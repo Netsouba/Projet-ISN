@@ -212,7 +212,7 @@ while continuer:
                     #Eclair
                     elif b_eclair:
                         elif b_eclair:
-                            for i in interrupteur.liste:
+                            for i in niveau_actuel.dict_element["interrupteur"]:
                                 if i.rect.collidepoint(liste_pos[-1]):
                                     son_electric.play()
                                     interrupteur.ouvert=False
@@ -353,7 +353,7 @@ while continuer:
             t.update(perso)
         for go in niveau_actuel.dict_element["goomba"]:
             go.update(duree_frame,niveau_actuel)
-        for i in Interrupteur.liste:
+        for i in Iniveau_actuel.dict_element["interrupteur"]:
             i.update()
 
         if victoire=="win":
@@ -381,7 +381,8 @@ while continuer:
 
     for i in niveau_actuel.dict_element["goomba"]:
         fenetre.blit(i.img,i.rect)
-
+    for i in niveau_actuel.dict_element["interrupeur"]:
+        fenetre.blit(i.img,i.rect)
 
     for boule in niveau_actuel.dict_element["boule feu"]:
         fenetre.blit(boule.img,boule.rect)
