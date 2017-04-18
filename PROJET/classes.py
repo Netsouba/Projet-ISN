@@ -458,7 +458,20 @@ class Bulle():
                     del self
                     return 0
 
+class Interrupteur():
+    liste= []
+    def __init__(self, dict_image, pos):
+        self.dict_image= dict_image
+        self.img= dict_image["Ouvert"]
+        self.rect=self.img.get_rect()
+        self.rect.topleft=pos
+        self.ouvert=True
 
+        Interrupteur.liste.append(self)
+
+    def update(self):
+        if self.ouvert==False:
+            self.img=self.dict_image["Ferme"]
 
 
 
