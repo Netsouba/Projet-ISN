@@ -102,7 +102,7 @@ class Niveau():
                     self.liste_ombre.append((x,y))
             if self.eclair==True:
                 self.liste_ombre=[]
-                pygame.time.set_timer(CLAIR,500)
+
 
 
         #Vent
