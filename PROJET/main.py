@@ -179,6 +179,7 @@ while continuer:
                 liste_pos=[]
                 
         if event.type==ECLAIR:
+            pygame.time.set_timer(ECLAIR,0)
             niveau_actuel.eclair=False
 
 
@@ -215,6 +216,7 @@ while continuer:
                     #Eclair
                     elif b_eclair:
                         niveau_actuel.eclair=True
+                        pygame.time.set_timer(ECLAIR,250)
                         for i in niveau_actuel.dict_element["interrupteur"]:
                             if i.rect.collidepoint(liste_pos[-1]):
                                 son_electric.play()
