@@ -87,7 +87,7 @@ class Niveau():
                 
                 elif car=='7':
                     i= Interrupteur(self.dict_images["interrupteur"],(x*bloc_x,y*bloc_y))
-                    self.dict_element['interrupteur"].append(i)
+                    self.dict_element["interrupteur"].append(i)
 
                 elif car=="n":
                     self.noir=True
