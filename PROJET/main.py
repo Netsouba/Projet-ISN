@@ -211,12 +211,15 @@ while continuer:
 
                     #Eclair
                     elif b_eclair:
+                        if niveau_actuel.ombre==True:
+                            niv_actuel.liste_ombre=[]
                         for i in niveau_actuel.dict_element["interrupteur"]:
                             if i.rect.collidepoint(liste_pos[-1]):
                                 son_electric.play()
                                 interrupteur.ouvert=False
                                 for porte in Porte.liste:
                                     porte.ouvert=True
+                        
 
                     #Cercle
                     elif b_cercle:
