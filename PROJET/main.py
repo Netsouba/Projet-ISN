@@ -211,13 +211,12 @@ while continuer:
 
                     #Eclair
                     elif b_eclair:
-                        elif b_eclair:
-                            for i in niveau_actuel.dict_element["interrupteur"]:
-                                if i.rect.collidepoint(liste_pos[-1]):
-                                    son_electric.play()
-                                    interrupteur.ouvert=False
-                                    for porte in Porte.liste:
-                                        porte.ouvert=True
+                        for i in niveau_actuel.dict_element["interrupteur"]:
+                            if i.rect.collidepoint(liste_pos[-1]):
+                                son_electric.play()
+                                interrupteur.ouvert=False
+                                for porte in Porte.liste:
+                                    porte.ouvert=True
 
                     #Cercle
                     elif b_cercle:
@@ -353,7 +352,7 @@ while continuer:
             t.update(perso)
         for go in niveau_actuel.dict_element["goomba"]:
             go.update(duree_frame,niveau_actuel)
-        for i in Iniveau_actuel.dict_element["interrupteur"]:
+        for i in niveau_actuel.dict_element["interrupteur"]:
             i.update()
 
         if victoire=="win":
