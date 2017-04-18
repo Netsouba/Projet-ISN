@@ -83,6 +83,9 @@ class Niveau():
                 elif car=='6':
                     go=Goomba(self.dict_images["goomba"],(x*bloc_x , y*bloc_y))
                     self.dict_element["goomba"].append(go)
+                
+                elif car=='7':
+                    interrupteur= Interrupteur(self.dict_images["interrupteur"],(x*bloc_x,y*bloc_y))
 
                 elif car=="n":
                     self.noir=True
