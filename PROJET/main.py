@@ -177,6 +177,9 @@ while continuer:
                 etat_jeu=1
 
                 liste_pos=[]
+                
+        if event.type==ECLAIR:
+            niveau_actuel.eclair=False
 
 
 
