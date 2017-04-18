@@ -42,6 +42,7 @@ class Niveau():
         self.liste_ombre=[]
         self.vent=False,None
         self.noir=False
+        self.eclair=False
 
         self.dict_images=images
         self.creation()
@@ -99,6 +100,8 @@ class Niveau():
             for y in range(0,fenetre_y,self.dict_images["ombre"].get_height()):
                 for x in range(0,fenetre_x,self.dict_images["ombre"].get_width()):
                     self.liste_ombre.append((x,y))
+            if self.eclair==True:
+                self.liste_ombre=[]
 
 
         #Vent
