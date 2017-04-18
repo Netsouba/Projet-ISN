@@ -91,6 +91,14 @@ for i in torche_img["Flamme"]:
 
 img_portail=[pygame.image.load("Images/Porte/0.bmp").convert(),pygame.image.load("Images/Porte/1.bmp").convert(),pygame.image.load("Images/Porte/2.bmp").convert(),pygame.image.load("Images/Porte/3.bmp").convert()]
 
+interrupteur_img={
+                    "Ouvert" : pygame.image.load("Images/Interrupteur/Ouvert.png").convert(),
+                    "Ferme" : pygame.image.load("Images/Interrupteur/Ferme.png").convert()
+                    }
+
+interrupteur_img["Ouvert"].set_colorkey(MAGENTA)
+interrupteur_img["Ferme"].set_colorkey(MAGENTA)
+
 
 fond_pause=pygame.Surface(taille_fenetre)
 fond_pause.fill(NOIR)
@@ -107,7 +115,8 @@ img_theme_1={
                 "pause": fond_pause                 ,
                 "portail":img_portail               ,
                 "ombre":ombre                       ,
-                "goomba":goomba_img
+                "goomba":goomba_img                 ,
+                "interrupteur":interrupteur_img
             }
 
 icone=pygame.image.load("Images/icon.png")
@@ -123,6 +132,7 @@ son_slash=pygame.mixer.Sound("Sons/Slash.wav")
 son_wind=pygame.mixer.Sound("Sons/wind.wav")
 son_fire=pygame.mixer.Sound("Sons/fire.wav")
 son_pop=pygame.mixer.Sound("Sons/pop.wav")
+son_electric=pygame.mixer.Sound("Sons/electricity.wav")
 
 
 duree_frame=0
@@ -201,7 +211,13 @@ while continuer:
 
                     #Eclair
                     elif b_eclair:
-                        print("e")
+                        elif b_eclair:
+                            for i in interrupteur.liste:
+                                if i.rect.collidepoint(liste_pos[-1]):
+                                    son_electric.play()
+                                    interrupteur.ouvert=False
+                                    for porte in Porte.liste:
+                                        porte.ouvert=True
 
                     #Cercle
                     elif b_cercle:
@@ -226,11 +242,14 @@ while continuer:
                     #Ellipse
                     elif b_ellipse:
                         print('ellipse',e_centre,(e_a,e_b))
+                    
                     #Angle
                     elif b_angle!=False:
                         son_fire.play()
                         boule_de_feu=BouleFeu(boule_de_feu_img,b_angle,perso)
                         niveau_actuel.dict_element["boule feu"].append(boule_de_feu)
+                    
+                    
                     #Arc de cercle
                     elif b_arc!=False:
                         son_wind.play()
@@ -334,6 +353,8 @@ while continuer:
             t.update(perso)
         for go in niveau_actuel.dict_element["goomba"]:
             go.update(duree_frame,niveau_actuel)
+        for i in Interrupteur.liste:
+            i.update()
 
         if victoire=="win":
             perso=Personnage((40,480),niveau_actuel.dict_images["perso"])
@@ -367,6 +388,9 @@ while continuer:
 
     for bulle in niveau_actuel.dict_element["bulle"]:
         fenetre.blit(bulle.img,bulle.rect)
+        
+    for interrupteur in Interrupteur.liste:
+        fenetre.blit(interrupteur.img,interrupteur.rect)
 
     fenetre.blit(perso.img,perso.rect)
 
