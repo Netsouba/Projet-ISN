@@ -211,8 +211,7 @@ while continuer:
 
                     #Eclair
                     elif b_eclair:
-                        if niveau_actuel.ombre==True:
-                            niv_actuel.liste_ombre=[]
+                        niveau_actuel.eclair=True
                         for i in niveau_actuel.dict_element["interrupteur"]:
                             if i.rect.collidepoint(liste_pos[-1]):
                                 son_electric.play()
