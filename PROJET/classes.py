@@ -35,7 +35,8 @@ class Niveau():
                             "porte":[],
                             "goomba":[],
                             "bulle":[],
-                            "boule feu":[]
+                            "boule feu":[],
+                            "interrupteur":[]
                             }
 
         self.liste_ombre=[]
@@ -85,7 +86,8 @@ class Niveau():
                     self.dict_element["goomba"].append(go)
                 
                 elif car=='7':
-                    interrupteur= Interrupteur(self.dict_images["interrupteur"],(x*bloc_x,y*bloc_y))
+                    i= Interrupteur(self.dict_images["interrupteur"],(x*bloc_x,y*bloc_y))
+                    self.dict_element['interrupteur"].append(i)
 
                 elif car=="n":
                     self.noir=True
