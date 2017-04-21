@@ -9,46 +9,36 @@ from fonctions import *
 #----------------------------Classes---------------------------------------
 class Niveau():
     liste=[]
-    """
-        Attributs:  theme :     Numero du theme
-                    fichier:    Nom du fichier
-                    structure:  Liste de liste
-                    dict_image: Images
-
-
-        Méthodes:   creation()
-                    update()
-
-    """
 
     def __init__(self,n,c_fichier,images,theme):
 
         self.numero=n
         self.theme=theme    #Numero du theme
         self.fichier=c_fichier
+        self.dict_images=images
 
+        self.creation()
+
+        Niveau.liste.append(self)
+
+    def creation(self):
+
+        self.vent=False,None
+        self.noir=False
+        self.eclair=False
+        self.liste_ombre=[]
         self.structure=[]
         self.dict_element={ "bloc":[],
-                            "fin":None,
+                            "fin":[],
                             "tp":[],
                             "torche":[],
                             "porte":[],
                             "goomba":[],
                             "bulle":[],
                             "boule feu":[],
-                            "interrupteur":[]
+                            "interrupteur":[],
+                            "porte interrupteur":[]
                             }
-
-        self.liste_ombre=[]
-        self.vent=False,None
-        self.noir=False
-        self.eclair=False
-
-        self.dict_images=images
-        self.creation()
-        Niveau.liste.append(self)
-
-    def creation(self):
 
         with open(self.fichier,'r') as fichier:
             grille=fichier.readlines()
@@ -62,36 +52,55 @@ class Niveau():
         for y,ligne in enumerate(self.structure):
             for x,car in enumerate(ligne):
 
-                if car=='1':
-                    r=Bloc(self.dict_images["bloc"],(x*bloc_x , y*bloc_y))
-                    self.dict_element["bloc"].append(r)
+                chiffre=True
+                try:
+                    if car!=" ":
+                        int(car)
+                except ValueError:
+                    chiffre=False
 
-                elif car=='2':
-                    f=Fin(self.dict_images["porte"],(x*bloc_x , y*bloc_y))
-                    self.dict_element["fin"]=f
 
-                elif car=='3':
-                    t=Teleport(self.dict_images["tp"],(x*bloc_x , y*bloc_y))
-                    self.dict_element["tp"].append(t)
+                if chiffre:
+                    if car=='1':
+                        r=Bloc(self.dict_images["bloc"],(x*bloc_x , y*bloc_y))
+                        self.dict_element["bloc"].append(r)
 
-                elif car=='4':
-                    t=Torche(self.dict_images["torche"],(x*bloc_x , y*bloc_y))
-                    self.dict_element["torche"].append(t)
+                    elif car=='2':
+                        f=Fin(self.dict_images["fin"],(x*bloc_x , y*bloc_y))
+                        self.dict_element["fin"].append(f)
 
-                elif car=='5':
-                    p=Porte(self.dict_images["portail"],(x*bloc_x , y*bloc_y))
-                    self.dict_element["porte"].append(p)
+                    elif car=='3':
+                        t=Teleport(self.dict_images["tp"],(x*bloc_x , y*bloc_y))
+                        self.dict_element["tp"].append(t)
 
-                elif car=='6':
-                    go=Goomba(self.dict_images["goomba"],(x*bloc_x , y*bloc_y))
-                    self.dict_element["goomba"].append(go)
-                
-                elif car=='7':
-                    i= Interrupteur(self.dict_images["interrupteur"],(x*bloc_x,y*bloc_y))
-                    self.dict_element["interrupteur"].append(i)
+                    elif car=='4':
+                        t=Torche(self.dict_images["torche"],(x*bloc_x , y*bloc_y))
+                        self.dict_element["torche"].append(t)
 
-                elif car=="n":
-                    self.noir=True
+                    elif car=='5':
+                        p=Porte(self.dict_images["porte"],(x*bloc_x , y*bloc_y))
+                        self.dict_element["porte"].append(p)
+
+                    elif car=='6':
+                        go=Goomba(self.dict_images["goomba"],(x*bloc_x , y*bloc_y))
+                        self.dict_element["goomba"].append(go)
+
+                else:
+                    if car=="n":
+                        self.noir=True
+                    elif car.lower()==car:
+                        i= Interrupteur(self.dict_images["interrupteur"],(x*bloc_x,y*bloc_y),car)
+                        self.dict_element["interrupteur"].append(i)
+                    elif car.upper()==car:
+                        p=Porte_interrupeur(self.dict_images["porte interrupteur"],(x*bloc_x , y*bloc_y),car)
+                        self.dict_element["porte interrupteur"].append(p)
+
+            for i in self.dict_element["interrupteur"]:
+                for indice,p in enumerate(self.dict_element["porte interrupteur"]):
+                    if i.car==p.car:
+                        i.liste_porte.append(indice)
+
+
 
     def update(self,perso):
         #Ombre
@@ -100,8 +109,13 @@ class Niveau():
             for y in range(0,fenetre_y,self.dict_images["ombre"].get_height()):
                 for x in range(0,fenetre_x,self.dict_images["ombre"].get_width()):
                     self.liste_ombre.append((x,y))
-            if self.eclair==True:
-                self.liste_ombre=[]
+
+        if self.eclair==True:
+            self.dict_images["ombre"].set_alpha(self.dict_images["ombre"].get_alpha()+10)
+        if self.dict_images["ombre"].get_alpha()>=240:
+            self.dict_images["ombre"].set_alpha(240)
+            self.eclair=False
+
 
 
 
@@ -146,12 +160,16 @@ class Personnage():
 
     def update(self,d_frame,niveau_actuel):
 
+        #Liste des elements de collision
         liste_rect=[]
 
         for i in niveau_actuel.dict_element["bloc"]:
             liste_rect.append(i.rect)
 
         for i in niveau_actuel.dict_element["porte"]:
+            if i.ouvert==False:
+                liste_rect.append(i.rect)
+        for i in niveau_actuel.dict_element["porte interrupteur"]:
             if i.ouvert==False:
                 liste_rect.append(i.rect)
 
@@ -192,11 +210,14 @@ class Personnage():
 
             elif self.rect.right>=rect.left and self.ancien.right<=rect.left:
                 self.rect.right=rect.left
+
             elif self.rect.left<=rect.right and self.ancien.left>=rect.right:
                 self.rect.left=rect.right
 
+
         for rect in liste_rect:
             if (self.rect.bottom==rect.top) and ((self.rect.left>rect.left and self.rect.left<rect.right) or (self.rect.right>rect.left and self.rect.right<rect.right)):
+                if self.deplacement==False:                self.vitesse_x*=0.97
                 self.saut=False
                 self.double_saut=False
 
@@ -213,7 +234,7 @@ class Personnage():
         #Verification victoire
         if self.rect.collidelist(niveau_actuel.dict_element["goomba"])!=-1:
             print("LOLOLOL! T'es mort!")
-        if self.rect.colliderect(niveau_actuel.dict_element["fin"].rect):
+        if self.rect.colliderect(niveau_actuel.dict_element["fin"][0].rect):
             return "win"
 
 class Bloc():
@@ -221,13 +242,16 @@ class Bloc():
         self.img=img
         self.rect=self.img.get_rect()
         self.rect.topleft=pos
-
+    def update(self,perso,d_frame,niveau_actuel):
+        pass
 
 class Fin():
     def __init__(self,img,pos):
         self.img=img
         self.rect=self.img.get_rect()
         self.rect.topleft=pos
+    def update(self,perso,d_frame,niveau_actuel):
+        pass
 
 class Goomba():
     def __init__(self,liste_img,pos):
@@ -242,8 +266,9 @@ class Goomba():
         self.acceleration_y=g
         self.animation=0
 
-    def update(self,d_frame,niveau_actuel):
+    def update(self,perso,d_frame,niveau_actuel):
 
+    #Liste des elements de collision
         liste_rect=[]
 
         for i in niveau_actuel.dict_element["bloc"]:
@@ -253,7 +278,11 @@ class Goomba():
             if i.ouvert==False:
                 liste_rect.append(i.rect)
 
+        for i in niveau_actuel.dict_element["porte interrupteur"]:
+            if i.ouvert==False:
+                liste_rect.append(i.rect)
 
+        #Mouvement
         self.ancien=self.rect
         self.vitesse_x+=self.acceleration_x
         self.vitesse_y+=self.acceleration_y
@@ -267,7 +296,6 @@ class Goomba():
             niveau_actuel.dict_element["goomba"].remove(self)
             del self
             return 0
-
         if self.rect.top<0:
             self.rect.top=0
             self.vitesse_y=0
@@ -277,6 +305,7 @@ class Goomba():
         elif self.rect.left<=0:
             self.rect.left=0
             self.vitesse_x=50
+
 
         #Collision
         i_collision=self.rect.collidelistall(liste_rect)
@@ -310,7 +339,8 @@ class Teleport():
         self.rect=self.img.get_rect()
         self.rect.topleft=pos
 
-    def update(self,perso):
+    def update(self,perso,d_frame,niveau_actuel):
+        #Changement couleur
         d=distance(perso.rect.center,self.rect.center)
 
         if d<100:       self.etat=0
@@ -350,7 +380,7 @@ class BouleFeu():
 
         self.animation=0
 
-    def update(self,d_frame,niveau_actuel):
+    def update(self,perso,d_frame,niveau_actuel):
 
 
         #Mouvement
@@ -375,6 +405,9 @@ class BouleFeu():
         for i in niveau_actuel.dict_element["bloc"]:
             liste_collision.append(i.rect)
         for i in niveau_actuel.dict_element["porte"]:
+            if i.ouvert==False:
+                liste_collision.append(i.rect)
+        for i in niveau_actuel.dict_element["porte interrupteur"]:
             if i.ouvert==False:
                 liste_collision.append(i.rect)
 
@@ -418,9 +451,11 @@ class Torche():
         self.enflamme=False
         self.animation=0
 
-    def update(self,niveau_actuel):
+    def update(self,perso,d_frame,niveau_actuel):
         if self.enflamme==True:
+            #Animation
             self.img=self.dict_img["Flamme"][self.animation]
+
             #Eclairage
             l=[]
             for o in niveau_actuel.liste_ombre:
@@ -442,7 +477,7 @@ class Porte():
         self.ouvert=False
         self.animation=0
 
-    def update(self):
+    def update(self,perso,d_frame,niveau_actuel):
         self.img=self.liste_img[self.animation]
 
 
@@ -454,7 +489,7 @@ class Bulle():
         self.rect=self.img.get_rect()
         self.rect.center=self.obj.rect.center
 
-    def update(self,niveau_actuel):
+    def update(self,perso,d_frame,niveau_actuel):
 
         self.rect.center=self.obj.rect.center
         self.obj.acceleration_y=-g/2
@@ -468,26 +503,41 @@ class Bulle():
                     return 0
 
 class Interrupteur():
-    liste= []
-    def __init__(self, dict_image, pos):
+    def __init__(self, dict_image, pos,car):
+        self.car=car
         self.dict_image= dict_image
         self.img= dict_image["Ouvert"]
         self.rect=self.img.get_rect()
         self.rect.topleft=pos
         self.ouvert=True
+        self.liste_porte=[]
 
-        Interrupteur.liste.append(self)
-
-    def update(self):
+    def update(self,perso,d_frame,niveau_actuel):
         if self.ouvert==False:
             self.img=self.dict_image["Ferme"]
+            for i,porte in enumerate(niveau_actuel.dict_element["porte interrupteur"]):
+                if i in self.liste_porte:
+                    porte.ouvert=True
 
+        else:
+            self.img=self.dict_image["Ouvert"]
+            for i,porte in enumerate(niveau_actuel.dict_element["porte interrupteur"]):
+                if i in self.liste_porte:
+                    porte.ouvert=False
 
+class Porte_interrupeur():
 
+    def __init__(self,liste_img,pos,car):
+        self.car=car.lower()
+        self.liste_img=liste_img
+        self.img=liste_img[0]
+        self.rect=self.img.get_rect()
+        self.rect.topleft=pos
+        self.ouvert=False
+        self.animation=0
 
-
-
-
+    def update(self,perso,d_frame,niveau_actuel):
+        self.img=self.liste_img[self.animation]
 
 
 

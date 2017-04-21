@@ -6,135 +6,17 @@ from constantes import *
 import texte
 from fonctions import *
 from classes import *
+from surfaces import *
+from sons import *
 
 
 #-----------------------------Début--------------------------------------
 
 pygame.init()
-
-#----------------------------Chargement des Surfaces--------------------
-fenetre=pygame.display.set_mode(taille_fenetre)
-
-
-
-#Theme 1
-
-ombre=pygame.Surface((30,30))
-ombre.fill(NOIR)
-ombre.set_alpha(245)
-
-fond=pygame.image.load('Images/fond.jpg')
-
-img_bulle=pygame.image.load("Images/bulle.png").convert_alpha()
-
-img_porte=pygame.image.load('Images/Fin.bmp')
-img_porte.set_colorkey(BLANC)
-
-bloc_plateforme=pygame.image.load("Images//block.png")
-
-
-img_tp=[pygame.image.load("Images/Teleportation/1.png").convert(),pygame.image.load("Images/Teleportation/2.png").convert(),pygame.image.load("Images/Teleportation/3.png").convert(),pygame.image.load("Images/Teleportation/4.png").convert(),pygame.image.load("Images/Teleportation/5.png").convert()]
-for i in img_tp:
-    i.set_colorkey(MAGENTA)
-
-
-megaman_images= {
-                    "droite":
-                    {"debout":  pygame.image.load("Images\\Megaman\\Droite\\Debout.png").convert(),
-                     "cours":   [pygame.image.load("Images\\Megaman\\Droite\\Cours\\1.png").convert(),pygame.image.load("Images\\Megaman\\Droite\\Cours\\2.png").convert(),pygame.image.load("Images\\Megaman\\Droite\\Cours\\3.png").convert(),pygame.image.load("Images\\Megaman\\Droite\\Cours\\2.png").convert()],
-                     "saute":   pygame.image.load("Images\\Megaman\\Droite\\Saute.png").convert()},
-
-                    "gauche":
-                    {"debout":  pygame.image.load("Images\\Megaman\\Gauche\\Debout.png").convert(),
-                     "cours":   [pygame.image.load("Images\\Megaman\\Gauche\\Cours\\1.png").convert(),pygame.image.load("Images\\Megaman\\Gauche\\Cours\\2.png").convert(),pygame.image.load("Images\\Megaman\\Gauche\\Cours\\3.png").convert(),pygame.image.load("Images\\Megaman\\Gauche\\Cours\\2.png").convert()],
-                    "saute":    pygame.image.load("Images\\Megaman\\Gauche\\Saute.png").convert()}
-                }
-
-megaman_images["droite"]["debout"].set_colorkey(MAGENTA)
-megaman_images["droite"]["saute"].set_colorkey(MAGENTA)
-for i in megaman_images["droite"]["cours"]:
-    i.set_colorkey(MAGENTA)
-megaman_images["gauche"]["debout"].set_colorkey(MAGENTA)
-megaman_images["gauche"]["saute"].set_colorkey(MAGENTA)
-for i in megaman_images["gauche"]["cours"]:
-    i.set_colorkey(MAGENTA)
-
-goomba_img=[pygame.image.load("Images/Goomba/0.png").convert(),pygame.image.load("Images/Goomba/1.png").convert(),pygame.image.load("Images/Goomba/2.png").convert()]
-for i in goomba_img:
-    i.set_colorkey(MAGENTA)
-
-boule_de_feu_img=   {
-                        "droite":[pygame.image.load("Images/Boule de feu/Droite/0.bmp").convert(),pygame.image.load("Images/Boule de feu/Droite/1.bmp").convert(),pygame.image.load("Images/Boule de feu/Droite/2.bmp").convert(),pygame.image.load("Images/Boule de feu/Droite/3.bmp").convert()],
-                        "gauche":[pygame.image.load("Images/Boule de feu/Gauche/0.bmp").convert(),pygame.image.load("Images/Boule de feu/Gauche/1.bmp").convert(),pygame.image.load("Images/Boule de feu/Gauche/2.bmp").convert(),pygame.image.load("Images/Boule de feu/Gauche/3.bmp").convert()],
-                        "haut":[pygame.image.load("Images/Boule de feu/Haut/0.bmp").convert(),pygame.image.load("Images/Boule de feu/Haut/1.bmp").convert(),pygame.image.load("Images/Boule de feu/Haut/2.bmp").convert(),pygame.image.load("Images/Boule de feu/Haut/3.bmp").convert()],
-                        "bas":[pygame.image.load("Images/Boule de feu/Bas/0.bmp").convert(),pygame.image.load("Images/Boule de feu/Bas/1.bmp").convert(),pygame.image.load("Images/Boule de feu/Bas/2.bmp").convert(),pygame.image.load("Images/Boule de feu/Bas/3.bmp").convert()],
-                    }
-
-for i in boule_de_feu_img["droite"]:
-    i.set_colorkey(CYAN)
-for i in boule_de_feu_img["gauche"]:
-    i.set_colorkey(CYAN)
-for i in boule_de_feu_img["haut"]:
-    i.set_colorkey(CYAN)
-for i in boule_de_feu_img["bas"]:
-    i.set_colorkey(CYAN)
-
-
-torche_img= {
-                "Arret":    pygame.image.load("Images/Torche/Arret.png").convert(),
-                "Flamme":   [pygame.image.load("Images/Torche/0.png").convert(),pygame.image.load("Images/Torche/1.png").convert(),pygame.image.load("Images/Torche/2.png").convert(),pygame.image.load("Images/Torche/3.png").convert()]
-                }
-
-torche_img["Arret"].set_colorkey(BLANC)
-for i in torche_img["Flamme"]:
-    i.set_colorkey(BLANC)
-
-img_portail=[pygame.image.load("Images/Porte/0.bmp").convert(),pygame.image.load("Images/Porte/1.bmp").convert(),pygame.image.load("Images/Porte/2.bmp").convert(),pygame.image.load("Images/Porte/3.bmp").convert()]
-
-interrupteur_img={
-                    "Ouvert" : pygame.image.load("Images/Interrupteur/Ouvert.png").convert(),
-                    "Ferme" : pygame.image.load("Images/Interrupteur/Ferme.png").convert()
-                    }
-
-interrupteur_img["Ouvert"].set_colorkey(MAGENTA)
-interrupteur_img["Ferme"].set_colorkey(MAGENTA)
-
-
-fond_pause=pygame.Surface(taille_fenetre)
-fond_pause.fill(NOIR)
-fond_pause.set_alpha(100)
-
-
-img_theme_1={
-                "fond":fond                         ,
-                "porte":img_porte                   ,
-                "bloc":bloc_plateforme              ,
-                "tp":img_tp                         ,
-                "perso":megaman_images              ,
-                "torche":torche_img                 ,
-                "pause": fond_pause                 ,
-                "portail":img_portail               ,
-                "ombre":ombre                       ,
-                "goomba":goomba_img                 ,
-                "interrupteur":interrupteur_img
-            }
-
-icone=pygame.image.load("Images/icon.png")
-icone.set_colorkey(MAGENTA)
 pygame.display.set_icon(icone)
 pygame.display.set_caption("C'est mon jeu!!!")
 
 #-----------------------------Création des variables--------------------
-
-#Sons
-
-son_slash=pygame.mixer.Sound("Sons/Slash.wav")
-son_wind=pygame.mixer.Sound("Sons/wind.wav")
-son_fire=pygame.mixer.Sound("Sons/fire.wav")
-son_pop=pygame.mixer.Sound("Sons/pop.wav")
-son_electric=pygame.mixer.Sound("Sons/electricity.wav")
-
-
 duree_frame=0
 
 etat_jeu=0  # 0: jeu de plateforme  1:jeu de dessin
@@ -154,7 +36,7 @@ pygame.time.set_timer(ANIMER,100)
 #Pointage
 niveau_actuel=niveau1
 
-perso=Personnage((40,480),niveau_actuel.dict_images["perso"])
+perso=Personnage((40,480),megaman_images)
 
 
 #-----------------------------Boucle--------------------------------------
@@ -177,11 +59,6 @@ while continuer:
                 etat_jeu=1
 
                 liste_pos=[]
-                
-        if event.type==ECLAIR:
-            pygame.time.set_timer(ECLAIR,0)
-            niveau_actuel.eclair=False
-
 
 
         if event.type==MOUSEBUTTONUP:
@@ -216,14 +93,23 @@ while continuer:
                     #Eclair
                     elif b_eclair:
                         son_electric.play()
+                        niveau_actuel.dict_images["ombre"].set_alpha(0)
                         niveau_actuel.eclair=True
-                        pygame.time.set_timer(ECLAIR,250)
                         for i in niveau_actuel.dict_element["interrupteur"]:
-                            if i.rect.collidepoint(liste_pos[-1]):
-                                interrupteur.ouvert=False
-                                for porte in Porte.liste:
-                                    porte.ouvert=True
-                        
+                            for p in liste_pos:
+                                if i.rect.collidepoint(p):
+                                    i.ouvert=not i.ouvert
+                                    break
+                        for go in niveau_actuel.dict_element["goomba"]:
+                            for p in liste_pos:
+                                if go.rect.collidepoint(p):
+                                    niveau_actuel.dict_element["goomba"].remove(go)
+                                    break
+                        for t in niveau_actuel.dict_element["torche"]:
+                            for p in liste_pos:
+                                if t.rect.collidepoint(p):
+                                    t.enflamme=True
+
 
                     #Cercle
                     elif b_cercle:
@@ -248,14 +134,14 @@ while continuer:
                     #Ellipse
                     elif b_ellipse:
                         print('ellipse',e_centre,(e_a,e_b))
-                    
+
                     #Angle
                     elif b_angle!=False:
                         son_fire.play()
                         boule_de_feu=BouleFeu(boule_de_feu_img,b_angle,perso)
                         niveau_actuel.dict_element["boule feu"].append(boule_de_feu)
-                    
-                    
+
+
                     #Arc de cercle
                     elif b_arc!=False:
                         son_wind.play()
@@ -311,6 +197,11 @@ while continuer:
             for p in niveau_actuel.dict_element["porte"]:
                 if p.ouvert==True and p.animation<3:
                     p.animation+=1
+            for p in niveau_actuel.dict_element["porte interrupteur"]:
+                if p.ouvert==True and p.animation<3:
+                    p.animation+=1
+                elif p.ouvert==False and p.animation>0:
+                    p.animation-=1
 
         if event.type==VENT:
             pygame.time.set_timer(VENT,0)
@@ -347,58 +238,28 @@ while continuer:
 
         victoire=perso.update(duree_frame,niveau_actuel)
 
-        for b in niveau_actuel.dict_element["boule feu"]:
-            b.update(duree_frame,niveau_actuel)
-        for t in niveau_actuel.dict_element["torche"]:
-            t.update(niveau_actuel)
-        for p in niveau_actuel.dict_element["porte"]:
-            p.update()
-        for b in niveau_actuel.dict_element["bulle"]:
-            b.update(niveau_actuel)
-        for t in niveau_actuel.dict_element["tp"]:
-            t.update(perso)
-        for go in niveau_actuel.dict_element["goomba"]:
-            go.update(duree_frame,niveau_actuel)
-        for i in niveau_actuel.dict_element["interrupteur"]:
-            i.update()
+        for a in niveau_actuel.dict_element.values():
+            for i in a:
+                i.update(perso,duree_frame,niveau_actuel)
+
 
         if victoire=="win":
-            perso=Personnage((40,480),niveau_actuel.dict_images["perso"])
+            perso=Personnage((40,480),megaman_images)
             try:
                 niveau_actuel=Niveau.liste[niveau_actuel.numero+1]
             except IndexError:
                 print("TU AS GAGNE T'ES LE MEILLEUR DE TOUS!!")
+                niveau_actuel.creation()
 #---------------------------Affichage-------------------------------------
+    #Fond
     fenetre.blit(niveau_actuel.dict_images['fond'],(0,0))
 
-    for i in niveau_actuel.dict_element["bloc"]:
-        fenetre.blit(i.img,i.rect)
+    #Elements du niveau
+    for a in niveau_actuel.dict_element.values():
+        for i in a:
+            fenetre.blit(i.img,i.rect)
 
-    fenetre.blit(niveau_actuel.dict_element["fin"].img,niveau_actuel.dict_element["fin"].rect)
-
-    for i in niveau_actuel.dict_element["tp"]:
-        fenetre.blit(i.img,i.rect)
-
-    for i in niveau_actuel.dict_element["torche"]:
-        fenetre.blit(i.img,i.rect)
-
-    for i in niveau_actuel.dict_element["porte"]:
-        fenetre.blit(i.img,i.rect)
-
-    for i in niveau_actuel.dict_element["goomba"]:
-        fenetre.blit(i.img,i.rect)
-    for i in niveau_actuel.dict_element["interrupeur"]:
-        fenetre.blit(i.img,i.rect)
-
-    for boule in niveau_actuel.dict_element["boule feu"]:
-        fenetre.blit(boule.img,boule.rect)
-
-    for bulle in niveau_actuel.dict_element["bulle"]:
-        fenetre.blit(bulle.img,bulle.rect)
-        
-    for interrupteur in Interrupteur.liste:
-        fenetre.blit(interrupteur.img,interrupteur.rect)
-
+    #Perso
     fenetre.blit(perso.img,perso.rect)
 
     #Textes
@@ -407,14 +268,18 @@ while continuer:
         fenetre.blit(texte.tuto[1],(0,25))
 
 
+    #Ombres
+    for o in niveau_actuel.liste_ombre:
+
+        fenetre.blit(niveau_actuel.dict_images["ombre"],o)
+
+
+    #Pause
     if etat_jeu==1:
         fenetre.blit(niveau_actuel.dict_images['pause'],(0,0))
 
         for i in range(len(liste_pos)-1):
             pygame.draw.line(fenetre,ROUGE,liste_pos[i+1],liste_pos[i],8)
-
-    for o in niveau_actuel.liste_ombre:
-        fenetre.blit(niveau_actuel.dict_images["ombre"],o)
 
     pygame.display.flip()
 
