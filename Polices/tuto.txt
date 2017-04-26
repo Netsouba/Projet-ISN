@@ -1,0 +1,13 @@
+Utiliser les fleches directionnelles pour se deplacer
+Clic droit pour ouvrir l'interface de dessin, puis clic gauche pour dessiner
+Le but du jeu est d'atteindre la porte
+Cliquer sur soi pour faire un double saut
+Vous avez une barre d'energie. Dessiner la consomme donc economisez la
+Dessiner un trait permet de couper certains elements
+Dessiner un cercle cree une bulle sur l'element
+Dessiner un angle < > ^ v forme une boule de feu
+Dessiner un arc de cercle cree du vent dans la direction de la figure
+Relier le personnage a un bloc de teleportation pour le teleporter
+Dessiner une ellipse pour ralentir le temps
+Dessiner un eclair pour apporter le l'electricite
+Utilisez tous ces pouvoirs pour atteindre la porte!
