@@ -282,6 +282,11 @@ def jeu(niveau_actuel):
                     if go.animation>=3:
                         go.animation=0
 
+                for go in niveau_actuel.dict_element["koopa"]:
+                    go.animation+=1
+                    if go.animation>=4:
+                        go.animation=0
+
                 for t in niveau_actuel.dict_element["torche"]:
                     t.animation+=1
                     if t.animation>=4:
@@ -345,7 +350,7 @@ def jeu(niveau_actuel):
             if p!=None:
                 if p=="mort":
                     pygame.image.save(fenetre,"temp/save.png")
-                    return game_over(pygame.image.load("temp/save.png"))
+                    return game_over()
                 if p=="suivant":
                     return p
                 if p=="touche":
@@ -421,36 +426,36 @@ def jeu(niveau_actuel):
 
 
 
-def game_over(fond):
-    rect_gameover=texte_gameover.get_rect()
-    rect_reessayer=texte_reessayer.get_rect()
-    rect_menu=texte_menu.get_rect()
-    rect_suivant=texte_suivant.get_rect()
+def game_over():
 
-    rect_reessayer.centerx=rect_menu.centerx=rect_suivant.centerx=rect_gameover.centerx=fenetre_x/2
+    titre_over_rect.center= fenetre_x/2, fenetre_y/3
+    menu_over_rect=menu_over.get_rect()
+    retry_over_rect=retry_over.get_rect()
+    skip_over_rect=skip_over.get_rect()
 
-    rect_gameover.centery=fenetre_y/8
-    rect_reessayer.centery=3*fenetre_y/8
-    rect_menu.centery=fenetre_y/2
-    rect_suivant.centery=5*fenetre_y/8
+    menu_over_rect.center=fenetre_x/4, 2*fenetre_y/3
+    retry_over_rect.center=3*fenetre_x/4, 2*fenetre_y/3
+    skip_over_rect.center=7*fenetre_x/8, 9*fenetre_y/10
 
 
-    continuer=True
-    while continuer:
+    while True:
+
         for event in pygame.event.get():
             if event.type==QUIT:
                 return "fin"
-            if event.type==MOUSEBUTTONDOWN and event.button==1:
-                if rect_menu.collidepoint(event.pos):
+            if event.type==MOUSEBUTTONDOWN:
+                if menu_over_rect.collidepoint(event.pos):
                     return "menu"
-                elif rect_reessayer.collidepoint(event.pos):
+                elif retry_over_rect.collidepoint(event.pos):
                     return "reset"
-                elif rect_suivant.collidepoint(event.pos):
+                elif skip_over_rect.collidepoint(event.pos):
                     return "suivant"
-        fenetre.blit(fond,(0,0))
-        fenetre.blit(fond_pause,(0,0))
-        fenetre.blit(texte_menu,rect_menu)
-        fenetre.blit(texte_gameover,rect_gameover)
-        fenetre.blit(texte_suivant,rect_suivant)
-        fenetre.blit(texte_reessayer,rect_reessayer)
+
+
+        fenetre.blit(game_over_fond,(0,0))
+
+        fenetre.blit(titre_over,titre_over_rect)
+        fenetre.blit(menu_over,menu_over_rect)
+        fenetre.blit(retry_over,retry_over_rect)
+        fenetre.blit(skip_over, skip_over_rect)
         pygame.display.flip()

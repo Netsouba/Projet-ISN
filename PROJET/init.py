@@ -29,13 +29,16 @@ nombres=[p_funny.render(str(i+1),1,JAUNE) for i in range(24)]
 titre_menu=p_candy.render("Choix du niveau",1,JAUNE)
 
 #-----------Game over--------------------
+police=pygame.font.Font("Polices/Packaging Funny.otf",100)
 
+titre_over= police.render("GAME OVER",0, ROUGE )
+titre_over_rect= titre_over.get_rect()
 
-texte_gameover=p_candy.render("Game Over!",1,ROUGE)
-texte_reessayer=p_funny.render("Reessayer?",1,VERT)
-texte_menu=p_funny.render("Retour au menu?",1,VERT)
-texte_suivant=p_funny.render("Niveau suivant?",1,VERT)
+bloc_menu=police.render("Menu",0,ROUGE)
+bloc_retry=police.render("Retry",0,ROUGE)
 
+bloc_menu_rect=bloc_menu.get_rect()
+bloc_retry_rect=bloc_retry.get_rect()
 
 
 #--------------------------------------------Images---------------------------------------------------------------------------------------------------------------
@@ -43,15 +46,29 @@ texte_suivant=p_funny.render("Niveau suivant?",1,VERT)
 fenetre=pygame.display.set_mode(taille_fenetre)
 
 #--------------------------------------------------Menu----------------------------------------------
-fond_ecran=pygame.image.load("Images/fond_ecran.jpg")
-img_fond_menu=pygame.image.load("Images/ecran_accueil.jpg").convert()
-img_boite=pygame.image.load("Images/boite.png").convert()
+fond_ecran=pygame.image.load("Images/Fonds/fond_ecran.jpg")
+img_fond_menu=pygame.image.load("Images/Fonds/ecran_accueil.jpg").convert()
+img_boite=pygame.image.load("Images/Structure/boite.png").convert()
 img_boite.set_colorkey(BLANC)
 
 img_fleche_droite=pygame.image.load("Images/Fleche/droite.png").convert()
 img_fleche_droite.set_colorkey(BLANC)
 img_fleche_gauche=pygame.image.load("Images/Fleche/gauche.png").convert()
 img_fleche_gauche.set_colorkey(BLANC)
+
+#--------------------------------------------------Game Over----------------------------------------------
+game_over_fond= pygame.Surface(taille_fenetre)
+game_over_fond.fill(NOIR)
+game_over_fond.set_alpha(100)
+
+menu_over=pygame.image.load("Images/Game Over/Menu_over.png").convert()
+retry_over=pygame.image.load("Images/Game Over/Retry_over.png").convert()
+skip_over=pygame.image.load("Images/Game Over/Skip.png").convert()
+
+menu_over.set_colorkey(BLANC)
+retry_over.set_colorkey(BLANC)
+skip_over.set_colorkey(NOIR)
+
 
 #----------------------------------Perso---------------------
 
@@ -78,10 +95,10 @@ for i in megaman_images["gauche"]["cours"]:
 
 
 #Interface
-img_reset=pygame.image.load("Images/Reset.png").convert_alpha()
-img_menu=pygame.image.load("Images/menu.png").convert_alpha()
-img_info=pygame.image.load("Images/info.png").convert_alpha()
-img_retour=pygame.image.load("Images/retour.png").convert_alpha()
+img_reset=pygame.image.load("Images/Structure/Reset.png").convert_alpha()
+img_menu=pygame.image.load("Images/Structure/menu.png").convert_alpha()
+img_info=pygame.image.load("Images/Structure/info.png").convert_alpha()
+img_retour=pygame.image.load("Images/Structure/retour.png").convert_alpha()
 liste_img_formes=   [pygame.image.load("Images/Formes/Trait.png").convert(),pygame.image.load("Images/Formes/Point.png").convert(),pygame.image.load("Images/Formes/Cercle.png").convert(),pygame.image.load("Images/Formes/TP.png").convert(),
                     pygame.image.load("Images/Formes/Angle.png").convert(),pygame.image.load("Images/Formes/Eclair.png").convert(),pygame.image.load("Images/Formes/Ellipse.png")]
 filtre_cooldown=pygame.Surface((40,40))
@@ -94,17 +111,17 @@ ombre=pygame.Surface((30,30))
 ombre.fill(NOIR)
 
 
-fond=pygame.image.load('Images/fond.jpg')
+fond=pygame.image.load('Images/Fonds/fond.jpg')
 
 
-img_bulle=pygame.image.load("Images/bulle.png").convert_alpha()
+img_bulle=pygame.image.load("Images/Structure/bulle.png").convert_alpha()
 
 
-img_porte=pygame.image.load('Images/Fin.bmp')
+img_porte=pygame.image.load('Images/Structure/Fin.bmp')
 img_porte.set_colorkey(BLANC)
 
 
-bloc_plateforme=pygame.image.load("Images//block.png")
+bloc_plateforme=pygame.image.load("Images/Structure/block.png")
 
 
 img_tp=[pygame.image.load("Images/Teleportation/1.png").convert(),pygame.image.load("Images/Teleportation/2.png").convert(),pygame.image.load("Images/Teleportation/3.png").convert(),pygame.image.load("Images/Teleportation/4.png").convert(),pygame.image.load("Images/Teleportation/5.png").convert()]
@@ -114,6 +131,10 @@ for i in img_tp:
 
 goomba_img=[pygame.image.load("Images/Goomba/0.png").convert(),pygame.image.load("Images/Goomba/1.png").convert(),pygame.image.load("Images/Goomba/2.png").convert()]
 for i in goomba_img:
+    i.set_colorkey(MAGENTA)
+
+koopa_img= [pygame.image.load("Images/Koopa/1.png").convert(),pygame.image.load("Images/Koopa/2.png").convert(),pygame.image.load("Images/Koopa/3.png").convert(),pygame.image.load("Images/Koopa/4.png").convert(),]
+for i in koopa_img:
     i.set_colorkey(MAGENTA)
 
 
@@ -172,21 +193,22 @@ fond_pause=pygame.Surface(taille_fenetre)
 fond_pause.fill(NOIR)
 fond_pause.set_alpha(100)
 
-pic=pygame.image.load('Images/pics.png').convert()
+pic=pygame.image.load('Images/Structure/pics.png').convert()
 pic.set_colorkey(MAGENTA)
 
-pot=pygame.image.load('Images/ink_pot.png').convert_alpha()
-coeur=pygame.image.load('Images/coeur.png').convert_alpha()
+pot=pygame.image.load('Images/Structure/ink_pot.png').convert_alpha()
+coeur=pygame.image.load('Images/Structure/coeur.png').convert_alpha()
 img_theme_1={
                 "fond":fond                         ,
-                "fin":img_porte                   ,
+                "fin":img_porte                     ,
                 "bloc":bloc_plateforme              ,
                 "tp":img_tp                         ,
                 "torche":torche_img                 ,
                 "pause": fond_pause                 ,
-                "porte":img_portail               ,
+                "porte":img_portail                 ,
                 "ombre":ombre                       ,
                 "goomba":goomba_img                 ,
+                "koopa": koopa_img                  ,
                 "interrupteur":interrupteur_img     ,
                 "porte interrupteur":img_portail_i  ,
                 "porte bouton":img_portail_b        ,
@@ -198,5 +220,5 @@ img_theme_1={
 
 
 #-------------------------------------------------------------------------Autre-----------------------------------------------------------------
-icone=pygame.image.load("Images/icon.png")
+icone=pygame.image.load("Images/Structure/icon.png")
 icone.set_colorkey(MAGENTA)
