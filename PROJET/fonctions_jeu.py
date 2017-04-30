@@ -126,10 +126,14 @@ def jeu(niveau_actuel):
 
             if event.type==KEYDOWN:
                 for i in niveau_actuel.dict_element["caisse"]:
-                    if event.key==K_SPACE and distance(perso.rect.center,i.rect.center)<=30 and i.hold==False:
-                        i.hold=True
-                    elif event.key==K_SPACE and i.hold==True:
-                        i.hold=False
+                    if event.key==K_SPACE and distance(perso.rect.center,i.rect.center)<=30:
+                        if i.hold==None:
+                            if perso.rect.x<i.rect.x:
+                                i.hold="gauche"
+                            else:
+                                i.hold="droite"
+                        else:
+                            i.hold=None
 
             if event.type==KEYUP:
                 if event.key==K_RIGHT or event.key==K_LEFT:
@@ -347,17 +351,12 @@ def jeu(niveau_actuel):
             perso.vitesse_x+=100
             perso.deplacement=True
             perso.direction="droite"
-            for i in niveau_actuel.dict_element["caisse"]:
-                if distance(i.rect.center,perso.rect.center)>35:
-                    i.hold=False
 
         if touches[K_LEFT] and perso.deplacement==False:
             perso.vitesse_x-=100
             perso.deplacement=True
             perso.direction="gauche"
-            for i in niveau_actuel.dict_element["caisse"]:
-                if distance(i.rect.center,perso.rect.center)>35:
-                    i.hold=False
+
 
         if touches[K_UP] and perso.saut==False:
             perso.vitesse_y=-6
