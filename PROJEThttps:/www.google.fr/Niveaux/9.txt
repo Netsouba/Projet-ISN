@@ -1,0 +1,20 @@
+n                                
+ 
+                                
+                                
+ 4  4                          
+                               
+p1  1
+p1  1    4       4    4     4
+p1  1 p      p      p   p    2
+11  1111111111111111111111111111                                
+    199                          
+4   1994  4   4   4     4    4
+ p       p  p  p     p     p  p
+AAAAA11111111111111111111111111 
+99999                    A B       
+   4       4  4     4   4A4B 4  
+pp     p     p a p b p   A Bp pp   
+11111111111111111111111111111111
+Eclairez vous avec l'eclair puis 
+arretez rapidement le temps pour analyser le niveau.

@@ -1,0 +1,31 @@
+                                
+                                
+   5                            
+       5           5            
+       1    6   6  p 6  6     6
+11111111111111111111111111551111
+                         5555   
+                         5cc56
+                         1111
+             5                 
+                  6        6   
+                       111111111
+                      11        
+                     11         
+  6                 11          
+   5   5           5         
+ p 1 c 1   5     11    2      6
+111111111  555511111111111 11111
+Clic droit pour ouvrir l'interface de dessin, 
+puis maintenir clic gauche pour dessiner. 
+
+Dessiner les formes pour faire des pouvoirs. 
+
+Chaque pouvoir a un temps de recuperation.
+
+Vous avez une barre d'energie. Dessiner la consomme donc economisez la.
+
+Dessinez un trait sur un element pour le coupez. 
+
+Si vous avez du mal a dessiner, 
+faites un trait rapide avec un mouvement bref de la souris.
