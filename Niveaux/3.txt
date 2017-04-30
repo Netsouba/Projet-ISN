@@ -1,0 +1,21 @@
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                     11           
+                    11 555555555
+                    11        
+                  111 11111111      
+                  11           
+       1         11    555 1  
+       1    1  6 1  6  525 1   
+1111111111  11111111111111111111
+Sautez puis dessinez un point sur vous meme 
+quand vous avez l'altitude maximale
+pour faire le double saut le plus efficace.

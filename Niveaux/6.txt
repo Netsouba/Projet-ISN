@@ -1,0 +1,22 @@
+n                                
+ 
+                                
+                                
+                               
+                                
+                               
+                                
+                              
+                                
+                                
+                  
+
+    
+                               
+  4    4     4    p4  4 4    4
+     p    p    6 p  p  p  6   2
+11111111111111111111111111111111
+La boule de feu peut etre lancee 
+dans toutes les directions.
+
+Faites des traits plus horizontaux si vous avez du mal a dessiner
