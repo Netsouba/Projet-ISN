@@ -18,13 +18,13 @@ def accueil():
     titre_rect.center=fenetre_x/2,fenetre_y/4
     titre_2_rect.center=fenetre_x/2,4*fenetre_y/5
     visible=True
-    pygame.time.set_timer(SECONDE,500)
+    pygame.time.set_timer(ANIMER,500)
 
     while True:
         for event in pygame.event.get():
             if event.type==QUIT:    return None
             if event.type==KEYDOWN or event.type==MOUSEBUTTONDOWN:  return "continuer"
-            if event.type==SECONDE: visible=not visible
+            if event.type==ANIMER: visible=not visible
 
         fenetre.blit(fond_ecran,(0,0))
         fenetre.blit(titre,titre_rect)
@@ -111,6 +111,7 @@ def jeu(niveau_actuel):
     liste_cooldown=deepcopy(liste_base_cooldown)
     duree_frame=0
     etat_jeu=0  # 0: jeu de plateforme  1:jeu de dessin     2:astuce
+    pygame.time.set_timer(ANIMER,100)
     timer=pygame.time.Clock()
 
     #-----------------------------Boucle--------------------------------------
@@ -122,6 +123,13 @@ def jeu(niveau_actuel):
 
             if event.type==QUIT:
                 return "fin"
+
+            if event.type==KEYDOWN:
+                for i in niveau_actuel.dict_element["caisse"]:
+                    if event.key==K_SPACE and distance(perso.rect.center,i.rect.center)<=30 and i.hold==False:
+                        i.hold=True
+                    elif event.key==K_SPACE and i.hold==True:
+                        i.hold=False
 
             if event.type==KEYUP:
                 if event.key==K_RIGHT or event.key==K_LEFT:
@@ -142,7 +150,7 @@ def jeu(niveau_actuel):
                     if pygame.Rect(500,2,40,40).collidepoint(event.pos):
                         a_e=etat_jeu
                         etat_jeu=2
-                    if pygame.Rect(600,2,40,40).collidepoint(event.pos) and etat_jeu==2:
+                    if pygame.Rect(550,2,40,40).collidepoint(event.pos) and etat_jeu==2:
                         etat_jeu=a_e
             if event.type==MOUSEBUTTONUP:
                 if event.button==1 and etat_jeu==1:
@@ -211,6 +219,8 @@ def jeu(niveau_actuel):
                             liste_obj_bulle.append(perso)
                             for i in niveau_actuel.dict_element["goomba"]:
                                 liste_obj_bulle.append(i)
+                            for i in niveau_actuel.dict_element["caisse"]:
+                                liste_obj_bulle.append(i)
 
                             liste_obj_proche=[i for i in liste_obj_bulle if distance(i.rect.center,c_centre)<c_rayon]
                             for i,elem in enumerate([distance(i.rect.center,c_centre) for i in liste_obj_proche]):
@@ -220,6 +230,7 @@ def jeu(niveau_actuel):
                                 b=Bulle(img_bulle,obj)
                                 niveau_actuel.dict_element["bulle"].append(b)
                                 del obj
+                                pygame.time.set_timer(POP_BULLE,4000)
                             except NameError:
                                 pass
 
@@ -228,7 +239,9 @@ def jeu(niveau_actuel):
                         elif b_ellipse and perso.energie>2 and liste_cooldown[6]==liste_base_cooldown[6]:
                             liste_t_forme[6]=pygame.time.get_ticks()
                             perso.energie-=2
-                            print('ellipse',e_centre,(e_a,e_b))
+                            niveau_actuel.ralenti=0.5
+                            pygame.time.set_timer(RALENTI,3000)
+                            pygame.time.set_timer(ANIMER,200)
 
                         #Angle
                         elif b_angle!=False and perso.energie>3 and liste_cooldown[4]==liste_base_cooldown[4]:
@@ -282,6 +295,11 @@ def jeu(niveau_actuel):
                     if go.animation>=3:
                         go.animation=0
 
+                for go in niveau_actuel.dict_element["koopa"]:
+                    go.animation+=1
+                    if go.animation>=4:
+                        go.animation=0
+
                 for t in niveau_actuel.dict_element["torche"]:
                     t.animation+=1
                     if t.animation>=4:
@@ -309,6 +327,19 @@ def jeu(niveau_actuel):
                 pygame.time.set_timer(INVINCIBLE,0)
                 perso.invincible=False
 
+            if event.type==POP_BULLE:
+                pygame.time.set_timer(POP_BULLE,0)
+                if niveau_actuel.dict_element["bulle"]!=[]:
+                    bulle=niveau_actuel.dict_element["bulle"][0]
+                    bulle.obj.acceleration_y=g
+                    bulle.obj.vitesse_y=0
+                    niveau_actuel.dict_element["bulle"].remove(bulle)
+                    del bulle
+
+            if event.type==RALENTI:
+                pygame.time.set_timer(RALENTI,0)
+                pygame.time.set_timer(ANIMER,100)
+                niveau_actuel.ralenti=1
 
         touches=pygame.key.get_pressed()
 
@@ -316,14 +347,22 @@ def jeu(niveau_actuel):
             perso.vitesse_x+=100
             perso.deplacement=True
             perso.direction="droite"
+            for i in niveau_actuel.dict_element["caisse"]:
+                if distance(i.rect.center,perso.rect.center)>35:
+                    i.hold=False
 
         if touches[K_LEFT] and perso.deplacement==False:
             perso.vitesse_x-=100
             perso.deplacement=True
             perso.direction="gauche"
+            for i in niveau_actuel.dict_element["caisse"]:
+                if distance(i.rect.center,perso.rect.center)>35:
+                    i.hold=False
 
         if touches[K_UP] and perso.saut==False:
             perso.vitesse_y=-6
+            for i in niveau_actuel.dict_element["caisse"]:
+                i.hold=False
 
 
         if etat_jeu==1:
@@ -345,6 +384,7 @@ def jeu(niveau_actuel):
             if p!=None:
                 if p=="mort":
                     pygame.image.save(fenetre,"temp/save.png")
+                    son_game_over.play()
                     return game_over(pygame.image.load("temp/save.png"))
                 if p=="suivant":
                     return p
@@ -389,8 +429,8 @@ def jeu(niveau_actuel):
                 pygame.draw.line(fenetre,ROUGE,liste_pos[i+1],liste_pos[i],8)
 
         #Interface
-        pygame.draw.rect(fenetre,VERT,(2,2,60*perso.pv,26))
-        pygame.draw.rect(fenetre,NOIR,(2,2,60*perso.pv,26),2)
+        pygame.draw.rect(fenetre,VERT,(2,2,150*perso.pv,26))
+        pygame.draw.rect(fenetre,NOIR,(2,2,150*perso.pv,26),2)
         pygame.draw.rect(fenetre,BLEU,(2,30,20*perso.energie,26))
         pygame.draw.rect(fenetre,NOIR,(2,30,20*perso.energie,26),2)
         for i,forme in enumerate(liste_img_formes):
@@ -404,8 +444,8 @@ def jeu(niveau_actuel):
         fenetre.blit(img_info,(500,2))
 
         if etat_jeu==2:
-            fenetre.blit(niveau_actuel.dict_images['pause'],(0,0))
-            fenetre.blit(img_retour,(600,2))
+            fenetre.blit(pause_tuto,(0,0))
+            fenetre.blit(img_retour,(550,2))
             for i,texte in enumerate(niveau_actuel.texte_astuce):
                 fenetre.blit(texte,(0,20*i))
 
@@ -422,6 +462,7 @@ def jeu(niveau_actuel):
 
 
 def game_over(fond):
+
     rect_gameover=texte_gameover.get_rect()
     rect_reessayer=texte_reessayer.get_rect()
     rect_menu=texte_menu.get_rect()

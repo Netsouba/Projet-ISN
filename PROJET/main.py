@@ -14,7 +14,6 @@ from fonctions_jeu import *
 
 
 #-----------------------------Début--------------------------------------
-
 pygame.init()
 pygame.display.set_icon(icone)
 pygame.display.set_caption("C'est mon jeu!!!")
@@ -26,14 +25,9 @@ pygame.display.set_caption("C'est mon jeu!!!")
 for i in range(24):
     if i==1:pos=40,40
     else:pos=40,480
-    Niveau(i,img_theme_1,1,pos)
-
-#Events
-pygame.time.set_timer(ANIMER,100)
-
+    Niveau(i,img_niveau,pos)
 
 if accueil()=="continuer":
-
     continuer=True
     while continuer:
 
@@ -44,6 +38,7 @@ if accueil()=="continuer":
 
                 try:
                     etat=jeu(Niveau.liste[niveau_actuel])
+                    pygame.mixer.stop()
                 except IndexError:  #Si c'etait le dernier niveau
                     continuer=False
                     break
