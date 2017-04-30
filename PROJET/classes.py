@@ -163,7 +163,7 @@ class Personnage():
     def __init__(self,pos,dict_img):
 
         self.dict_img=dict_img
-        self.pv=5
+        self.pv=2
         self.energie=15
         self.invincible=False
         self.img=dict_img["droite"]["debout"]
@@ -274,7 +274,7 @@ class Personnage():
 
         #Verification victoire
         if self.rect.collidelist(niveau_actuel.dict_element["goomba"])!=-1 and self.invincible==False:
-                self.pv-=3
+                self.pv-=1
                 return "touche"
         if self.rect.collidelist(niveau_actuel.dict_element["koopa"])!=-1 and self.invincible==False:
             return "mort"
