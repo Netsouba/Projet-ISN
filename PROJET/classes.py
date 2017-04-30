@@ -1,54 +1,55 @@
-﻿import pygame
+﻿import os
+import pygame
 from pygame.locals import *
 import math
 from copy import deepcopy
+
+
 from constantes import *
 from fonctions import *
+from init import *
 
 
 #----------------------------Classes---------------------------------------
 class Niveau():
     liste=[]
-    """
-        Attributs:  theme :     Numero du theme
-                    fichier:    Nom du fichier
-                    structure:  Liste de liste
-                    dict_image: Images
 
-
-        Méthodes:   creation()
-                    update()
-
-    """
-
-    def __init__(self,n,c_fichier,images,theme):
+    def __init__(self,n,images,depart):
 
         self.numero=n
-        self.theme=theme    #Numero du theme
-        self.fichier=c_fichier
+        self.fichier="Niveaux//"+str(self.numero+1)+".txt"
+        self.dict_images=images
 
+        self.depart=depart
+        self.creation()
+
+        Niveau.liste.append(self)
+
+    def creation(self):
+
+        self.dict_images["ombre"].set_alpha(240)
+        self.noir=False
+        self.eclair=False
+        self.ralenti=False
+        self.liste_ombre=[]
         self.structure=[]
+        self.astuce=[]
         self.dict_element={ "bloc":[],
-                            "fin":None,
+                            "fin":[],
                             "tp":[],
                             "torche":[],
                             "porte":[],
                             "goomba":[],
                             "bulle":[],
                             "boule feu":[],
-                            "interrupteur":[]
+                            "interrupteur":[],
+                            "porte interrupteur":[],
+                            "bouton":[],
+                            "porte bouton":[],
+                            "pic":[],
+                            "pot":[],
+                            "coeur":[]
                             }
-
-        self.liste_ombre=[]
-        self.vent=False,None
-        self.noir=False
-        self.eclair=False
-
-        self.dict_images=images
-        self.creation()
-        Niveau.liste.append(self)
-
-    def creation(self):
 
         with open(self.fichier,'r') as fichier:
             grille=fichier.readlines()
@@ -60,38 +61,77 @@ class Niveau():
 
 
         for y,ligne in enumerate(self.structure):
-            for x,car in enumerate(ligne):
+            if y<=17:
+                for x,car in enumerate(ligne):
+                    if car!=" ":
+                        try:
+                            int(car)
+                            chiffre=True
+                        except ValueError:
+                            chiffre=False
 
-                if car=='1':
-                    r=Bloc(self.dict_images["bloc"],(x*bloc_x , y*bloc_y))
-                    self.dict_element["bloc"].append(r)
 
-                elif car=='2':
-                    f=Fin(self.dict_images["porte"],(x*bloc_x , y*bloc_y))
-                    self.dict_element["fin"]=f
+                        if chiffre:
+                            if car=='1':
+                                r=Bloc(self.dict_images["bloc"],(x*bloc_x , y*bloc_y))
+                                self.dict_element["bloc"].append(r)
 
-                elif car=='3':
-                    t=Teleport(self.dict_images["tp"],(x*bloc_x , y*bloc_y))
-                    self.dict_element["tp"].append(t)
+                            elif car=='2':
+                                f=Fin(self.dict_images["fin"],(x*bloc_x , y*bloc_y))
+                                self.dict_element["fin"].append(f)
 
-                elif car=='4':
-                    t=Torche(self.dict_images["torche"],(x*bloc_x , y*bloc_y))
-                    self.dict_element["torche"].append(t)
+                            elif car=='3':
+                                t=Teleport(self.dict_images["tp"],(x*bloc_x , y*bloc_y))
+                                self.dict_element["tp"].append(t)
 
-                elif car=='5':
-                    p=Porte(self.dict_images["portail"],(x*bloc_x , y*bloc_y))
-                    self.dict_element["porte"].append(p)
+                            elif car=='4':
+                                t=Torche(self.dict_images["torche"],(x*bloc_x , y*bloc_y))
+                                self.dict_element["torche"].append(t)
 
-                elif car=='6':
-                    go=Goomba(self.dict_images["goomba"],(x*bloc_x , y*bloc_y))
-                    self.dict_element["goomba"].append(go)
-                
-                elif car=='7':
-                    i= Interrupteur(self.dict_images["interrupteur"],(x*bloc_x,y*bloc_y))
-                    self.dict_element["interrupteur"].append(i)
+                            elif car=='5':
+                                p=Porte(self.dict_images["porte"],(x*bloc_x , y*bloc_y))
+                                self.dict_element["porte"].append(p)
 
-                elif car=="n":
-                    self.noir=True
+                            elif car=='6':
+                                go=Goomba(self.dict_images["goomba"],(x*bloc_x , y*bloc_y))
+                                self.dict_element["goomba"].append(go)
+
+                            elif car=="7":
+                                b=Bouton(self.dict_images["bouton"],((x*bloc_x , y*bloc_y)))
+                                self.dict_element['bouton'].append(b)
+                            elif car=="8":
+                                p=Porte_interrupeur(self.dict_images["porte bouton"],(x*bloc_x , y*bloc_y),car)
+                                self.dict_element["porte bouton"].append(p)
+                            elif car=="9":
+                                p=Pic(self.dict_images["pic"],(x*bloc_x , y*bloc_y))
+                                self.dict_element["pic"].append(p)
+
+                        else:
+                            if car=="p":
+                                p=Pot(self.dict_images["pot"],(x*bloc_x+15 , y*bloc_y+15))
+                                self.dict_element["pot"].append(p)
+                            elif car=="c":
+                                c=Coeur(self.dict_images["coeur"],(x*bloc_x+15, y*bloc_y+15))
+                                self.dict_element["coeur"].append(c)
+
+
+                            elif car=="n":
+                                self.noir=True
+                            elif car.lower()==car:
+                                i= Interrupteur(self.dict_images["interrupteur"],(x*bloc_x,y*bloc_y),car)
+                                self.dict_element["interrupteur"].append(i)
+                            elif car.upper()==car:
+                                p=Porte_interrupeur(self.dict_images["porte interrupteur"],(x*bloc_x , y*bloc_y),car)
+                                self.dict_element["porte interrupteur"].append(p)
+
+
+                for i in self.dict_element["interrupteur"]:
+                    for indice,p in enumerate(self.dict_element["porte interrupteur"]):
+                        if i.car==p.car:
+                            i.liste_porte.append(indice)
+            else:
+                self.astuce.append(ligne)
+        self.texte_astuce=[p_perfect.render(i,0,JAUNE) for i in self.astuce]
 
     def update(self,perso):
         #Ombre
@@ -100,34 +140,23 @@ class Niveau():
             for y in range(0,fenetre_y,self.dict_images["ombre"].get_height()):
                 for x in range(0,fenetre_x,self.dict_images["ombre"].get_width()):
                     self.liste_ombre.append((x,y))
-            if self.eclair==True:
-                self.liste_ombre=[]
+
+        if self.eclair==True:
+            self.dict_images["ombre"].set_alpha(self.dict_images["ombre"].get_alpha()+10)
+        if self.dict_images["ombre"].get_alpha()>=240:
+            self.dict_images["ombre"].set_alpha(240)
+            self.eclair=False
 
 
-
-        #Vent
-        liste_obj_vent=[]
-        for i in self.dict_element["goomba"]:
-            liste_obj_vent.append(i)
-        liste_obj_vent.append(perso)
-
-        if self.vent[0]==True:
-
-            for i in liste_obj_vent:
-
-                if self.vent[1]=="droite":
-                    i.acceleration_x=15
-                elif self.vent[1]=="gauche":
-                    i.acceleration_x=-15
-        else:
-            for i in liste_obj_vent:
-                i.acceleration_x=0
 
 class Personnage():
 
     def __init__(self,pos,dict_img):
 
         self.dict_img=dict_img
+        self.pv=2
+        self.energie=15
+        self.invincible=False
         self.img=dict_img["droite"]["debout"]
         self.rect=self.img.get_rect()
         self.ancien=self.rect
@@ -142,10 +171,24 @@ class Personnage():
         self.double_saut=False
         self.deplacement=False
         self.direction="droite"
+        self.clignotant=False
 
 
     def update(self,d_frame,niveau_actuel):
 
+        #Animation
+        if self.invincible==True:
+            self.clignotant=True
+        else:
+            self.clignotant=False
+        if self.deplacement==True:
+            self.img=self.dict_img[self.direction]["cours"][self.animation]
+        if self.saut==True:
+            self.img=self.dict_img[self.direction]["saute"]
+        if self.deplacement==False and self.saut==False:
+            self.img=self.dict_img[self.direction]["debout"]
+
+        #Liste des elements de collision
         liste_rect=[]
 
         for i in niveau_actuel.dict_element["bloc"]:
@@ -154,6 +197,14 @@ class Personnage():
         for i in niveau_actuel.dict_element["porte"]:
             if i.ouvert==False:
                 liste_rect.append(i.rect)
+        for i in niveau_actuel.dict_element["porte interrupteur"]:
+            if i.ouvert==False:
+                liste_rect.append(i.rect)
+        for i in niveau_actuel.dict_element["porte bouton"]:
+            if i.ouvert==False:
+                liste_rect.append(i.rect)
+        for i in niveau_actuel.dict_element["bouton"]:
+            liste_rect.append(i.rect)
 
         #Mouvement
 
@@ -168,8 +219,8 @@ class Personnage():
 
 
         #Restraindre position dans la fenetre
-        if self.rect.bottom>=fenetre_y:
-            print("T'es mort!!!!!!!!!!!!!!!!!!!")
+        if self.rect.top>=fenetre_y:
+            return "mort"
         elif self.rect.top<0:
             self.rect.top=0
             self.vitesse_y=0
@@ -183,51 +234,133 @@ class Personnage():
         #Collision
         i_collision=self.rect.collidelistall(liste_rect)
         for rect in [liste_rect[i] for i in i_collision]:
-            if self.rect.bottom>=rect.top and self.ancien.bottom<=rect.top:
+            if self.ancien.bottom<=rect.top<=self.rect.bottom:
                 self.rect.bottom=rect.top
                 self.vitesse_y=0
-            elif self.rect.top<=rect.bottom and self.ancien.top>=rect.bottom:
+            elif self.rect.top<=rect.bottom<=self.ancien.top:
                 self.rect.top=rect.bottom
                 self.vitesse_y=0
 
-            elif self.rect.right>=rect.left and self.ancien.right<=rect.left:
+            elif self.ancien.right<=rect.left<=self.rect.right:
                 self.rect.right=rect.left
-            elif self.rect.left<=rect.right and self.ancien.left>=rect.right:
+
+            elif self.rect.left<=rect.right<=self.ancien.left:
                 self.rect.left=rect.right
 
+
         for rect in liste_rect:
-            if (self.rect.bottom==rect.top) and ((self.rect.left>rect.left and self.rect.left<rect.right) or (self.rect.right>rect.left and self.rect.right<rect.right)):
+            if (self.rect.bottom==rect.top) and (rect.left<self.rect.left<rect.right or rect.left<self.rect.right<rect.right):
                 self.saut=False
                 self.double_saut=False
 
 
-        #Animation
-
-        if self.deplacement==True:
-            self.img=self.dict_img[self.direction]["cours"][self.animation]
-        if self.saut==True:
-            self.img=self.dict_img[self.direction]["saute"]
-        if self.deplacement==False and self.saut==False:
-            self.img=self.dict_img[self.direction]["debout"]
 
         #Verification victoire
-        if self.rect.collidelist(niveau_actuel.dict_element["goomba"])!=-1:
-            print("LOLOLOL! T'es mort!")
-        if self.rect.colliderect(niveau_actuel.dict_element["fin"].rect):
-            return "win"
+        if self.rect.collidelist(niveau_actuel.dict_element["goomba"])!=-1 and self.invincible==False:
+                self.pv-=1
+                return "touche"
+        if self.rect.collidelist(niveau_actuel.dict_element["pic"])!=-1 and self.invincible==False:
+            return "mort"
+
+        i=self.rect.collidelist(niveau_actuel.dict_element["pot"])
+        if i!=-1 and self.energie<15:
+            if self.energie<=10:    self.energie+=5
+            else:                   self.energie=15
+            niveau_actuel.dict_element["pot"].pop(i)
+
+        i=self.rect.collidelist(niveau_actuel.dict_element["coeur"])
+        if i!=-1 and self.pv==1:
+            self.pv=2
+            niveau_actuel.dict_element["coeur"].pop(i)
+
+        if self.rect.colliderect(niveau_actuel.dict_element["fin"][0].rect):
+            return "suivant"
+        if self.pv==0:
+            return "mort"
+
 
 class Bloc():
     def __init__(self,img,pos):
         self.img=img
         self.rect=self.img.get_rect()
         self.rect.topleft=pos
+    def update(self,perso,d_frame,niveau_actuel):
+        pass
 
+class Pot():
+    def __init__(self,img,pos):
+        self.img=img
+        self.rect=self.img.get_rect()
+        self.rect.topleft=pos
+    def update(self,perso,d_frame,niveau_actuel):
+        pass
+
+class Coeur():
+    def __init__(self,img,pos):
+        self.img=img
+        self.rect=self.img.get_rect()
+        self.rect.topleft=pos
+    def update(self,perso,d_frame,niveau_actuel):
+        pass
+
+class Pic():
+    def __init__(self,img,pos):
+        self.img=img
+        self.rect=self.img.get_rect()
+        self.rect.topleft=pos
+    def update(self,perso,d_frame,niveau_actuel):
+        pass
+
+class Bouton():
+    def __init__(self,liste_img,pos):
+        self.liste_img=liste_img
+        self.img=self.liste_img[1]
+        self.rect=self.img.get_rect()
+        self.rect.topleft=pos
+        self.appuye=False
+
+    def update(self,perso,d_frame,niveau_actuel):
+        liste_collision=[]
+        liste_collision.append(perso.rect)
+        for i in niveau_actuel.dict_element["goomba"]:
+            liste_collision.append(i.rect)
+
+        self.appuye=False
+        for rect in liste_collision:
+            if rect.bottom==self.rect.top and self.rect.left<rect.centerx<self.rect.right:
+                self.appuye=True
+
+
+        if False not in [i.appuye for i in niveau_actuel.dict_element["bouton"]]:
+            for i in niveau_actuel.dict_element["porte bouton"]:
+                i.ouvert=True
+        else:
+            for i in niveau_actuel.dict_element["porte bouton"]:
+                i.ouvert=False
+
+        if self.appuye: self.img=self.liste_img[0]
+        else:           self.img=self.liste_img[1]
+
+class PorteBouton():
+
+    def __init__(self,liste_img,pos):
+        self.liste_img=liste_img
+        self.img=liste_img[0]
+        self.rect=self.img.get_rect()
+        self.rect.topleft=pos
+        self.ouvert=False
+        self.animation=0
+
+    def update(self,perso,d_frame,niveau_actuel):
+        self.img=self.liste_img[self.animation]
 
 class Fin():
     def __init__(self,img,pos):
         self.img=img
         self.rect=self.img.get_rect()
         self.rect.topleft=pos
+    def update(self,perso,d_frame,niveau_actuel):
+        pass
 
 class Goomba():
     def __init__(self,liste_img,pos):
@@ -242,18 +375,29 @@ class Goomba():
         self.acceleration_y=g
         self.animation=0
 
-    def update(self,d_frame,niveau_actuel):
+    def update(self,perso,d_frame,niveau_actuel):
 
+    #Liste des elements de collision
         liste_rect=[]
 
         for i in niveau_actuel.dict_element["bloc"]:
             liste_rect.append(i.rect)
-
         for i in niveau_actuel.dict_element["porte"]:
             if i.ouvert==False:
                 liste_rect.append(i.rect)
 
+        for i in niveau_actuel.dict_element["porte interrupteur"]:
+            if i.ouvert==False:
+                liste_rect.append(i.rect)
 
+        for i in niveau_actuel.dict_element["porte bouton"]:
+            if i.ouvert==False:
+                liste_rect.append(i.rect)
+
+        for i in niveau_actuel.dict_element["bouton"]:
+            liste_rect.append(i.rect)
+
+        #Mouvement
         self.ancien=self.rect
         self.vitesse_x+=self.acceleration_x
         self.vitesse_y+=self.acceleration_y
@@ -267,7 +411,6 @@ class Goomba():
             niveau_actuel.dict_element["goomba"].remove(self)
             del self
             return 0
-
         if self.rect.top<0:
             self.rect.top=0
             self.vitesse_y=0
@@ -278,23 +421,26 @@ class Goomba():
             self.rect.left=0
             self.vitesse_x=50
 
+
         #Collision
         i_collision=self.rect.collidelistall(liste_rect)
         for rect in [liste_rect[i] for i in i_collision]:
 
-            if self.rect.bottom>=rect.top and self.ancien.bottom<=rect.top:
+            if self.ancien.bottom<=rect.top<=self.rect.bottom:
                 self.rect.bottom=rect.top
                 self.vitesse_y=0
-            elif self.rect.top<=rect.bottom and self.ancien.top>=rect.bottom:
+            elif self.rect.top<=rect.bottom<=self.ancien.top:
                 self.rect.top=rect.bottom
                 self.vitesse_y=0
 
-            elif self.rect.right>=rect.left and self.ancien.right<=rect.left:
+            elif self.ancien.right<=rect.left<=self.rect.right:
                 self.rect.right=rect.left
                 self.vitesse_x=-50
-            elif self.rect.left<=rect.right and self.ancien.left>=rect.right:
+
+            elif self.rect.left<=rect.right<=self.ancien.left:
                 self.rect.left=rect.right
                 self.vitesse_x=50
+
 
         #Animation
         self.img=self.liste_img[self.animation]
@@ -310,7 +456,8 @@ class Teleport():
         self.rect=self.img.get_rect()
         self.rect.topleft=pos
 
-    def update(self,perso):
+    def update(self,perso,d_frame,niveau_actuel):
+        #Changement couleur
         d=distance(perso.rect.center,self.rect.center)
 
         if d<100:       self.etat=0
@@ -350,7 +497,7 @@ class BouleFeu():
 
         self.animation=0
 
-    def update(self,d_frame,niveau_actuel):
+    def update(self,perso,d_frame,niveau_actuel):
 
 
         #Mouvement
@@ -375,6 +522,9 @@ class BouleFeu():
         for i in niveau_actuel.dict_element["bloc"]:
             liste_collision.append(i.rect)
         for i in niveau_actuel.dict_element["porte"]:
+            if i.ouvert==False:
+                liste_collision.append(i.rect)
+        for i in niveau_actuel.dict_element["porte interrupteur"]:
             if i.ouvert==False:
                 liste_collision.append(i.rect)
 
@@ -418,9 +568,11 @@ class Torche():
         self.enflamme=False
         self.animation=0
 
-    def update(self,niveau_actuel):
+    def update(self,perso,d_frame,niveau_actuel):
         if self.enflamme==True:
+            #Animation
             self.img=self.dict_img["Flamme"][self.animation]
+
             #Eclairage
             l=[]
             for o in niveau_actuel.liste_ombre:
@@ -442,7 +594,7 @@ class Porte():
         self.ouvert=False
         self.animation=0
 
-    def update(self):
+    def update(self,perso,d_frame,niveau_actuel):
         self.img=self.liste_img[self.animation]
 
 
@@ -454,7 +606,7 @@ class Bulle():
         self.rect=self.img.get_rect()
         self.rect.center=self.obj.rect.center
 
-    def update(self,niveau_actuel):
+    def update(self,perso,d_frame,niveau_actuel):
 
         self.rect.center=self.obj.rect.center
         self.obj.acceleration_y=-g/2
@@ -468,28 +620,41 @@ class Bulle():
                     return 0
 
 class Interrupteur():
-    liste= []
-    def __init__(self, dict_image, pos):
+    def __init__(self, dict_image, pos,car):
+        self.car=car
         self.dict_image= dict_image
         self.img= dict_image["Ouvert"]
         self.rect=self.img.get_rect()
         self.rect.topleft=pos
         self.ouvert=True
+        self.liste_porte=[]
 
-        Interrupteur.liste.append(self)
-
-    def update(self):
+    def update(self,perso,d_frame,niveau_actuel):
         if self.ouvert==False:
             self.img=self.dict_image["Ferme"]
+            for i,porte in enumerate(niveau_actuel.dict_element["porte interrupteur"]):
+                if i in self.liste_porte:
+                    porte.ouvert=True
 
+        else:
+            self.img=self.dict_image["Ouvert"]
+            for i,porte in enumerate(niveau_actuel.dict_element["porte interrupteur"]):
+                if i in self.liste_porte:
+                    porte.ouvert=False
 
+class Porte_interrupeur():
 
+    def __init__(self,liste_img,pos,car):
+        self.car=car.lower()
+        self.liste_img=liste_img
+        self.img=liste_img[0]
+        self.rect=self.img.get_rect()
+        self.rect.topleft=pos
+        self.ouvert=False
+        self.animation=0
 
-
-
-
-
-
+    def update(self,perso,d_frame,niveau_actuel):
+        self.img=self.liste_img[self.animation]
 
 
 

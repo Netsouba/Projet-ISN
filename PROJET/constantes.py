@@ -1,4 +1,5 @@
-﻿import pygame
+﻿import os
+import pygame
 from pygame.locals import *
 import math
 from copy import deepcopy
@@ -32,10 +33,18 @@ CYAN=0,255,255
 MAGENTA=255,0,255
 
 #Events
-SECONDE=24
+POP_BULLE=24
 ANIMER=25
-VENT=26
-ECLAIR=27
+INVINCIBLE=26
+TRAIT=27
+POINT=28
+CERCLE=29
+TP=30
+ANGLE=31
+ECLAIR=32
+ELLIPSE=33
+
+
 
 #Divers
 g=0.3

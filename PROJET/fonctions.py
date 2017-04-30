@@ -1,12 +1,13 @@
-﻿import pygame
+﻿import os
+import pygame
 from pygame.locals import *
 import math
 from copy import deepcopy
+
+
 from constantes import *
 
-#---------------------------Fonctions----------------------------------------
-
-#Fontions maths
+#-----------------------------------Fontions maths--------------------------------
 def moyenne(liste):
     try:
         return sum(liste)/len(liste)
@@ -104,7 +105,7 @@ def interdiagonalequadri(a,b,c,d):
         return 'Erreur'
 
 
-#Fonctions reconnaissance
+#--------------------------------Fonctions reconnaissance----------------------
 def r_droite(liste_pos):
     acroissement=[]
     for i in range(len(liste_pos)-1):
@@ -296,7 +297,32 @@ def r_tp(liste_pos,rect_perso,liste_tp):
         for i,rect in enumerate(liste_tp):
             if rect.collidepoint(deb):
                 return i
-
-
     return -1
+
+
+
+
+#----------------------------Fonctions jeu--------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
