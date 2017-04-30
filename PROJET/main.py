@@ -37,6 +37,7 @@ if accueil()=="continuer":
             while True:
 
                 try:
+                    pygame.mixer.music.stop()
                     etat=jeu(Niveau.liste[niveau_actuel])
                     pygame.mixer.stop()
                 except IndexError:  #Si c'etait le dernier niveau

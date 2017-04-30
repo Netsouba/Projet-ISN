@@ -19,6 +19,7 @@ def accueil():
     titre_2_rect.center=fenetre_x/2,4*fenetre_y/5
     visible=True
     pygame.time.set_timer(ANIMER,500)
+    pygame.mixer.music.play()
 
     while True:
         for event in pygame.event.get():
@@ -113,6 +114,8 @@ def jeu(niveau_actuel):
     etat_jeu=0  # 0: jeu de plateforme  1:jeu de dessin     2:astuce
     pygame.time.set_timer(ANIMER,100)
     timer=pygame.time.Clock()
+    animation=0
+    longueur=0
 
     #-----------------------------Boucle--------------------------------------
 
@@ -126,10 +129,14 @@ def jeu(niveau_actuel):
 
             if event.type==KEYDOWN:
                 for i in niveau_actuel.dict_element["caisse"]:
-                    if event.key==K_SPACE and distance(perso.rect.center,i.rect.center)<=30 and i.hold==False:
-                        i.hold=True
-                    elif event.key==K_SPACE and i.hold==True:
-                        i.hold=False
+                    if event.key==K_SPACE and distance(perso.rect.center,i.rect.center)<=30:
+                        if i.hold==None:
+                            if perso.rect.x<i.rect.x:
+                                i.hold="gauche"
+                            else:
+                                i.hold="droite"
+                        else:
+                            i.hold=None
 
             if event.type==KEYUP:
                 if event.key==K_RIGHT or event.key==K_LEFT:
@@ -151,7 +158,9 @@ def jeu(niveau_actuel):
                         a_e=etat_jeu
                         etat_jeu=2
                     if pygame.Rect(550,2,40,40).collidepoint(event.pos) and etat_jeu==2:
+                        niveau_actuel.dict_element["bloc_tuto"][0].toucher=True
                         etat_jeu=a_e
+
             if event.type==MOUSEBUTTONUP:
                 if event.button==1 and etat_jeu==1:
                     etat_jeu=0
@@ -323,6 +332,14 @@ def jeu(niveau_actuel):
                     elif p.ouvert==False and p.animation>0:
                         p.animation-=1
 
+                if etat_jeu==2:
+                    animation+=1
+                    if animation>=longueur:
+                        animation=0
+
+
+
+
             if event.type==INVINCIBLE:
                 pygame.time.set_timer(INVINCIBLE,0)
                 perso.invincible=False
@@ -404,6 +421,12 @@ def jeu(niveau_actuel):
                 if liste_cooldown[i]<=0:liste_cooldown[i]=liste_base_cooldown[i]
             liste_texte_cooldown=[p_perfect.render(str(round(i/1000,1)),1,NOIR) for i in liste_cooldown]
 
+            for i in niveau_actuel.dict_element["bloc_tuto"]:
+                if perso.tuto==True and i.toucher==False: #Collision avec bloc tuto
+                    a_e=etat_jeu
+                    etat_jeu=2
+
+
     #---------------------------Affichage-------------------------------------
         #Fond
         fenetre.blit(niveau_actuel.dict_images['fond'],(0,0))
@@ -446,8 +469,33 @@ def jeu(niveau_actuel):
         if etat_jeu==2:
             fenetre.blit(pause_tuto,(0,0))
             fenetre.blit(img_retour,(550,2))
+
+
             for i,texte in enumerate(niveau_actuel.texte_astuce):
-                fenetre.blit(texte,(0,20*i))
+                fenetre.blit(texte,(150,200+20*i))
+
+            if niveau_actuel.numero==1:
+                longueur=len(anim_tuto["trait"])
+                fenetre.blit(anim_tuto["trait"][animation],(200,0))
+            if niveau_actuel.numero==2:
+                longueur=len(anim_tuto["point"])
+                fenetre.blit(anim_tuto["point"][animation],(200,0))
+            if niveau_actuel.numero==3:
+                longueur=len(anim_tuto["cercle"])
+                fenetre.blit(anim_tuto["cercle"][animation],(200,0))
+            if niveau_actuel.numero==4:
+                longueur=len(anim_tuto["TP"])
+                fenetre.blit(anim_tuto["TP"][animation],(200,0))
+            if niveau_actuel.numero==5:
+                longueur=len(anim_tuto["angle droite"])
+                fenetre.blit(anim_tuto["angle haut"][animation],(100,0))
+                fenetre.blit(anim_tuto["angle droite"][animation],(300,0))
+            if niveau_actuel.numero==6:
+                longueur=len(anim_tuto["eclair"])
+                fenetre.blit(anim_tuto["eclair"][animation],(200,0))
+            if niveau_actuel.numero==9:
+                longueur=len(anim_tuto["ellipse"])
+                fenetre.blit(anim_tuto["ellipse"][animation],(200,0))
 
         pygame.display.flip()
 

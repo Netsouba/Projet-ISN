@@ -16,6 +16,7 @@ son_fire=pygame.mixer.Sound("Sons/fire.wav")
 son_pop=pygame.mixer.Sound("Sons/pop.wav")
 son_electric=pygame.mixer.Sound("Sons/electricity.wav")
 son_game_over=pygame.mixer.Sound("Sons/Game_over.wav")
+pygame.mixer.music.load("Sons/fond_menu.wav")
 
 #----------------------------------------------Texte--------------------------------------------------------------------------------------------------------------
 p_funny=pygame.font.Font("Polices/Packaging Funny.otf",40)
@@ -46,12 +47,12 @@ fenetre=pygame.display.set_mode(taille_fenetre)
 fond_ecran=pygame.image.load("Images/Fonds/fond_ecran.jpg")
 img_fond_menu=pygame.image.load("Images/Fonds/ecran_accueil.jpg").convert()
 img_boite=pygame.image.load("Images/Structure/boite.png").convert()
-img_boite.set_colorkey(BLANC)
+img_boite.set_colorkey(MAGENTA)
 
 img_fleche_droite=pygame.image.load("Images/Fleche/droite.png").convert()
-img_fleche_droite.set_colorkey(BLANC)
+img_fleche_droite.set_colorkey(CYAN)
 img_fleche_gauche=pygame.image.load("Images/Fleche/gauche.png").convert()
-img_fleche_gauche.set_colorkey(BLANC)
+img_fleche_gauche.set_colorkey(CYAN)
 
 #----------------------------------Perso---------------------
 
@@ -110,6 +111,8 @@ img_porte.set_colorkey(BLANC)
 
 bloc_plateforme=pygame.image.load("Images/Structure//block.png")
 
+bloc_tuto=pygame.image.load("Images/Structure/tuto.png")
+bloc_tuto.set_colorkey(MAGENTA)
 
 img_tp=[pygame.image.load("Images/Teleportation/1.png").convert(),pygame.image.load("Images/Teleportation/2.png").convert(),pygame.image.load("Images/Teleportation/3.png").convert(),pygame.image.load("Images/Teleportation/4.png").convert(),pygame.image.load("Images/Teleportation/5.png").convert()]
 for i in img_tp:
@@ -205,10 +208,19 @@ img_niveau={
                 "pic":pic                           ,
                 "pot":pot                           ,
                 "coeur":coeur                       ,
-                "caisse":img_caisse
+                "caisse":img_caisse                 ,
+                "bloc_tuto": bloc_tuto
             }
 
-
+anim_tuto={ "angle droite": [pygame.image.load("Images/Tuto/Angle droite/frame_"+str(i)+"_delay-0.1s.gif").convert() for i in range(9)],
+            "angle haut":   [pygame.image.load("Images/Tuto/Angle haut/frame_"+str(i)+"_delay-0.1s.gif").convert() for i in range(9)],
+            "cercle":       [pygame.image.load("Images/Tuto/Cercle/frame_"+str(i)+"_delay-0.1s.gif").convert() for i in range(17)],
+            "eclair":       [pygame.image.load("Images/Tuto/Eclair/frame_"+str(i)+"_delay-0.1s.gif").convert() for i in range(16)],
+            "ellipse":      [pygame.image.load("Images/Tuto/Ellipse/frame_"+str(i)+"_delay-0.1s.gif").convert() for i in range(0,43,3)],
+            "point":        [pygame.image.load("Images/Tuto/Point/frame_"+str(i)+"_delay-0.1s.gif").convert() for i in range(8)],
+            "trait":        [pygame.image.load("Images/Tuto/Trait/frame_"+str(i)+"_delay-0.1s.gif").convert() for i in range(8)],
+            "TP":        [pygame.image.load("Images/Tuto/TP/frame_"+str(i)+"_delay-0.1s.gif").convert() for i in range(15)]
+            }
 
 #-------------------------------------------------------------------------Autre-----------------------------------------------------------------
 icone=pygame.image.load("Images/Structure/icon.png")
