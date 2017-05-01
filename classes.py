@@ -438,7 +438,7 @@ class Koopa():
         self.vitesse_x+=self.acceleration_x
         self.vitesse_y+=self.acceleration_y
 
-        self.rect=self.rect.move(self.vitesse_x*d_frame,self.vitesse_y)
+        self.rect=self.rect.move(self.vitesse_x*d_frame*niveau_actuel.ralenti,self.vitesse_y)
 
 
 
@@ -530,6 +530,7 @@ class Bouton():
             liste_collision.append(i.rect)
         for i in niveau_actuel.dict_element["caisse"]:
             liste_collision.append(i.rect)
+
         self.appuye=False
         for rect in liste_collision:
             if rect.bottom==self.rect.top and self.rect.left<rect.centerx<self.rect.right:

@@ -250,9 +250,9 @@ def jeu(niveau_actuel):
                         elif b_ellipse and perso.energie>2 and liste_cooldown[6]==liste_base_cooldown[6]:
                             liste_t_forme[6]=pygame.time.get_ticks()
                             perso.energie-=2
-                            niveau_actuel.ralenti=0.5
-                            pygame.time.set_timer(RALENTI,3000)
-                            pygame.time.set_timer(ANIMER,200)
+                            niveau_actuel.ralenti=0.1
+                            pygame.time.set_timer(RALENTI,8000)
+                            pygame.time.set_timer(ANIMER,1000)
 
                         #Angle
                         elif b_angle!=False and perso.energie>3 and liste_cooldown[4]==liste_base_cooldown[4]:
@@ -498,7 +498,7 @@ def jeu(niveau_actuel):
                 fenetre.blit(anim_tuto["ellipse"][animation],((200,120)))
 
         pygame.display.flip()
-
+        print(pygame.mouse.get_pos())
     #----------------------------Gestion du temps-----------------------------
         timer.tick(30)
         fps=timer.get_fps()
