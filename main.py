@@ -22,7 +22,7 @@ pygame.display.set_caption("C'est mon jeu!!!")
 
 
 #Creation des niveaux
-for i in range(24):
+for i in range(10):
     if i==1:pos=40,40
     else:pos=40,480
     Niveau(i,img_niveau,pos)
