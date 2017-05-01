@@ -476,26 +476,26 @@ def jeu(niveau_actuel):
 
             if niveau_actuel.numero==1:
                 longueur=len(anim_tuto["trait"])
-                fenetre.blit(anim_tuto["trait"][animation],(10,10))
+                fenetre.blit(anim_tuto["trait"][animation],(200,120))
             elif niveau_actuel.numero==2:
                 longueur=len(anim_tuto["point"])
-                fenetre.blit(anim_tuto["point"][animation],(10,10))
+                fenetre.blit(anim_tuto["point"][animation],(200,120))
             elif niveau_actuel.numero==3:
                 longueur=len(anim_tuto["cercle"])
-                fenetre.blit(anim_tuto["cercle"][animation],(10,10))
+                fenetre.blit(anim_tuto["cercle"][animation],(200,120))
             elif niveau_actuel.numero==4:
                 longueur=len(anim_tuto["TP"])
-                fenetre.blit(anim_tuto["TP"][animation],(10,10))
+                fenetre.blit(anim_tuto["TP"][animation],(200,120))
             elif niveau_actuel.numero==5:
                 longueur=len(anim_tuto["angle droite"])
-                fenetre.blit(anim_tuto["angle haut"][animation],(10,10))
-                fenetre.blit(anim_tuto["angle droite"][animation],(100,10))
+                fenetre.blit(anim_tuto["angle haut"][animation],(200,120))
+                fenetre.blit(anim_tuto["angle droite"][animation],(300,120))
             elif niveau_actuel.numero==6:
                 longueur=len(anim_tuto["eclair"])
-                fenetre.blit(anim_tuto["eclair"][animation],(10,10))
+                fenetre.blit(anim_tuto["eclair"][animation],((200,100)))
             elif niveau_actuel.numero==7:
                 longueur=len(anim_tuto["ellipse"])
-                fenetre.blit(anim_tuto["ellipse"][animation],(10,10))
+                fenetre.blit(anim_tuto["ellipse"][animation],((200,120)))
 
         pygame.display.flip()
 
