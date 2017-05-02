@@ -22,7 +22,7 @@ pygame.display.set_caption("C'est mon jeu!!!")
 
 
 #Creation des niveaux
-for i in range(11):
+for i in range(13):
     if i==1:pos=40,40
     else:pos=40,480
     Niveau(i,img_niveau,pos)
@@ -32,15 +32,16 @@ if accueil()=="continuer":
     while continuer:
 
         niveau_actuel=menu()
+
+
         if niveau_actuel!=None:
 
             while True:
 
                 if niveau_actuel<len(Niveau.liste):
-                    pygame.mixer.music.stop()
+
                     etat=jeu(Niveau.liste[niveau_actuel])
 
-                    pygame.mixer.stop()
                 else:  #Si c'etait le dernier niveau
                     continuer=False
                     break

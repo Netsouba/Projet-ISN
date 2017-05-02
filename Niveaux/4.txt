@@ -18,3 +18,4 @@
 11111111111111111111111111111111
 Creez une bulle sur vous meme pour voler.
 Vous pouvez casser la bulle en la coupant.
+La bulle se casse au bout de quelques secondes.

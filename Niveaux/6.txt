@@ -17,6 +17,6 @@ n
      p    p    6 p  p  p  6   2
 11111111111111111111111111111111
 La boule de feu peut etre lancee 
-dans toutes les directions.
+dans les quatres directions.
 
 Faites des traits plus horizontaux si vous avez du mal a dessiner

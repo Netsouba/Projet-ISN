@@ -18,6 +18,10 @@ son_electric=pygame.mixer.Sound("Sons/electricity.wav")
 son_game_over=pygame.mixer.Sound("Sons/Game_over.wav")
 pygame.mixer.music.load("Sons/fond_menu.wav")
 
+
+
+
+
 #----------------------------------------------Texte--------------------------------------------------------------------------------------------------------------
 p_funny=pygame.font.Font("Polices/Packaging Funny.otf",40)
 p_candy=pygame.font.Font("Polices/Candy_Pop!-demo-font.ttf",90)

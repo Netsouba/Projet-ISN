@@ -19,7 +19,8 @@ def accueil():
     titre_2_rect.center=fenetre_x/2,4*fenetre_y/5
     visible=True
     pygame.time.set_timer(ANIMER,500)
-    pygame.mixer.music.play()
+
+
 
     while True:
         for event in pygame.event.get():
@@ -34,6 +35,7 @@ def accueil():
 
 
 def menu():
+
 
     titre_menu_rect=titre_menu.get_rect()
     nombres_rect=[i.get_rect() for i in nombres]
@@ -103,6 +105,7 @@ def jeu(niveau_actuel):
 
     #Variables diverses
 
+    pygame.mixer.music.play(1)
     niveau_actuel.creation()
     perso=Personnage(niveau_actuel.depart,megaman_images)
     liste_pos=[]
@@ -498,7 +501,6 @@ def jeu(niveau_actuel):
                 fenetre.blit(anim_tuto["ellipse"][animation],((200,120)))
 
         pygame.display.flip()
-        print(pygame.mouse.get_pos())
     #----------------------------Gestion du temps-----------------------------
         timer.tick(30)
         fps=timer.get_fps()
