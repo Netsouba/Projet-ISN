@@ -16,12 +16,20 @@ son_fire=pygame.mixer.Sound("Sons/fire.wav")
 son_pop=pygame.mixer.Sound("Sons/pop.wav")
 son_electric=pygame.mixer.Sound("Sons/electricity.wav")
 son_game_over=pygame.mixer.Sound("Sons/Game_over.wav")
+son_victory=pygame.mixer.Sound("Sons/victory.wav")
 pygame.mixer.music.load("Sons/fond_menu.wav")
+
+
+
+
+
 
 #----------------------------------------------Texte--------------------------------------------------------------------------------------------------------------
 p_funny=pygame.font.Font("Polices/Packaging Funny.otf",40)
 p_candy=pygame.font.Font("Polices/Candy_Pop!-demo-font.ttf",90)
 p_perfect=pygame.font.Font("Polices/Perfect DOS VGA 437.ttf",20)
+p_juice=pygame.font.Font("Polices/orange juice.ttf",90)
+p_atelier=pygame.font.Font("Polices/Atelier du Machiniste.ttf",100)
 
 #-------------------------Menu--------------------------------------------------
 titre=p_candy.render("NOM DU JEU",1,CYAN)
@@ -31,13 +39,17 @@ titre_menu=p_candy.render("Choix du niveau",1,JAUNE)
 
 #-----------Game over--------------------
 
-
 texte_gameover=p_candy.render("Game Over!",1,ROUGE)
 texte_reessayer=p_funny.render("Reessayer?",1,VERT)
 texte_menu=p_funny.render("Retour au menu?",1,VERT)
 texte_suivant=p_funny.render("Niveau suivant?",1,VERT)
 
+#---------------------------------Victoire---------------------------------
 
+vctr=p_juice.render("Victoire !!!",1, VERT)
+congrats=p_atelier.render("Félicitation !",1, BLANC)
+txt_vctr=p_atelier.render("Notre jeu est à présent terminé !",1, BLANC)
+menu_vctr=p_funny.render("Retour au menu?",1, (255,128,64))
 
 #--------------------------------------------Images---------------------------------------------------------------------------------------------------------------
 
@@ -53,6 +65,13 @@ img_fleche_droite=pygame.image.load("Images/Fleche/droite.png").convert()
 img_fleche_droite.set_colorkey(CYAN)
 img_fleche_gauche=pygame.image.load("Images/Fleche/gauche.png").convert()
 img_fleche_gauche.set_colorkey(CYAN)
+
+
+#-------------------------------------Victoire---------------
+fond_vctr=pygame.Surface(taille_fenetre)
+fond_vctr.fill(NOIR)
+fond_vctr.set_alpha(200)
+
 
 #----------------------------------Perso---------------------
 
@@ -78,7 +97,7 @@ for i in megaman_images["gauche"]["cours"]:
     i.set_colorkey(MAGENTA)
 
 
-#Interface
+#---------------------------------------Interface------------------------------
 img_reset=pygame.image.load("Images/Structure/Reset.png").convert_alpha()
 img_menu=pygame.image.load("Images/Structure/menu.png").convert_alpha()
 img_info=pygame.image.load("Images/Structure/info.png").convert_alpha()
@@ -99,7 +118,7 @@ ombre=pygame.Surface((30,30))
 ombre.fill(NOIR)
 
 
-fond=pygame.image.load('Images/Fonds/fond.jpg')
+fond=pygame.image.load('Images/Fonds/fond3.png')
 
 
 img_bulle=pygame.image.load("Images/Structure/bulle.png").convert_alpha()

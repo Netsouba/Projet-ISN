@@ -13,13 +13,15 @@ from init import *
 
 
 def accueil():
+    pygame.mixer.music.play()
     titre_rect=titre.get_rect()
     titre_2_rect=titre_2.get_rect()
     titre_rect.center=fenetre_x/2,fenetre_y/4
     titre_2_rect.center=fenetre_x/2,4*fenetre_y/5
     visible=True
     pygame.time.set_timer(ANIMER,500)
-    pygame.mixer.music.play()
+
+
 
     while True:
         for event in pygame.event.get():
@@ -34,6 +36,7 @@ def accueil():
 
 
 def menu():
+
 
     titre_menu_rect=titre_menu.get_rect()
     nombres_rect=[i.get_rect() for i in nombres]
@@ -158,8 +161,10 @@ def jeu(niveau_actuel):
                         a_e=etat_jeu
                         etat_jeu=2
                     if pygame.Rect(550,2,40,40).collidepoint(event.pos) and etat_jeu==2:
-                        niveau_actuel.dict_element["bloc_tuto"][0].toucher=True
+                        if niveau_actuel.dict_element["bloc_tuto"]!=[]:
+                            niveau_actuel.dict_element["bloc_tuto"][0].toucher=True
                         etat_jeu=a_e
+
 
             if event.type==MOUSEBUTTONUP:
                 if event.button==1 and etat_jeu==1:
@@ -248,9 +253,9 @@ def jeu(niveau_actuel):
                         elif b_ellipse and perso.energie>2 and liste_cooldown[6]==liste_base_cooldown[6]:
                             liste_t_forme[6]=pygame.time.get_ticks()
                             perso.energie-=2
-                            niveau_actuel.ralenti=0.5
-                            pygame.time.set_timer(RALENTI,3000)
-                            pygame.time.set_timer(ANIMER,200)
+                            niveau_actuel.ralenti=0.1
+                            pygame.time.set_timer(RALENTI,8000)
+                            pygame.time.set_timer(ANIMER,1000)
 
                         #Angle
                         elif b_angle!=False and perso.energie>3 and liste_cooldown[4]==liste_base_cooldown[4]:
@@ -469,36 +474,33 @@ def jeu(niveau_actuel):
         if etat_jeu==2:
             fenetre.blit(pause_tuto,(0,0))
             fenetre.blit(img_retour,(550,2))
-
-
             for i,texte in enumerate(niveau_actuel.texte_astuce):
-                fenetre.blit(texte,(150,200+20*i))
+                fenetre.blit(texte,(200,200+20*i))
 
             if niveau_actuel.numero==1:
                 longueur=len(anim_tuto["trait"])
-                fenetre.blit(anim_tuto["trait"][animation],(200,0))
-            if niveau_actuel.numero==2:
+                fenetre.blit(anim_tuto["trait"][animation],(200,120))
+            elif niveau_actuel.numero==2:
                 longueur=len(anim_tuto["point"])
-                fenetre.blit(anim_tuto["point"][animation],(200,0))
-            if niveau_actuel.numero==3:
+                fenetre.blit(anim_tuto["point"][animation],(200,120))
+            elif niveau_actuel.numero==3:
                 longueur=len(anim_tuto["cercle"])
-                fenetre.blit(anim_tuto["cercle"][animation],(200,0))
-            if niveau_actuel.numero==4:
+                fenetre.blit(anim_tuto["cercle"][animation],(200,120))
+            elif niveau_actuel.numero==4:
                 longueur=len(anim_tuto["TP"])
-                fenetre.blit(anim_tuto["TP"][animation],(200,0))
-            if niveau_actuel.numero==5:
+                fenetre.blit(anim_tuto["TP"][animation],(200,120))
+            elif niveau_actuel.numero==5:
                 longueur=len(anim_tuto["angle droite"])
-                fenetre.blit(anim_tuto["angle haut"][animation],(100,0))
-                fenetre.blit(anim_tuto["angle droite"][animation],(300,0))
-            if niveau_actuel.numero==6:
+                fenetre.blit(anim_tuto["angle haut"][animation],(200,120))
+                fenetre.blit(anim_tuto["angle droite"][animation],(300,120))
+            elif niveau_actuel.numero==6:
                 longueur=len(anim_tuto["eclair"])
-                fenetre.blit(anim_tuto["eclair"][animation],(200,0))
-            if niveau_actuel.numero==9:
+                fenetre.blit(anim_tuto["eclair"][animation],((200,100)))
+            elif niveau_actuel.numero==7:
                 longueur=len(anim_tuto["ellipse"])
-                fenetre.blit(anim_tuto["ellipse"][animation],(200,0))
+                fenetre.blit(anim_tuto["ellipse"][animation],((200,120)))
 
         pygame.display.flip()
-
     #----------------------------Gestion du temps-----------------------------
         timer.tick(30)
         fps=timer.get_fps()
@@ -536,6 +538,8 @@ def game_over(fond):
                     return "reset"
                 elif rect_suivant.collidepoint(event.pos):
                     return "suivant"
+
+
         fenetre.blit(fond,(0,0))
         fenetre.blit(fond_pause,(0,0))
         fenetre.blit(texte_menu,rect_menu)
@@ -543,3 +547,39 @@ def game_over(fond):
         fenetre.blit(texte_suivant,rect_suivant)
         fenetre.blit(texte_reessayer,rect_reessayer)
         pygame.display.flip()
+
+
+def victoire(fond):
+    son_victory.play()
+    rect_vctr=vctr.get_rect()
+    rect_congrats=congrats.get_rect()
+    rect_txt_vctr=txt_vctr.get_rect()
+    rect_menu=menu_vctr.get_rect()
+
+    rect_vctr.centerx=rect_congrats.centerx=rect_txt_vctr.centerx=rect_menu.centerx=fenetre_x/2
+    rect_vctr.centery=fenetre_y/4
+    rect_congrats.centery=(fenetre_y/2)-25
+    rect_txt_vctr.centery=(fenetre_y/2)+25
+    rect_menu.centery=3*fenetre_y/4
+
+
+    continuer=True
+    while continuer:
+        for event in pygame.event.get():
+            if event.type==QUIT:
+
+                return "fin"
+            if event.type==MOUSEBUTTONDOWN and event.button==1:
+                if rect_menu.collidepoint(event.pos):
+
+                    return "menu"
+
+        fenetre.blit(fond,(0,0))
+        fenetre.blit(fond_vctr,(0,0))
+        fenetre.blit(menu_vctr,rect_menu)
+        fenetre.blit(vctr,rect_vctr)
+        fenetre.blit(congrats,rect_congrats)
+        fenetre.blit(txt_vctr,rect_txt_vctr)
+        pygame.display.flip()
+
+

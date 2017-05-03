@@ -438,7 +438,7 @@ class Koopa():
         self.vitesse_x+=self.acceleration_x
         self.vitesse_y+=self.acceleration_y
 
-        self.rect=self.rect.move(self.vitesse_x*d_frame,self.vitesse_y)
+        self.rect=self.rect.move(self.vitesse_x*d_frame*niveau_actuel.ralenti,self.vitesse_y)
 
 
 
@@ -527,6 +527,8 @@ class Bouton():
         for i in niveau_actuel.dict_element["goomba"]:
             liste_collision.append(i.rect)
         for i in niveau_actuel.dict_element["koopa"]:
+            liste_collision.append(i.rect)
+        for i in niveau_actuel.dict_element["caisse"]:
             liste_collision.append(i.rect)
 
         self.appuye=False
