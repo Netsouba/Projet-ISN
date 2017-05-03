@@ -1,8 +1,8 @@
                                 
                                 
    5                            
-       5           5            
-       1    6   6  p 6  6     6
+       5       5   5            
+    t  1    6  56p 5 6  6     6
 11111111111111111111111111551111
                          5555   
                          5cc56
@@ -12,20 +12,23 @@
                        111111111
                       11        
                      11         
-  6                 11          
-   5   5           5         
- p 1 c 1   5     11    2      6
-111111111  555511111111111 11111
+                    11          
+   5   5           11        
+ 2 1 6 1   5  k  111           
+111111111  11111111 
 Clic droit pour ouvrir l'interface de dessin, 
 puis maintenir clic gauche pour dessiner. 
 
-Dessiner les formes pour faire des pouvoirs. 
+Dessinez les formes pour faire des pouvoirs. 
 
 Chaque pouvoir a un temps de recuperation.
 
-Vous avez une barre d'energie. Dessiner la consomme donc economisez la.
+Vous avez une barre d'energie. 
+Dessiner la consomme donc economisez la.
+Recuperez les pots d'encre pour remplir votre barre.
 
 Dessinez un trait sur un element pour le coupez. 
+La carapace est insensible a ce pouvoir.
 
 Si vous avez du mal a dessiner, 
 faites un trait rapide avec un mouvement bref de la souris.

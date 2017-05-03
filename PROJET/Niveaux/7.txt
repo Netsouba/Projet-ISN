@@ -14,8 +14,9 @@
                                 
 99999999999999999    2AAAAAAAAA    
 AAAAAAAAABBBBBBBB99999999999999p
-p  a  p A  b    B         pB   p
+p ta  p A  b    B         pB   p
 11111111111111111AAAAABBBB11AAAA
 L'eclair allume et eteint un interrupteur 
 qui controle certains blocs.
+Dessinez un eclair sur les interrupteurs pour les activer/desactiver.
 Observez d'abord quel interrupteur agit sur quels blocs.

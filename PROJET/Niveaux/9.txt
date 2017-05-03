@@ -14,7 +14,7 @@ p1  1 p      p      p   p    2
 AAAAA11111111111111111111111111 
 99999                    A B       
    4       4  4     4   4A4B 4  
-pp     p     p a p b p   A Bp pp   
+pp  t  p     p a p b p   A Bp pp   
 11111111111111111111111111111111
 Eclairez vous avec l'eclair puis 
 arretez rapidement le temps pour analyser le niveau.
