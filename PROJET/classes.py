@@ -169,30 +169,30 @@ class Niveau():                         '''créer une classe Niveau'''
 
 
 
-class Personnage():
+class Personnage():                                           '''créer la classe personnage'''
 
-    def __init__(self,pos,dict_img):
+    def __init__(self,pos,dict_img):                           '''on initialise la classe niveau en lui donnant des paramètres'''
 
-        self.dict_img=dict_img
-        self.pv=2
-        self.energie=15
-        self.invincible=False
-        self.img=dict_img["droite"]["debout"]
-        self.rect=self.img.get_rect()
-        self.ancien=self.rect
-        self.rect.x=pos[0]
-        self.rect.y=pos[1]
-        self.vitesse_x=0
-        self.vitesse_y=0
-        self.acceleration_x=0
-        self.acceleration_y=g
-        self.animation=0
-        self.saut=True
-        self.double_saut=False
-        self.deplacement=False
-        self.direction="droite"
-        self.clignotant=False
-        self.tuto=False
+        self.dict_img=dict_img                                #nous allons utiliser les images du personnage
+        self.pv=2                                             #son niveau de vie est égale à 2
+        self.energie=15                                       #son niveau d'energie est donc de 15
+        self.invincible=False                                 #ici son invincibilité égale False car il n'est pas touchée par un ennemies
+        self.img=dict_img["droite"]["debout"]                 #l'image de la position normal du peronnage est l'image du personnonage debout regardant vert la droite
+        self.rect=self.img.get_rect()                         #
+        self.ancien=self.rect                                 #     
+        self.rect.x=pos[0]                                    #
+        self.rect.y=pos[1]                                    #
+        self.vitesse_x=0                                      #à l'aret, sa vitesse x est de 0
+        self.vitesse_y=0                                      #à l'aret, sa vitesse y est de 0
+        self.acceleration_x=0                                 #son acceleration x est égal a 0 mais
+        self.acceleration_y=g                                 #son acceleration y est égal a sa gravité soit g
+        self.animation=0                                      #son annimation est donc l'image 0
+        self.saut=True                                        #le personnage est en saut car saut=True
+        self.double_saut=False                                #le double saut n'est pas activée donc double_saut=False
+        self.deplacement=False                                #le personnage n'est donc pas en mouvement 
+        self.direction="droite"                               #la direction du personnage est vers la droite
+        self.clignotant=False                                 #ici le personnage n'est pas touché par un ennemies donc il ne clignotte pas 
+        self.tuto=False                                       #le personnage n'a pas activé un élement tuto
 
 
     def update(self,d_frame,niveau_actuel):
