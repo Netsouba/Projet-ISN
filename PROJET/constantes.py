@@ -43,4 +43,4 @@ RALENTI=27                                #L'évenement sera appelé quand le ra
 
 #------------------------------------Divers-----------------------------------
 g=0.3                                     #Valeur arbitraire de l'acceleration dûe à la gravitation
-                                          #Cela signifie que les objets accelerent de 0.3 pixels par frame vers le bas.
+                                          #Ainisi, les objets vont accelerer de 0.3 pixels par frame vers le bas.
