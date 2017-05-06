@@ -531,8 +531,13 @@ def jeu(niveau_actuel):
 
 
 def game_over(fond):
-
-    rect_gameover=texte_gameover.get_rect()
+    """La fonction prend en paramètre une capture d’écran du jeu. 
+        Ce qu’il retourne va être retourné par la fonction jeu(). 
+        Il peut retourner “fin” si le joueur quitte le jeu, “menu” s’il appuie sur le bouton du menu, “reset” s’il appuie sur le bouton “réessayer”, “suivant” s’il appuie sur le bouton “niveau suivant”
+    """
+    
+    #-------------------------Création et placement des rectangles des textes et images----------------------------------------------
+    rect_gameover=texte_gameover.get_rect()                     
     rect_reessayer=texte_reessayer.get_rect()
     rect_menu=texte_menu.get_rect()
     rect_suivant=texte_suivant.get_rect()
@@ -545,30 +550,31 @@ def game_over(fond):
     rect_suivant.centery=5*fenetre_y/8
 
 
-    continuer=True
-    while continuer:
-        for event in pygame.event.get():
-            if event.type==QUIT:
-                return "fin"
-            if event.type==MOUSEBUTTONDOWN and event.button==1:
-                if rect_menu.collidepoint(event.pos):
-                    musique("Sons/fond_menu.wav")
-                    return "menu"
-                elif rect_reessayer.collidepoint(event.pos):
-                    musique("Sons/music_jeu.wav")
-                    return "reset"
-                elif rect_suivant.collidepoint(event.pos):
-                    musique("Sons/music_jeu.wav")
-                    return "suivant"
+    #Boucle infinie
+    while True:
+        
+        for event in pygame.event.get():                    #On capture tous les évenements que l'ordinateur va intercepter en tant que la variable event
+            if event.type==QUIT:    return "fin"             #Si l'évenement est un ordre de quitter le jeu (comme cliquer sur la croix rouge), retourne "fin"
+
+            if event.type==MOUSEBUTTONDOWN and event.button==1: #Si l'utilisateur fait un clic gauche
+                if rect_menu.collidepoint(event.pos):           #Si la position du curseur collisionne avec le rectangle "retour au menu"
+                    musique("Sons/fond_menu.wav")               #On lance la musique du menu
+                    return "menu"                               #On retourne "menu"
+                elif rect_reessayer.collidepoint(event.pos):    #Si la position du curseur collisionne avec le rectangle "réessayer"
+                    musique("Sons/music_jeu.wav")               #On relance la musique du jeu
+                    return "reset"                              #On retourne "reset"
+                elif rect_suivant.collidepoint(event.pos):      #Si la position du curseur collisionne avec le rectangle "niveau suivant"
+                    musique("Sons/music_jeu.wav")               #On relance la musique du jeu
+                    return "suivant"                            #On retourne "suivant"
 
 
-        fenetre.blit(fond,(0,0))
-        fenetre.blit(fond_pause,(0,0))
-        fenetre.blit(texte_menu,rect_menu)
+        fenetre.blit(fond,(0,0))                            #Afficher le fond en arrière plan, qui est la capture d'écran
+        fenetre.blit(fond_pause,(0,0))                      #Afficher un rectangle noir transparent pour assombrir l'écran
+        fenetre.blit(texte_menu,rect_menu)                  #Affichier tous les textes
         fenetre.blit(texte_gameover,rect_gameover)
         fenetre.blit(texte_suivant,rect_suivant)
-        fenetre.blit(texte_reessayer,rect_reessayer)
-        pygame.display.flip()
+        fenetre.blit(texte_reessayer,rect_reessayer)      
+        pygame.display.flip()                               #Mettre à jour l'affichage de l'écran
 
 
 def victoire(fond):
