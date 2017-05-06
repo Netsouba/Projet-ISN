@@ -612,11 +612,11 @@ def victoire(fond):
         
         fenetre.blit(fond,(0,0))                                #Afficher le fond en arrière plan, qui est la capture d'écran
         fenetre.blit(fond_vctr,(0,0))                           #Afficher un rectangle noir transparent pour assombrir l'écran
-        fenetre.blit(menu_vctr,rect_menu)                       #Affichier tous les textes
+        fenetre.blit(menu_vctr,rect_menu)                       #Afficher tous les textes
         fenetre.blit(vctr,rect_vctr)
         fenetre.blit(congrats,rect_congrats)
         fenetre.blit(txt_vctr,rect_txt_vctr)
-        pygame.display.flip()
+        pygame.display.flip()                                   #Mise à jour de affichage de l'écan
 
 
 
