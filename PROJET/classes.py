@@ -10,12 +10,17 @@ from fonctions import *
 from init import *
 
 
-#----------------------------Classes---------------------------------------
-class Niveau():                         '''créer une classe Niveau'''
-    liste=[]                                                                                #créer une liste vide
+class Niveau():                         
+    """Un objet niveau est l'environnement dans lequel intéragie et se déplace le personnage.
+       Il également tous les éléments qui le consititue
+       Il y a 2 méthodes: création() et update()
+    """
+    liste=[]                                                                                #Cette liste qui possède tous les objets Niveaux
 
-    def __init__(self,n,images,depart): '''initialise la classe Niveau'''
-
+    def __init__(self,n,images,depart): 
+    """La création du niveau prend 3 paramètres : son numéro, ses images, et la position de depart du personnage
+        
+    """
         self.numero=n                                                                       #correspond au numéro du niveau
         self.fichier="Niveaux//"+str(self.numero+1)+".txt"                                  #charge le fichier text du niveau actuel (numero+1 car le numéro commence à partir de 0)
         self.dict_images=images                                                             #créer un dictionnaire de toutes les images des éléments du niveau 
@@ -25,7 +30,9 @@ class Niveau():                         '''créer une classe Niveau'''
 
         Niveau.liste.append(self)                                                           #insert dans la liste tous les niveaux
 
-    def creation(self):                 '''fonction qui créer tous les niveaux ainsi que ses éléments'''
+    def creation(self): 
+        """La méthode permet de recréer le niveau. Il est appelé lors de __init__() mais également quand on réinitialise le niveau.
+        """
 
         self.dict_images["ombre"].set_alpha(240)                                            #établi une transparance sur les images "ombres" du dictionnaire d'image
         self.noir=False                                                                     #détermine si le niveau est sombre ou pas, par défaut le niveau n'est pas sombre
