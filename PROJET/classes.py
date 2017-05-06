@@ -76,12 +76,12 @@ class Niveau():                         '''créer une classe Niveau'''
 
                         if chiffre:                                                         #test si "chiffre" est True, donc test si "car" est un chiffre
                             if car=='1':                                                    #"car" est un chiffre, test si "car" est égal à 1
-                                r=Bloc(self.dict_images["bloc"],(x*bloc_x , y*bloc_y))      #"car"=1, on attribut la classe Bloc à la lettre "r", on donne comme parametre l'image du dictionnaire d'ima qui correspond à "bloc", et la position qu'aura le bloc dans le niveau. On multiplie son indice par ses dimension pour trouver son emplacement exact
-                                self.dict_element["bloc"].append(r)
+                                r=Bloc(self.dict_images["bloc"],(x*bloc_x , y*bloc_y))      #"car"=1, "r" devient un bloc en utillisant la classe "Bloc" avec comme parametre l'image du dictionnaire d'image qui correspond à "bloc", et la position qu'aura le bloc dans le niveau. On multiplie x (qui est le numero de la colonne) par bloc_x (qui est la longueur d'un bloc) et y (qui est le numero de la ligne) par bloc_y (qui est la hauteur d'un bloc)
+                                self.dict_element["bloc"].append(r)                         #on ajoute le bloc dans le dictionnaire d'élément du niveau
 
-                            elif car=='2':
-                                f=Fin(self.dict_images["fin"],(x*bloc_x , y*bloc_y))
-                                self.dict_element["fin"].append(f)
+                            elif car=='2':                                                  #test si "car"=2
+                                f=Fin(self.dict_images["fin"],(x*bloc_x , y*bloc_y))        #"car"=2, "f" devient le point de fin de niveau en utillisant la classe "Fin" avec comme parametre l'image du dictionnaire d'image qui correspond à "fin", et la position qu'aura le bloc dans le niveau. On multiplie x (qui est le numero de la colonne) par bloc_x (qui est la longueur d'un bloc) et y (qui est le numero de la ligne) par bloc_y (qui est la hauteur d'un bloc)
+                                self.dict_element["fin"].append(f)                          #on ajoute la fin dans le dictionnaire d'élément du niveau
 
                             elif car=='3':
                                 t=Teleport(self.dict_images["tp"],(x*bloc_x , y*bloc_y))
