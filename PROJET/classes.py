@@ -88,81 +88,83 @@ class Niveau():                         '''créer une classe Niveau'''
                                 self.dict_element["tp"].append(t)                           #on ajoute finalement  l'element du niveau dans le dictionnaire
 
                             elif car=='4':                                                 #on test si le chiffre "car" est égal à 4
-                                t=Torche(self.dict_images["torche"],(x*bloc_x , y*bloc_y)) #"car"=4, on crée un objet de la classe Torche, et on utilise l'image du dictionnaire qui represente la "Torche", et la position qu'aura la torche dans le niveau. Ensuite on multiplie x (qui est le numero de la colonne) par bloc_x (qui est la longueur d'un bloc) et y (qui est le numero de la ligne) par bloc_y (qui est la hauteur d'un bloc)
+                                t=Torche(self.dict_images["torche"],(x*bloc_x , y*bloc_y)) #"car"=4, on crée un objet de la classe Torche. Ensuite on utilise l'image du dictionnaire qui represente la "Torche", et la position qu'aura la torche dans le niveau. Ensuite on multiplie x (qui est le numero de la colonne) par bloc_x (qui est la longueur d'un bloc) et y (qui est le numero de la ligne) par bloc_y (qui est la hauteur d'un bloc)
                                 self.dict_element["torche"].append(t)                      #on ajoute finalement l'element du niveau dans le dictionnaire
 
                             elif car=='5':                                                 #on test si le chiffre "car" est égal à 5
-                                p=Porte(self.dict_images["porte"],(x*bloc_x , y*bloc_y))   #"car"=5, on crée un objet de la classe Porte et la position qu'aura la porte dans le niveau. Ensuite on multiplie x (qui est le numero de la colonne) par bloc_x (qui est la longueur d'un bloc) et y (qui est le numero de la ligne) par bloc_y (qui est la hauteur d'un bloc)
+                                p=Porte(self.dict_images["porte"],(x*bloc_x , y*bloc_y))   #"car"=5, on crée un objet de la classe Porte. Ensuite on utilise l'image du dictionnaire qui represente la "Porte" et la position qu'aura la porte dans le niveau. Ensuite on multiplie x (qui est le numero de la colonne) par bloc_x (qui est la longueur d'un bloc) et y (qui est le numero de la ligne) par bloc_y (qui est la hauteur d'un bloc)
                                 self.dict_element["porte"].append(p)                       #on ajoute finalement l'element du niveau dans le dictionnaire
 
                             elif car=='6':                                                 #on test si le chifre "car" est égal a 6
-                                go=Goomba(self.dict_images["goomba"],(x*bloc_x , y*bloc_y))#"car"=6, on crée un objet de la classe Goomba et la position qu'aura le goomba dans le niveau
+                                go=Goomba(self.dict_images["goomba"],(x*bloc_x , y*bloc_y))#"car"=6, on crée un objet de la classe Goomba. Ensuite on utilise l'image du dictionnaire qui represente la "Goomba" et la position qu'aura le goomba dans le niveau
                                 self.dict_element["goomba"].append(go)                     #on ajoute finalement l'element du niveau dans le dictionnaire
 
                             elif car=="7":                                                  #on test si le chifre "car" est égal a 7
-                                b=Bouton(self.dict_images["bouton"],((x*bloc_x , y*bloc_y)))#"car"=7, on crée un objet de la classe Bouton et la position qu'aura le bouton dans le niveau
+                                b=Bouton(self.dict_images["bouton"],((x*bloc_x , y*bloc_y)))#"car"=7, on crée un objet de la classe Bouton. Ensuite on utilise l'image du dictionnaire qui represente la "Bouton" et la position qu'aura le bouton dans le niveau
                                 self.dict_element['bouton'].append(b)                       #on ajoute finalement l'element du niveau dans le dictionnaire
                                  
                             elif car=="8":                                                               #on test si le chifre "car" est égal a 8
-                                p=PorteBouton(self.dict_images["porte bouton"],(x*bloc_x , y*bloc_y),car)#"car"=8, on crée un objet de la classe PorteBouton et la position qu'aura la portebouton dans le niveau
+                                p=PorteBouton(self.dict_images["porte bouton"],(x*bloc_x , y*bloc_y),car)#"car"=8, on crée un objet de la classe PorteBouton. Ensuite on utilise l'image du dictionnaire qui represente la "PorteBouton" et la position qu'aura la portebouton dans le niveau
                                 self.dict_element["porte bouton"].append(p)                              #on ajoute finalement l'element du niveau dans le dictionnaire
                                 
                             elif car=="9":                                          #on test si le chifre "car" est égal a 9
-                                p=Pic(self.dict_images["pic"],(x*bloc_x , y*bloc_y))#"car"=9, on crée un objet de la classe Pic et la position qu'aura le pic dans le niveau
+                                p=Pic(self.dict_images["pic"],(x*bloc_x , y*bloc_y))#"car"=9, on crée un objet de la classe Pic. Ensuite on utilise l'image du dictionnaire qui represente la "Pic" et la position qu'aura le pic dans le niveau
                                 self.dict_element["pic"].append(p)                  #on ajoute finalement l'element du niveau dans le dictionnaire
 
                         else:
                             if car=="p":                                                  #on test si le chifre "car" est égal a p
-                                p=Pot(self.dict_images["pot"],(x*bloc_x+15 , y*bloc_y+15))#"car"=p, on crée un objet de la classe Pot et la position qu'aura le pot dans le niveau
+                                p=Pot(self.dict_images["pot"],(x*bloc_x+15 , y*bloc_y+15))#"car"=p, on crée un objet de la classe Pot. Ensuite on utilise l'image du dictionnaire qui represente la "Pot" et la position qu'aura le pot dans le niveau
                                 self.dict_element["pot"].append(p)                        #on ajoute finalement l'element du niveau dans le dictionnaire
                                 
-                            elif car=="c":
-                                c=Coeur(self.dict_images["coeur"],(x*bloc_x+15, y*bloc_y+15))
-                                self.dict_element["coeur"].append(c)
+                            elif car=="c":                                                   #on test si le chifre "car" est égal a c
+                                c=Coeur(self.dict_images["coeur"],(x*bloc_x+15, y*bloc_y+15))#"car"=c, on crée un objet de la classe Coeur. Ensuite on utilise l'image du dictionnaire qui represente la "Coeur" et la position qu'aura le coeur dans le niveau 
+                                self.dict_element["coeur"].append(c)                         #on ajoute finalement l'element du niveau dans le dictionnaire
                                 
-                            elif car=="k":
-                                ko=Koopa(self.dict_images["koopa"],(x*bloc_x,y*bloc_y))
-                                self.dict_element["koopa"].append(ko)
+                            elif car=="k":                                             #on test si le chifre "car" est égal a k
+                                ko=Koopa(self.dict_images["koopa"],(x*bloc_x,y*bloc_y))#"car"=k, on crée un objet de la classe Koopa. Ensuite on utilise l'image du dictionnaire qui represente la "Koopa" et la position qu'aura le koopa dans le niveau 
+                                self.dict_element["koopa"].append(ko)                  #on ajoute finalement l'element du niveau dans le dictionnaire
                                 
-                            elif car=="x":
-                                box=Caisse(self.dict_images["caisse"],(x*bloc_x,y*bloc_y))
-                                self.dict_element["caisse"].append(box)
+                            elif car=="x":                                                #on test si le chifre "car" est égal a x
+                                box=Caisse(self.dict_images["caisse"],(x*bloc_x,y*bloc_y))#"car"=x, on crée un objet de la classe Caisse. Ensuite on utilise l'image du dictionnaire qui represente la "Caisse" et la position qu'aura la caisse dans le niveau 
+                                self.dict_element["caisse"].append(box)                   #on ajoute finalement l'element du niveau dans le dictionnaire
                                 
-                            elif car=="t":
-                                t=Tuto(self.dict_images["bloc_tuto"],(x*bloc_x,y*bloc_y))
-                                self.dict_element["bloc_tuto"].append(t)
+                            elif car=="t":                                               #on test si le chifre "car" est égal a t
+                                t=Tuto(self.dict_images["bloc_tuto"],(x*bloc_x,y*bloc_y))#"car"=t, on crée un objet de la classe Tuto. Ensuite on utilise l'image du dictionnaire qui represente la "Tuto" et la position qu'aura le tuto dans le niveau
+                                self.dict_element["bloc_tuto"].append(t)                 #on ajoute finalement l'element du niveau dans le dictionnaire
 
-                            elif car=="n":
-                                self.noir=True
-                            elif car.lower()==car:
-                                i= Interrupteur(self.dict_images["interrupteur"],(x*bloc_x,y*bloc_y),car)
-                                self.dict_element["interrupteur"].append(i)
-                            elif car.upper()==car:
-                                p=Porte_interrupteur(self.dict_images["porte interrupteur"],(x*bloc_x , y*bloc_y),car)
-                                self.dict_element["porte interrupteur"].append(p)
+                            elif car=="n":                                               #on test si le chiffre "car" égal a n
+                                self.noir=True                                           #l'ecran du jeu deviendra automatiquement noir car self.noir= True. Donc le noir est activé
+                                
+                            elif car.lower()==car:                                                       #on test si le chifre "car" est égal à une minuscule. La fonction lower va detecter les lettres en minuscule
+                                i= Interrupteur(self.dict_images["interrupteur"],(x*bloc_x,y*bloc_y),car)#"car"=i, on crée un objet de la classe Interrupteur. Ensuite on utilise l'image du dictionnaire qui represente la "Interrupteur" et la position qu'aura l'interrupteur dans le niveau
+                                self.dict_element["interrupteur"].append(i)                              #on ajoute finalement l'element du niveau dans le dictionnaire
+                                
+                            elif car.upper()==car:                                                                    #on test si le chifre "car" est égal à une majuscule. La fonction upper va detecter les lettres en majuscule
+                                p=Porte_interrupteur(self.dict_images["porte interrupteur"],(x*bloc_x , y*bloc_y),car)#"car"=p, on crée un objet de la classe Porte Interrupteur. Ensuite on utilise l'image du dictionnaire qui represente la "Porte Interrupteur" et la position qu'aura la porte interrupteur dans le niveau
+                                self.dict_element["porte interrupteur"].append(p)                                     #on ajoute finalement l'element du niveau dans le dictionnaire
 
 
-                for i in self.dict_element["interrupteur"]:
-                    for indice,p in enumerate(self.dict_element["porte interrupteur"]):
-                        if i.car==p.car:
-                            i.liste_porte.append(indice)
+                for i in self.dict_element["interrupteur"]:                              #pour chaque élement dans Interrupteur
+                    for indice,p in enumerate(self.dict_element["porte interrupteur"]):  #pour chaque indice, on regarde ligne par ligne si il y a une porte interrupteur
+                        if i.car==p.car:                                                 #on test si il le chiffre "car" est égal a t et si il est égal à t
+                            i.liste_porte.append(indice)                                 #on ajoute indice dans la liste_porte
             else:
-                self.astuce.append(ligne)
-        self.texte_astuce=[p_perfect.render(i,0,JAUNE) for i in self.astuce]
+                self.astuce.append(ligne)                                                #astuce est la liste des textes explicatif mis a disposition du joueur puis on ajoute une ligne our chaque astuces
+        self.texte_astuce=[p_perfect.render(i,0,JAUNE) for i in self.astuce]             #nous allons definir ces astuces en creant une surface texte avec police de texte p_perfect puis nous faisons cela pour toutes les astuces
 
-    def update(self,perso):
+    def update(self,perso):                                     '''fonction qui créer toutes les ombres '''
         #Ombre
-        self.liste_ombre=[]
-        if self.noir==True:
-            for y in range(0,fenetre_y,self.dict_images["ombre"].get_height()):
-                for x in range(0,fenetre_x,self.dict_images["ombre"].get_width()):
-                    self.liste_ombre.append((x,y))
+        self.liste_ombre=[]                                                              #créer un liste vide qui va etre utilisé par les ombres        
+        if self.noir==True:                                                              #si la fonction noir un True alors
+            for y in range(0,fenetre_y,self.dict_images["ombre"].get_height()):          #pour tout y de la fennetre, l'image devient une ombre qui va se reporter sur toute la hauteur fenetre 
+                for x in range(0,fenetre_x,self.dict_images["ombre"].get_width()):       #pour tout x de la fennetre, l'image devient une ombre qui va se reporter sur toute la largeur fenetre 
+                    self.liste_ombre.append((x,y))                                       #on ajoute donc dans les liste_ombre les coordonnées x et y
 
-        if self.eclair==True:
-            self.dict_images["ombre"].set_alpha(self.dict_images["ombre"].get_alpha()+10)
-        if self.dict_images["ombre"].get_alpha()>=240:
-            self.dict_images["ombre"].set_alpha(240)
-            self.eclair=False
+        if self.eclair==True:                                                            #si la foncion éclaire égale True (c'est a dre qu'elle est activée) alors
+            self.dict_images["ombre"].set_alpha(self.dict_images["ombre"].get_alpha()+10)#ici nous allons poser une transparence (grace a la focntion set_alpha) en donnant 10 de plus à la transparence actuel
+        if self.dict_images["ombre"].get_alpha()>=240:                                   #si la transparence actuel est supérieur ou égale a 240 alors
+            self.dict_images["ombre"].set_alpha(240)                                     #on pose une transparence de 240 pour redonner a l'ombre a l'écran
+            self.eclair=False                                                            #l'éclaire n'est donc plus activé car il est égale a False
 
 
 
