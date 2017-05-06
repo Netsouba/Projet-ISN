@@ -132,7 +132,7 @@ class Niveau():
                                 i= Interrupteur(self.dict_images["interrupteur"],(x*bloc_x,y*bloc_y),car)
                                 self.dict_element["interrupteur"].append(i)
                             elif car.upper()==car:
-                                p=Porte_interrupeur(self.dict_images["porte interrupteur"],(x*bloc_x , y*bloc_y),car)
+                                p=Porte_interrupteur(self.dict_images["porte interrupteur"],(x*bloc_x , y*bloc_y),car)
                                 self.dict_element["porte interrupteur"].append(p)
 
 
@@ -766,7 +766,7 @@ class Interrupteur():
                 if i in self.liste_porte:
                     porte.ouvert=False
 
-class Porte_interrupeur():
+class Porte_interrupteur():
 
     def __init__(self,liste_img,pos,car):
         self.car=car.lower()
