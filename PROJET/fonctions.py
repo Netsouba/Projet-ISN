@@ -102,11 +102,11 @@ def interdiagonalequadri(a,b,c,d):
     """La fonction prend en paramètres quatres tuples qui sont sont les coordonnées de quatres points A,B,C,D. 
     On renvoie ainsi les coordonnées de l’intersection I de la diagonale du quadrilatère ABCD.
     """
-    v_ac=(c[0]-a[0],c[1]-a[1])
-    v_bd=(d[0]-b[0],d[1]-b[1])
+    v_ac=(c[0]-a[0],c[1]-a[1])                      #v_ac est le vecteur AC
+    v_bd=(d[0]-b[0],d[1]-b[1])                      #b_bd est le vecteur BD
     
     try:
-        x=b[0]+v_bd[0]*(a[1]+(v_ac[1]*b[0]-v_ac[1]*a[0])/v_ac[0]-b[1])/(v_bd[1]-v_ac[1]*v_bd[0]/v_ac[0])
+        x=b[0]+v_bd[0]*(a[1]+(v_ac[1]*b[0]-v_ac[1]*a[0])/v_ac[0]-b[1])/(v_bd[1]-v_ac[1]*v_bd[0]/v_ac[0])    #Voir le dossier pour une explication approfondie de la formule
         y=b[1]+v_bd[1]*(a[1]+(v_ac[1]*b[0]-v_ac[1]*a[0])/v_ac[0]-b[1])/(v_bd[1]-v_ac[1]*v_bd[0]/v_ac[0])
         return int(x),int(y)
     except ZeroDivisionError:
