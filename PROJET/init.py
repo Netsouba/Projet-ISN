@@ -6,11 +6,14 @@ from copy import deepcopy
 
 
 from constantes import *
+        
+#Ce module crée tous objets utilisant pygame, comme les images et les sons
 
-pygame.init()
+pygame.init()                                                   #Initialisation de pygame
 
 #--------------------------------------------Sons----------------------------------------------------------------------------------------------------------------
-son_slash=pygame.mixer.Sound("Sons/Slash.wav")
+#Création des différents sons
+son_slash=pygame.mixer.Sound("Sons/Slash.wav")                
 son_fire=pygame.mixer.Sound("Sons/fire.wav")
 son_pop=pygame.mixer.Sound("Sons/pop.wav")
 son_electric=pygame.mixer.Sound("Sons/electricity.wav")
@@ -24,19 +27,22 @@ son_clap=pygame.mixer.Sound("Sons/clap.wav")
 
 
 #----------------------------------------------Texte--------------------------------------------------------------------------------------------------------------
+#Création des polices d'écritures
 p_funny=pygame.font.Font("Polices/Packaging Funny.otf",40)
 p_candy=pygame.font.Font("Polices/Candy_Pop!-demo-font.ttf",90)
 p_perfect=pygame.font.Font("Polices/Perfect DOS VGA 437.ttf",20)
 p_juice=pygame.font.Font("Polices/orange juice.ttf",90)
 p_atelier=pygame.font.Font("Polices/Atelier du Machiniste.ttf",100)
 
+
+#Création des textes à partir de différentes polices
 #-------------------------Menu--------------------------------------------------
 titre=p_candy.render("NOM DU JEU",1,CYAN)
 titre_2=p_funny.render("Appuyez sur une touche pour continuer",1,BLANC)
 nombres=[p_funny.render(str(i+1),1,JAUNE) for i in range(24)]
 titre_menu=p_candy.render("Choix du niveau",1,JAUNE)
 
-#-----------Game over--------------------
+#--------------------------Game over------------------------
 
 texte_gameover=p_candy.render("Game Over!",1,ROUGE)
 texte_reessayer=p_funny.render("Reessayer?",1,VERT)
@@ -50,15 +56,17 @@ congrats=p_atelier.render("Félicitation !",1, BLANC)
 txt_vctr=p_atelier.render("Notre jeu est à présent terminé !",1, BLANC)
 menu_vctr=p_funny.render("Retour au menu?",1, (255,128,64))
 
-#--------------------------------------------Images---------------------------------------------------------------------------------------------------------------
 
+#--------------------------------------------Images------------------------------------------------
+#Création de la fenetre
 fenetre=pygame.display.set_mode(taille_fenetre)
 
 #--------------------------------------------------Menu----------------------------------------------
+#Création de toutes les images
 fond_ecran=pygame.image.load("Images/Fonds/fond_ecran.jpg")
 img_fond_menu=pygame.image.load("Images/Fonds/ecran_accueil.jpg").convert()
 img_boite=pygame.image.load("Images/Structure/boite.png").convert()
-img_boite.set_colorkey(MAGENTA)
+img_boite.set_colorkey(MAGENTA)                                                 #set_colorkey() permet de modifier tous les pixels d'une certaine couleur
 
 img_fleche_droite=pygame.image.load("Images/Fleche/droite.png").convert()
 img_fleche_droite.set_colorkey(CYAN)
@@ -69,11 +77,14 @@ img_fleche_gauche.set_colorkey(CYAN)
 #-------------------------------------Victoire---------------
 fond_vctr=pygame.Surface(taille_fenetre)
 fond_vctr.fill(NOIR)
-fond_vctr.set_alpha(200)
+fond_vctr.set_alpha(200)                                                        #set_alpha() permet de donner une transparence à une image
 
 
 #----------------------------------Perso---------------------
 
+#C'est un dictionnaire qui comporte toutes les images de l'animation du personnage.
+#Le clé "droite" renvoie à un autre dictionnaire qui a toutes les images du personnage vers la droite, et inversement pour la clé "gauche"
+#Chaqu'un de ces dictionnaires possèdent une clé "debout", "saute" qui contiennent l'image correspondante, et une clé "cours" qui contient une liste qui possède toutes les images de l'animation de course du personnage
 megaman_images= {
                     "droite":
                     {"debout":  pygame.image.load("Images\\Megaman\\Droite\\Debout.png").convert(),
@@ -85,7 +96,7 @@ megaman_images= {
                      "cours":   [pygame.image.load("Images\\Megaman\\Gauche\\Cours\\1.png").convert(),pygame.image.load("Images\\Megaman\\Gauche\\Cours\\2.png").convert(),pygame.image.load("Images\\Megaman\\Gauche\\Cours\\3.png").convert(),pygame.image.load("Images\\Megaman\\Gauche\\Cours\\2.png").convert()],
                     "saute":    pygame.image.load("Images\\Megaman\\Gauche\\Saute.png").convert()}
                 }
-
+#On met la transparence de chaque image du personnage
 megaman_images["droite"]["debout"].set_colorkey(MAGENTA)
 megaman_images["droite"]["saute"].set_colorkey(MAGENTA)
 for i in megaman_images["droite"]["cours"]:
@@ -101,6 +112,7 @@ img_reset=pygame.image.load("Images/Structure/Reset.png").convert_alpha()
 img_menu=pygame.image.load("Images/Structure/menu.png").convert_alpha()
 img_info=pygame.image.load("Images/Structure/info.png").convert_alpha()
 img_retour=pygame.image.load("Images/Structure/retour.png").convert_alpha()
+
 liste_img_formes=   [pygame.image.load("Images/Formes/Trait.png").convert(),pygame.image.load("Images/Formes/Point.png").convert(),pygame.image.load("Images/Formes/Cercle.png").convert(),pygame.image.load("Images/Formes/TP.png").convert(),
                     pygame.image.load("Images/Formes/Angle.png").convert(),pygame.image.load("Images/Formes/Eclair.png").convert(),pygame.image.load("Images/Formes/Ellipse.png")]
 filtre_cooldown=pygame.Surface((40,40))
@@ -111,14 +123,10 @@ pause_tuto=pygame.Surface(taille_fenetre)
 pause_tuto.fill(NOIR)
 pause_tuto.set_alpha(200)
 
-
-
 ombre=pygame.Surface((30,30))
 ombre.fill(NOIR)
 
-
 fond=pygame.image.load('Images/Fonds/fond3.png')
-
 
 img_bulle=pygame.image.load("Images/Structure/bulle.png").convert_alpha()
 
@@ -208,6 +216,8 @@ pot=pygame.image.load('Images/Structure/ink_pot.png').convert_alpha()
 coeur=pygame.image.load('Images/Structure/coeur.png').convert_alpha()
 img_caisse=pygame.image.load("Images/Structure/box.png").convert()
 
+#On rassemble toutes les images ou listes d'images d'un niveau dans un dictionnaire pour simplifier la compréhension dans la suite du programme
+#Le dictionnaire sera un attributs des objets Niveau.
 img_niveau={
                 "fond":fond                         ,
                 "fin":img_porte                     ,
@@ -229,6 +239,7 @@ img_niveau={
                 "caisse":img_caisse                 ,
                 "bloc_tuto": bloc_tuto
             }
+
 
 anim_tuto={ "angle droite": [pygame.image.load("Images/Tuto/Angle droite/frame_"+str(i)+"_delay-0.1s.gif").convert() for i in range(9)],
             "angle haut":   [pygame.image.load("Images/Tuto/Angle haut/frame_"+str(i)+"_delay-0.1s.gif").convert() for i in range(9)],
