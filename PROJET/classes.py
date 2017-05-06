@@ -176,7 +176,7 @@ class Personnage():                                           '''créer la class
         self.dict_img=dict_img                                #nous allons utiliser les images du personnage
         self.pv=2                                             #son niveau de vie est égale à 2
         self.energie=15                                       #son niveau d'energie est donc de 15
-        self.invincible=False                                 #ici son invincibilité égale False car il n'est pas touchée par un ennemies
+        self.invincible=False                                 #ici son invincibilité égale False car il n'est pas touchée par un goomba
         self.img=dict_img["droite"]["debout"]                 #l'image de la position normal du peronnage est l'image du personnonage debout regardant vert la droite
         self.rect=self.img.get_rect()                         #
         self.ancien=self.rect                                 #     
@@ -195,40 +195,39 @@ class Personnage():                                           '''créer la class
         self.tuto=False                                       #le personnage n'a pas activé un élement tuto
 
 
-    def update(self,d_frame,niveau_actuel):
+    def update(self,d_frame,niveau_actuel):                '''focntion qui créer les annimations'''
 
         #Animation
-        if self.invincible==True:
-            self.clignotant=True
+        if self.invincible==True:                                           # le personnage est invincible car il est touché par un goomba donc
+            self.clignotant=True                                            # le personnage se met à clignoter car il et invincible
         else:
-            self.clignotant=False
-        if self.deplacement==True:
-            self.img=self.dict_img[self.direction]["cours"][self.animation]
-        if self.saut==True:
-            self.img=self.dict_img[self.direction]["saute"]
-        if self.deplacement==False and self.saut==False:
-            self.img=self.dict_img[self.direction]["debout"]
+            self.clignotant=False                                           #ensuite le clignotement s'arrete
+        if self.deplacement==True:                                          #si le personnage est en deplacement alors
+            self.img=self.dict_img[self.direction]["cours"][self.animation] #l'image du personnage qui court s'affiche
+        if self.saut==True:                                                 #si le personnage est en saut alors
+            self.img=self.dict_img[self.direction]["saute"]                 #l'image affiché sera celle du personnage entrain de sauter
+        if self.deplacement==False and self.saut==False:                    #si le personnage ne bouge pas (donc pas de deplacement ni de saut) alors
+            self.img=self.dict_img[self.direction]["debout"]                #le personnage affichera l'image du perso debout
 
         #Liste des elements de collision
-        liste_rect=[]
+        liste_rect=[]                                         
 
-        for i in niveau_actuel.dict_element["bloc"]:
-            liste_rect.append(i.rect)
-
-        for i in niveau_actuel.dict_element["porte"]:
-            if i.ouvert==False:
-                liste_rect.append(i.rect)
-        for i in niveau_actuel.dict_element["porte interrupteur"]:
-            if i.ouvert==False:
-                liste_rect.append(i.rect)
-        for i in niveau_actuel.dict_element["porte bouton"]:
-            if i.ouvert==False:
-                liste_rect.append(i.rect)
-        for i in niveau_actuel.dict_element["bouton"]:
-            liste_rect.append(i.rect)
-        for i in niveau_actuel.dict_element["caisse"]:
-            if i.hold==None:
-                liste_rect.append(i.rect)
+        for i in niveau_actuel.dict_element["bloc"]:                        #pour chaque element bloc dans le niveau actuel
+            liste_rect.append(i.rect)                                       #on l'ajoute dans la liste rect pour pourvoir leur donner des collision
+        for i in niveau_actuel.dict_element["porte"]:                       #pour chaque element porte dans le niveau actuel
+            if i.ouvert==False:                                             #si la porte est fermer alors elle est soumise au collision donc
+                liste_rect.append(i.rect)                                   #on l'ajoute dans la liste rect pour pourvoir leur donner des collisions
+        for i in niveau_actuel.dict_element["porte interrupteur"]:          #pour chaque element porte interrupteur dans le niveau actuel
+            if i.ouvert==False:                                             #pour etre activée la porte interrupteur doit etre soumis au collision donc
+                liste_rect.append(i.rect)                                   #on l'ajoute dans la liste rect pour pouvoir lui donner des collisions
+        for i in niveau_actuel.dict_element["porte bouton"]:                #pour chaque element porte bouton dans le niveau actuel
+            if i.ouvert==False:                                             #pour activer le porte bouton nous devons avoir une collision donc
+                liste_rect.append(i.rect)                                   #on l'ajoute dans la liste rect pour pourvoir leur donner des collisions
+        for i in niveau_actuel.dict_element["bouton"]:                      #pour chaque element bouton dans le niveau actuel
+            liste_rect.append(i.rect)                                       #on l'ajoute dans la liste rect pour pouvoir interragir avec grace au collision
+        for i in niveau_actuel.dict_element["caisse"]:                      #pour chaque element bloc dans le niveau actuel  
+            if i.hold==None:                                                #
+                liste_rect.append(i.rect)                                   #on l'ajoute dans la liste rect pour pourvoir leur donner des collisions
 
         #Mouvement
 
