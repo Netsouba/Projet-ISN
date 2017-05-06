@@ -16,4 +16,5 @@
     2       1            11          
             1              11      
 11111111111111111111111111111111
-Indice : vous pouvez utiliser la caisse pour activer l'interrupteur, mais le "Koopa" peut faire l'affaire.
+Indice : vous pouvez utiliser la caisse pour activer l'interrupteur, 
+mais le "Koopa" peut faire l'affaire.
