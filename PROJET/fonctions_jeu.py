@@ -213,7 +213,7 @@ def jeu(niveau_actuel):
                                 liste_t_forme[1]=pygame.time.get_ticks()        #On met à jour la liste_t_forme
                                 perso.energie-=1                                #On fait perdre de l'énergie au personnage
                                 perso.double_saut=True                          #Le personnage ne peut plus faire de double saut jusqu'a qu'il touche le sol
-                                perso.vitesse_y=-6                              #On donne une vitesse de 6 pixels/secondes vers le haut (saut)
+                                perso.vitesse_y=-6                              #On donne une vitesse de 6 pixels/frames vers le haut (saut)
 
                         #------------------------------Teleportation-------------------------
 
@@ -300,30 +300,30 @@ def jeu(niveau_actuel):
                                 for porte in niveau_actuel.dict_element["porte"]:           
                                     if porte.rect.collidepoint(point):                      #S'il y a collision avec une porte
                                         porte.ouvert=True                                   #Son attribut ouvert devient True et la porte s'ouvre
-                                for torche in niveau_actuel.dict_element["torche"]: 
-                                    if torche.rect.collidepoint(point):
-                                        torche.enflamme=False
+                                for torche in niveau_actuel.dict_element["torche"]:         
+                                    if torche.rect.collidepoint(point):                     #S'il y a collision avec une torche
+                                        torche.enflamme=False                               #Son attribut enflamme devient True et il s'éteint
                                 for bulle in niveau_actuel.dict_element["bulle"]:
-                                    if bulle.rect.collidepoint(point):
-                                        bulle.obj.acceleration_y=g
-                                        bulle.obj.vitesse_y=0
-                                        niveau_actuel.dict_element["bulle"].remove(bulle)
-                                        del bulle
-                                for goomba in niveau_actuel.dict_element["goomba"]:
-                                    if goomba.rect.collidepoint(point):
-                                        niveau_actuel.dict_element["goomba"].remove(goomba)
-                                        del goomba
-
-                        b_point=b_ellipse=b_eclair=b_angle=b_trait=b_cercle=False
+                                    if bulle.rect.collidepoint(point):                      #S'il y a collision avec une bulle
+                                        bulle.obj.acceleration_y=g                          #L'objet de la bulle est de nouveau accéléré vers le bas par la gravité
+                                        bulle.obj.vitesse_y=0                               #Sa vitesse redevient nulle
+                                        niveau_actuel.dict_element["bulle"].remove(bulle)   #On retire la bulle de la liste des éléments du niveau
+                                        del bulle                                           #On supprimer la bulle
+                                for goomba in niveau_actuel.dict_element["goomba"]:         
+                                    if goomba.rect.collidepoint(point):                     #S'il y a collision avec un "goomba"
+                                        niveau_actuel.dict_element["goomba"].remove(goomba) #On le retire de la liste des éléments du niveau
+                                        del goomba                                          #On le supprime
+    
+                        b_point=b_ellipse=b_eclair=b_angle=b_trait=b_cercle=False           #On remet les valeurs par défaut pour éviter les bugs
                         i_tp=-1
 
-            if event.type==ANIMER:
-
-                perso.animation+=1
-                if perso.animation>=4:
+            if event.type==ANIMER:                                                          #Si l'évenement ANIMER est appelé (toutes les 0.1 secondes en général)
+    
+                perso.animation+=1                                                          #L'image à afficher désignée par l'attribut animation change.
+                if perso.animation>=4:                                                      #Si l'animation dépasse le nombre d'images, on remet à 0 pour faire ainsi une boucle
                     perso.animation=0
 
-                for b in niveau_actuel.dict_element["boule feu"]:
+                for b in niveau_actuel.dict_element["boule feu"]:                           #On anime de la même manière tous les éléments du niveau qui possèdent une animation
                     b.animation+=1
                     if b.animation>=4:
                         b.animation=0
@@ -361,151 +361,149 @@ def jeu(niveau_actuel):
                     elif p.ouvert==False and p.animation>0:
                         p.animation-=1
 
-                if etat_jeu==2:
-                    animation+=1
+                if etat_jeu==2:                                                             #Si on est dans le tutoriel:                    
+                    animation+=1                                                            #On anime l'image grâce à la longueur définie plus tôt
                     if animation>=longueur:
                         animation=0
 
 
 
+    
+            if event.type==INVINCIBLE:                                                      #Si l'évenement INVINCIBLE est appelé pour la première fois (quelquees secondes après être touché)
+                pygame.time.set_timer(INVINCIBLE,0)                                         #On arrete l'appel de l'évenement
+                perso.invincible=False                                                      #L'attribut invincible du personnage redevient False
 
-            if event.type==INVINCIBLE:
-                pygame.time.set_timer(INVINCIBLE,0)
-                perso.invincible=False
+            if event.type==POP_BULLE:                                                       #Si l'évenement POP_BULLE est appelé pour la première fois (quelquees secondes après avoir créé la bulle)
+                pygame.time.set_timer(POP_BULLE,0)                                          #On arrete l'appel de l'évenement
+                if niveau_actuel.dict_element["bulle"]!=[]:                                 #S'il y a bien une bulle
+                    bulle=niveau_actuel.dict_element["bulle"][0]                            #La seule bulle est désignée par la variable bulle
+                    bulle.obj.acceleration_y=g                                              #L'objet dans la bulle redevient attiré par le bas
+                    bulle.obj.vitesse_y=0                                                   #On remet sa vitesse y à 0
+                    niveau_actuel.dict_element["bulle"].remove(bulle)                       #On retire la bulle de la liste des éléments du niveau
+                    del bulle                                                               #Puis la supprime
+        
+            if event.type==RALENTI:                                                         #Si l'évenement RALENTI est appelé pour la première fois (quelquees secondes après avoir fait le pouvoir de ralentissement)
+                pygame.time.set_timer(RALENTI,0)                                            #On arrete l'appel de l'évenement   
+                pygame.time.set_timer(ANIMER,100)                                           #On remet la vitesse d'animation à 0.1 secondes
+                niveau_actuel.ralenti=1                                                     #On remet l'attribut ralenti du niveau à 1
 
-            if event.type==POP_BULLE:
-                pygame.time.set_timer(POP_BULLE,0)
-                if niveau_actuel.dict_element["bulle"]!=[]:
-                    bulle=niveau_actuel.dict_element["bulle"][0]
-                    bulle.obj.acceleration_y=g
-                    bulle.obj.vitesse_y=0
-                    niveau_actuel.dict_element["bulle"].remove(bulle)
-                    del bulle
-
-            if event.type==RALENTI:
-                pygame.time.set_timer(RALENTI,0)
-                pygame.time.set_timer(ANIMER,100)
-                niveau_actuel.ralenti=1
-
-        touches=pygame.key.get_pressed()
-
-        if touches[K_RIGHT] and perso.deplacement==False:
-            perso.vitesse_x+=100
-            perso.deplacement=True
-            perso.direction="droite"
-            for i in niveau_actuel.dict_element["caisse"]:
-                if distance(i.rect.center,perso.rect.center)>35:
+        #----------------------------Gestion du mouvement--------------------------
+        touches=pygame.key.get_pressed()                                                    #C'est une liste de l'état de chaque touche du clavier
+                                                                                            #L'avantage de cette technique est qu'on peut gérer plusieurs touches pressées en même temps
+        if touches[K_RIGHT] and perso.deplacement==False:                                   #Si on appuie sur la flèche directionnelle droite pour la première fois
+            perso.vitesse_x+=100                                                            #On ajoute une vitesse de 100 pixels par seconde
+            perso.deplacement=True                                                          #On met déplacement True (notamment utile pour l'animation)
+            perso.direction="droite"                                                        #On met direction à droite
+            for i in niveau_actuel.dict_element["caisse"]:                                  #Si le personnage s'éloigne trop d'une caisse:
+                if distance(i.rect.center,perso.rect.center)>35:                            #L'attribut hold de la caisse devient False
                     i.hold=False
-
-        if touches[K_LEFT] and perso.deplacement==False:
-            perso.vitesse_x-=100
+    
+        if touches[K_LEFT] and perso.deplacement==False:                                    #Même raisonnement que pour la droite
+            perso.vitesse_x-=100                                                            #On soustrait maintenant la vitesse
             perso.deplacement=True
             perso.direction="gauche"
             for i in niveau_actuel.dict_element["caisse"]:
                 if distance(i.rect.center,perso.rect.center)>35:
                     i.hold=False
 
-        if touches[K_UP] and perso.saut==False:
-            perso.vitesse_y=-6
-            for i in niveau_actuel.dict_element["caisse"]:
+        if touches[K_UP] and perso.saut==False:                                             #Si on appuie sur la flèche directionnelle haut pour la première fois
+            perso.vitesse_y=-6                                                              #On met une vitesse y de 6 pixels par frame vers le haut
+            for i in niveau_actuel.dict_element["caisse"]:                                  #On lache la caisse
                 i.hold=False
 
 
-        if etat_jeu==1:
-            souris=pygame.mouse.get_pressed()
-            if souris[0]:
-
-                liste_pos.append(pygame.mouse.get_pos())
-
+        if etat_jeu==1:                                                                     #Si on est dans l'interface de dessin
+            souris=pygame.mouse.get_pressed()                                               #C'est une liste de l'état des boutons de la souris. L'avantage est de pouvoir gérer plusieurs boutons pressés en même temps
+            if souris[0]:                                                                   #Si le clic gauche est maintenu
+                liste_pos.append(pygame.mouse.get_pos())                                    #On rajoute dans la liste_pos la position de la souris
 
 
-    #---------------------------Gestion des variable--------------------------
-        if etat_jeu==0:
 
+    #---------------------------Gestion des variables--------------------------
+        if etat_jeu==0:                                                                     #Si on est dans le jeu (ainsi, dans le tutoriel ou l'interface de dessin, les objets ne se mettent pas à jour, ce qui donne l'impression d'arreter le temps)
+                                                                                            #On va mettre à jour tous les éléments grâce à la méthode update()
+                                                                                            
+            niveau_actuel.update(perso)                                                     #On met à jour le niveau 
+            
+            p=perso.update(duree_frame,niveau_actuel)                                       #On met à jour le personnage, et l'éventuel retour de la méthode est capturé dans une variable
+            if p!=None:                                                                     #S'il ne c'est pas rien passé
+                if p=="mort":                                                               #Si la méthode a retourné "mort" (la mort du personnage)
+                    pygame.mixer.music.stop()                                               #On arrete la musique
+                    son_game_over.play()                                                    #On joue l'effet sonore du Game Over
+                    pygame.image.save(fenetre,"temp/save.png")                              #On fait une capture de l'écran actuel
+                    return game_over(pygame.image.load("temp/save.png"))                    #On lance le game over en passant en paramètre l'image de cette capture d'écran
+                if p=="suivant":                                                            #Si la méthode a retourné "suivant" (si le personnage arrive à la fin du niveau ou s'il passe le niveau)
+                    son_clap.play()                                                         #On joue l'effet sonore de la victoire
+                    return p                                                                #On retourne "suivant" vers le main.py
+                if p=="touche":                                                             #Si la méthode a retourné "touche" (si le personnage a touché un ennemi basique)
+                    pygame.time.set_timer(INVINCIBLE,2000)                                  #On appelle l'évenement INVINCIBLE toutes les 2 secondes (il ne sera appelé qu'une fois) pour éviter une collision avec les ennemis juste après avoir été touché
+                    perso.invincible=True                                                   #L'attribut invicible du personnage devient True
+    
+            for a in niveau_actuel.dict_element.values():                                   #On fait un parcours des valeurs du dictionnaire 
+                for i in a:                                                                 
+                    i.update(perso,duree_frame,niveau_actuel)                               #On met à jour tous les éléments interractifs
 
-            niveau_actuel.update(perso)
+            #---------------------Gestion du délai de récupération--------------------------------
+            temps_actuel=pygame.time.get_ticks()                                    #On met le temps écoulé dans temps_actuel
+            for i,t_forme in enumerate(liste_t_forme):                              #On travaille sur tous les pouvoirs avec un parcours de liste
+                d_ecoulee=temps_actuel-t_forme                                      #On a le temps écoulé depuis le dernier lancement du sort
+                liste_cooldown[i]=liste_base_cooldown[i]-d_ecoulee                  #On met à jour la liste qui indique le temps restant avant que le sort soit réutilisable
+                if liste_cooldown[i]<=0:liste_cooldown[i]=liste_base_cooldown[i]    #Si ce temps atteint 0, on le remet au début
+            liste_texte_cooldown=[p_perfect.render(str(round(i/1000,1)),1,NOIR) for i in liste_cooldown]        #On met à jour les textes qui indiquent le temps restant dans l'interface
 
-
-            p=perso.update(duree_frame,niveau_actuel)
-            if p!=None:
-                if p=="mort":
-                    pygame.mixer.music.stop()
-                    pygame.image.save(fenetre,"temp/save.png")
-                    son_game_over.play()
-                    return game_over(pygame.image.load("temp/save.png"))
-                if p=="suivant":
-                    son_clap.play()
-                    return p
-                if p=="touche":
-                    pygame.time.set_timer(INVINCIBLE,2000)
-                    perso.invincible=True
-
-            for a in niveau_actuel.dict_element.values():
-                for i in a:
-                    etat=i.update(perso,duree_frame,niveau_actuel)
-
-
-            temps_actuel=pygame.time.get_ticks()
-            for i,t_forme in enumerate(liste_t_forme):
-                d_ecoulee=temps_actuel-t_forme
-                liste_cooldown[i]=liste_base_cooldown[i]-d_ecoulee
-                if liste_cooldown[i]<=0:liste_cooldown[i]=liste_base_cooldown[i]
-            liste_texte_cooldown=[p_perfect.render(str(round(i/1000,1)),1,NOIR) for i in liste_cooldown]
-
-            for i in niveau_actuel.dict_element["bloc_tuto"]:
-                if perso.tuto==True and i.toucher==False: #Collision avec bloc tuto
-                    a_e=etat_jeu
-                    etat_jeu=2
+            
+            for i in niveau_actuel.dict_element["bloc_tuto"]:                       #On travaille sur tous les blocs tutoriels avec un parcours de liste
+                if perso.tuto==True and i.toucher==False:                           #Si collision avec le bloc tuto pour la première fois     
+                    a_e=etat_jeu                                                    #On sauvegarde l'ancien etat_jeu dans a_e
+                    etat_jeu=2                                                      #On met l'interface du tutoriel
 
 
     #---------------------------Affichage-------------------------------------
-        #Fond
-        fenetre.blit(niveau_actuel.dict_images['fond'],(0,0))
-
-        #Elements du niveau
-        for a in niveau_actuel.dict_element.values():
+        fenetre.blit(niveau_actuel.dict_images['fond'],(0,0))                       #Affichage du fond
+        
+        for a in niveau_actuel.dict_element.values():                               #Affichage de tous les éléments dans le dict_element du niveau avec un parcours des valeurs du dictionnaire
             for i in a:
-                fenetre.blit(i.img,i.rect)
+                fenetre.blit(i.img,i.rect)                                          #On affiche l'image de l'objet à l'emplacement de son rectangle
 
-        #Perso
-        if perso.clignotant==False or perso.animation%2==0:
+        #-----------Personnage--------------
+        if perso.clignotant==False or perso.animation%2==0:                         #Dans le cas où le personnage est clignotant(à cause de l'invicibilité), on ne l'affiche pas une image sur 2
             fenetre.blit(perso.img,perso.rect)
 
-        #Ombres
-        for o in niveau_actuel.liste_ombre:
-
+        for o in niveau_actuel.liste_ombre:                                         #On place les ombres
             fenetre.blit(niveau_actuel.dict_images["ombre"],o)
-        #Pause
-        if etat_jeu==1:
-            fenetre.blit(niveau_actuel.dict_images['pause'],(0,0))
+            
+        if etat_jeu==1:                                                             #Si on est dans l'interface de dessin
+            fenetre.blit(niveau_actuel.dict_images['pause'],(0,0))                  #On met le rectangle sombre
+            for i in range(len(liste_pos)-1):                                       #On fait un parcours de la liste des points dessinés
+                pygame.draw.line(fenetre,ROUGE,liste_pos[i+1],liste_pos[i],8)       #On dessine trait entre les points
 
-            for i in range(len(liste_pos)-1):
-                pygame.draw.line(fenetre,ROUGE,liste_pos[i+1],liste_pos[i],8)
+        #-----------Interface-------------
+        pygame.draw.rect(fenetre,VERT,(2,2,150*perso.pv,26))                        #Le rectangle vert des points de vie qui a une longueur qui dépend de la quantité de points de vie restants
+        pygame.draw.rect(fenetre,NOIR,(2,2,150*perso.pv,26),2)                      #Le rectangle noir qui encadre ce dernier
+        pygame.draw.rect(fenetre,BLEU,(2,30,20*perso.energie,26))                   #Le rectangle bleu de l'énergie qui a une longueur qui dépend de la quantité d'énergie restantes
+        pygame.draw.rect(fenetre,NOIR,(2,30,20*perso.energie,26),2)                 #Le rectangle noir qui encadre ce dernier
+        for i,forme in enumerate(liste_img_formes):                                 #On affiche les formes en haut à droite avec une boucle
+            if i<niveau_actuel.numero:                                              #On affiche pas tous les pouvoirs dans les premiers niveaux.
+                fenetre.blit(forme,(618+i*50,2))                                    
+                if liste_cooldown[i]!=liste_base_cooldown[i]:                       #Si le sort est en rechargement:
+                    fenetre.blit(filtre_cooldown,(618+i*50,2))                      #On affiche un petit rectangle sombre qui couvre l'image
+                    fenetre.blit(liste_texte_cooldown[i],(618+i*50,2))              #On affiche les secondes qui restent
+                    
+        fenetre.blit(img_menu,(400,2))                                              #Affichage du bouton menu                 
+        fenetre.blit(img_reset,(450,2))                                             #Affichage du bouton recommencer
+        fenetre.blit(img_info,(500,2))                                              #Affichage du bouton tutoriel
+        
+        #---Tutoriel---
+        if etat_jeu==2:                                                             #Si on est dans l'interface tutoriel
+            fenetre.blit(pause_tuto,(0,0))                                          #Affichage du rectangle sombre
+            fenetre.blit(img_retour,(550,2))                                        #Affichage de la flèche "retour au jeu"
+            for i,texte in enumerate(niveau_actuel.texte_astuce):                   #Affichage du texte du tutoriel
+                fenetre.blit(texte,(200,200+20*i))                                  
 
-        #Interface
-        pygame.draw.rect(fenetre,VERT,(2,2,150*perso.pv,26))
-        pygame.draw.rect(fenetre,NOIR,(2,2,150*perso.pv,26),2)
-        pygame.draw.rect(fenetre,BLEU,(2,30,20*perso.energie,26))
-        pygame.draw.rect(fenetre,NOIR,(2,30,20*perso.energie,26),2)
-        for i,forme in enumerate(liste_img_formes):
-            if i<niveau_actuel.numero:
-                fenetre.blit(forme,(618+i*50,2))
-                if liste_cooldown[i]!=liste_base_cooldown[i]:
-                    fenetre.blit(filtre_cooldown,(618+i*50,2))
-                    fenetre.blit(liste_texte_cooldown[i],(618+i*50,2))
-        fenetre.blit(img_menu,(400,2))
-        fenetre.blit(img_reset,(450,2))
-        fenetre.blit(img_info,(500,2))
-
-        if etat_jeu==2:
-            fenetre.blit(pause_tuto,(0,0))
-            fenetre.blit(img_retour,(550,2))
-            for i,texte in enumerate(niveau_actuel.texte_astuce):
-                fenetre.blit(texte,(200,200+20*i))
-
-            if niveau_actuel.numero==1:
-                longueur=len(anim_tuto["trait"])
-                fenetre.blit(anim_tuto["trait"][animation],(200,120))
+            #On rajoute les animations expliquant les formes à dessiner dans certains niveaux
+            if niveau_actuel.numero==1:                             
+                longueur=len(anim_tuto["trait"])                            #On met à jour la longueur
+                fenetre.blit(anim_tuto["trait"][animation],(200,120))       #Puis on affiche l'image qui correspond à l'animation(qui change toutes les 0.1 secondes)
             elif niveau_actuel.numero==2:
                 longueur=len(anim_tuto["point"])
                 fenetre.blit(anim_tuto["point"][animation],(200,120))
@@ -526,12 +524,12 @@ def jeu(niveau_actuel):
                 longueur=len(anim_tuto["ellipse"])
                 fenetre.blit(anim_tuto["ellipse"][animation],((200,120)))
 
-        pygame.display.flip()
+        pygame.display.flip()                                                       #Mise à jour de l'affichage de l'écran
     #----------------------------Gestion du temps-----------------------------
-        timer.tick(30)
-        fps=timer.get_fps()
-        if fps!=0:
-            duree_frame=1/fps
+        timer.tick(30)                                                              #Le programme ne peut pas être tourné à plus de 30 frames par secondes pour économiser de la puissance
+        fps=timer.get_fps()                                                         #On capture le nombre de frame par seconde
+        if fps!=0:                                                                  #Le FPS est parfois égal à 0 lors de forts ralentissements
+            duree_frame=1/fps                                                       #La durée d'une frame est notamment utile pour les déplacements
         else:
             duree_frame=0
 
