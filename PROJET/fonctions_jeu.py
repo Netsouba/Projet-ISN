@@ -295,12 +295,12 @@ def jeu(niveau_actuel):
                             perso.energie-=1
                             son_slash.play()
 
-                            for point in trait_l_point:
-
-                                for porte in niveau_actuel.dict_element["porte"]:
-                                    if porte.rect.collidepoint(point):
-                                        porte.ouvert=True
-                                for torche in niveau_actuel.dict_element["torche"]:
+                            for point in trait_l_point:                                     #On parcours les points de la droite
+                                                                                            #On va parcourir les éléments qui interragissent avec le trait
+                                for porte in niveau_actuel.dict_element["porte"]:           
+                                    if porte.rect.collidepoint(point):                      #S'il y a collision avec une porte
+                                        porte.ouvert=True                                   #Son attribut ouvert devient True et la porte s'ouvre
+                                for torche in niveau_actuel.dict_element["torche"]: 
                                     if torche.rect.collidepoint(point):
                                         torche.enflamme=False
                                 for bulle in niveau_actuel.dict_element["bulle"]:
