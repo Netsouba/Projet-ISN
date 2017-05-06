@@ -132,7 +132,7 @@ def jeu(niveau_actuel):
     liste_pos=[]                                                    #Liste qui va contenir tous les points du dessin 
     
     #Pour les listes des formes qui suivent, l'ordre est :Trait,point,cercle,tp,angle,eclair,ellipse
-    liste_t_forme=[0,0,0,0,0,0,0]                                   #Liste qui possède pour chaque pouvoir le durée depuis la dernière fois que le pouvoir est utilisé
+    liste_t_forme=[0,0,0,0,0,0,0]                                   #Liste qui possède pour chaque pouvoir le temps à chauque fois que le pouvoir est utilisé
     liste_base_cooldown=[3000,2000,8000,1,5000,5000,10000]          #Liste qui gère le temps nécessaire à attendre entre chaque sort
     liste_cooldown=[0,0,0,0,0,0,0]                                  #Liste qui indique le temps restant avant que le sort soit réutilisable
     
@@ -194,7 +194,7 @@ def jeu(niveau_actuel):
 
                     #---------------------------------------------Reconnaissance--------------------------------------------------------
                     if liste_pos!=[]:                           #S'il y a bien au moins un point (ce qui est toujours le cas, sauf en cas de bug)
-                        #On donne à b_(forme) les valeurs True ou False selon si les fonctions ont "reconnu" la forme, et 
+                        #On donne à b_(forme) les valeurs True ou False selon si les fonctions ont "reconnu" la forme, et eventuellement les valeurs nécessaires
                         i_tp=r_tp(liste_pos,perso.rect,[i.rect for i in niveau_actuel.dict_element["tp"]])
                         b_angle,pos_angle=r_angle(liste_pos)
                         b_arc=r_arc_cercle(liste_pos)
@@ -203,92 +203,93 @@ def jeu(niveau_actuel):
                         b_point,pos_point=r_point(liste_pos)
                         b_trait,trait_l_point=r_droite(liste_pos)
                         b_ellipse,(e_centre,(e_a,e_b))=r_ellipse(liste_pos)
+                        
+                        #Toutes les pouvoirs ne se lancent que si le personnage a assez d'energie et que le sort n'est pas pendant le délai de récupération
+                        
+                        #--------------------------------Point-------------------------------
+                        if b_point:                             #Si un point a été reconnu
 
+                            if perso.double_saut==False and perso.rect.collidepoint(pos_point) and perso.energie>1 and liste_cooldown[1]==liste_base_cooldown[1]:   #Si le personnage peut faire un double saut, et si le point collision avec le rectangle du personnage
+                                liste_t_forme[1]=pygame.time.get_ticks()        #On met à jour la liste_t_forme
+                                perso.energie-=1                                #On fait perdre de l'énergie au personnage
+                                perso.double_saut=True                          #Le personnage ne peut plus faire de double saut jusqu'a qu'il touche le sol
+                                perso.vitesse_y=-6                              #On donne une vitesse de 6 pixels/secondes vers le haut (saut)
 
-                        #Point
-                        if b_point:
+                        #------------------------------Teleportation-------------------------
 
-                            if perso.double_saut==False and perso.rect.collidepoint(pos_point) and perso.energie>1 and liste_cooldown[1]==liste_base_cooldown[1]:
-                                liste_t_forme[1]=pygame.time.get_ticks()
-                                perso.energie-=1
-                                perso.double_saut=True
-                                perso.vitesse_y=-6
-
-                        #Teleportation
-
-                        elif i_tp!=-1:
-                            tp=niveau_actuel.dict_element["tp"][i_tp]
-                            if tp.etat!=4 and perso.energie>tp.etat and liste_cooldown[3]==liste_base_cooldown[3]:
+                        elif i_tp!=-1:                          #Si la téléportation est reconnue
+                            tp=niveau_actuel.dict_element["tp"][i_tp]       #tp prend la valeur de l'objet Teleportation en question
+                            if tp.etat!=4 and perso.energie>tp.etat and liste_cooldown[3]==liste_base_cooldown[3]:  #Si le bloc n'est pas marron
                                 liste_t_forme[3]=pygame.time.get_ticks()
                                 perso.energie-=3*tp.etat
-                                perso.vitesse_y=0
-                                perso.rect.center=tp.rect.center
+                                perso.vitesse_y=0                           #On remet la vitesse y du personnage à 0
+                                perso.rect.center=tp.rect.center            #On met le rectangle du personnage au niveau du rectangle téléportation (les centres au même endroit)
 
-                        #Eclair
+                        #--------------------------------Eclair----------------------------------------
                         elif b_eclair and perso.energie>3 and liste_cooldown[5]==liste_base_cooldown[5]:
                             liste_t_forme[5]=pygame.time.get_ticks()
-                            perso.energie-=3
-                            son_electric.play()
-                            niveau_actuel.dict_images["ombre"].set_alpha(0)
-                            niveau_actuel.eclair=True
-                            for i in niveau_actuel.dict_element["interrupteur"]:
+                            perso.energie-=3    
+                            son_electric.play()                                 #On joue l'effet sonore correspondant
+                            niveau_actuel.dict_images["ombre"].set_alpha(0)     #Les ombres du niveau deviennent entièrement transparentes
+                            niveau_actuel.eclair=True                           #On change l'attribut eclair du niveau
+                            for i in niveau_actuel.dict_element["interrupteur"]:#On parcours les interrupteurs
+                                for p in liste_pos:                             #On parcours les points du trait
+                                    if i.rect.collidepoint(p):                  #Si le point collisionne avec l'interrupteur
+                                        i.ouvert=not i.ouvert                   #L'attribut ouvert de l'interrupteur change
+                                        break                                   #On quitte la boucle
+                                for go in niveau_actuel.dict_element["goomba"]: #On parcours les objets "goomba" du niveau
+                                for p in liste_pos:                             
+                                    if go.rect.collidepoint(p):                 #Si le point collision avec le goomba
+                                        niveau_actuel.dict_element["goomba"].remove(go)     #On l'enlève de sa liste
+                                        break                                   #On quitte la boucle
+                            for t in niveau_actuel.dict_element["torche"]:      #On parcours les torches du niveau
                                 for p in liste_pos:
-                                    if i.rect.collidepoint(p):
-                                        i.ouvert=not i.ouvert
-                                        break
-                            for go in niveau_actuel.dict_element["goomba"]:
-                                for p in liste_pos:
-                                    if go.rect.collidepoint(p):
-                                        niveau_actuel.dict_element["goomba"].remove(go)
-                                        break
-                            for t in niveau_actuel.dict_element["torche"]:
-                                for p in liste_pos:
-                                    if t.rect.collidepoint(p):
-                                        t.enflamme=True
+                                    if t.rect.collidepoint(p):                  #Si le point collision avec la torche 
+                                        t.enflamme=True                         #L'attribut enflamme de la torche devient True
 
 
-                        #Cercle
+                        #----------------------------Cercle-----------------------------------------
                         elif b_cercle and perso.energie>2 and liste_cooldown[2]==liste_base_cooldown[2]:
                             liste_t_forme[2]=pygame.time.get_ticks()
                             perso.energie-=2
                             son_pop.play()
-                            liste_obj_bulle=[]
-                            liste_obj_bulle.append(perso)
-                            for i in niveau_actuel.dict_element["goomba"]:
+                            liste_obj_bulle=[]                                  #La liste prend tous les objets qui peuvent s'envoler grâce à la bulle
+                            liste_obj_bulle.append(perso)                       #On met le personnage
+                            for i in niveau_actuel.dict_element["goomba"]:      #On met tous les "goomba"
                                 liste_obj_bulle.append(i)
-                            for i in niveau_actuel.dict_element["caisse"]:
+                            for i in niveau_actuel.dict_element["caisse"]:      #On met toutes les caisses
                                 liste_obj_bulle.append(i)
 
-                            liste_obj_proche=[i for i in liste_obj_bulle if distance(i.rect.center,c_centre)<c_rayon]
-                            for i,elem in enumerate([distance(i.rect.center,c_centre) for i in liste_obj_proche]):
-                                if elem==min([distance(i.rect.center,c_centre) for i in liste_obj_proche]):
+                            liste_obj_proche=[i for i in liste_obj_bulle if distance(i.rect.center,c_centre)<c_rayon]   #On met dans la liste_obj_proche tous les éléments qui sont dans la bulle en vérifiant si la distance entre l'objet et le centre du cercle est inférieur au rayon (maximum pour être indulgeant)
+                            for i,elem in enumerate([distance(i.rect.center,c_centre) for i in liste_obj_proche]):      #On selectionne l'objet de cette liste qui est le plus proche du centre en faisant une liste distance
+                                if elem==min([distance(i.rect.center,c_centre) for i in liste_obj_proche]):             
                                     obj=liste_obj_proche[i]
-                            try :
-                                b=Bulle(img_bulle,obj)
-                                niveau_actuel.dict_element["bulle"].append(b)
-                                del obj
-                                pygame.time.set_timer(POP_BULLE,4000)
-                            except NameError:
-                                pass
+                            try :                                                                   
+                                b=Bulle(img_bulle,obj)                          #On crée l'objet Bulle
+                                niveau_actuel.dict_element["bulle"].append(b)   #On la rajoute dans la liste des éléments du niveau
+                                del obj                                         #La suppression permet d'éviter les erreurs lors de la réutilisation de cette variable temporaire
+                                pygame.time.set_timer(POP_BULLE,4000)           #On appelera l'évenement POP_BULLE dans 4 secondes pour la détruire
+                            except NameError:                                   #S'il n'a pas d'obj :
+                                pass                        
 
 
-                        #Ellipse
+                        #-------------------------------------Ellipse-----------------------------------------
                         elif b_ellipse and perso.energie>2 and liste_cooldown[6]==liste_base_cooldown[6]:
                             liste_t_forme[6]=pygame.time.get_ticks()
                             perso.energie-=2
-                            niveau_actuel.ralenti=0.1
-                            pygame.time.set_timer(RALENTI,8000)
-                            pygame.time.set_timer(ANIMER,1000)
+                            niveau_actuel.ralenti=0.1           #L'attribut ralenti du niveau devient 0.1 qui va ralentir les ennemis
+                            pygame.time.set_timer(RALENTI,8000) #On appelera l'évenement RALENTI dans 8 secondes pour arreter le ralenti
+                            pygame.time.set_timer(ANIMER,1000)  #Les animations deviennent plus lentes
 
-                        #Angle
+                        #------------------------------------------Angle---------------------------------------------
                         elif b_angle!=False and perso.energie>3 and liste_cooldown[4]==liste_base_cooldown[4]:
                             liste_t_forme[4]=pygame.time.get_ticks()
                             perso.energie-=3
-                            son_fire.play()
-                            boule_de_feu=BouleFeu(boule_de_feu_img,b_angle,perso)
-                            niveau_actuel.dict_element["boule feu"].append(boule_de_feu)
+                            son_fire.play() 
+                            boule_de_feu=BouleFeu(boule_de_feu_img,b_angle,perso)           #On crée la boule de feu
+                            niveau_actuel.dict_element["boule feu"].append(boule_de_feu)    #On la rajoute dans la liste des éléments du niveau
 
-                        #Trait
+                        #--------------------------------------Trait---------------------------------------
                         elif b_trait and perso.energie>1 and liste_cooldown[0]==liste_base_cooldown[0]:
                             liste_t_forme[0]=pygame.time.get_ticks()
                             perso.energie-=1
