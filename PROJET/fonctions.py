@@ -9,94 +9,102 @@ from constantes import *
 
 #-----------------------------------Fontions maths--------------------------------
 def moyenne(liste):
-    try:
-        return sum(liste)/len(liste)
-    except:
+    """La fonction prend en paramètre une liste de réels et retourne sa moyenne.
+    S'il la liste est vide, elle renvoie 0.
+    """
+    try:                                                                        
+        return sum(liste)/len(liste)                                                #sum() est une fonction dans python qui fait la somme des termes d'une liste
+    except ZeroDivisionError:
         return 0
+    
 def milieu(point_a,point_b):
-    ax,ay=point_a
+    """La fonction prend en paramètres deux tuples qui sont sont les coordonnées de deux points. 
+    On renvoie ainsi les coordonnées du milieu.
+    """
+    ax,ay=point_a           #On pose ax,ay,bx et by, les coordonnées des points.
     bx,by=point_b
     m=(ax+bx)/2,(ay+by)/2
     return m
 
 def distance(point_a,point_b):
+    """La fonction prend en paramètres deux tuples qui sont sont les coordonnées de deux points. 
+    On renvoie ainsi la distance entre ces points."""
+
     return math.sqrt((point_b[0]-point_a[0])**2+(point_b[1]-point_a[1])**2)
 
 def droite(point_a,point_b):
-    if point_a[0]>point_b[0]:
-        point_a,point_b=point_b,point_a
-    ax,ay=point_a
+    """La fonction prend en paramètres deux tuples qui sont sont les coordonnées de deux points A et B. 
+    Elle renvoie une liste de points qui appartiennent à la droite (AB):
+    """
+    
+    if point_a[0]>point_b[0]:               #On va admettre que le point A est à gauche du point B.
+        point_a,point_b=point_b,point_a     #Donc si ce n'est pas le cas, on échange les deux points
+    ax,ay=point_a                           #On pose ax,ay,bx et by, les coordonnées des points.
     bx,by=point_b
 
     try:
-        delta=(by-ay)/(bx-ax)
-        liste_point=[(x,delta*(x-ax)+ay) for x in range(ax,bx)]
+        delta=(by-ay)/(bx-ax)                                       #delta est le taux d'accroissement de la droite (AB). Il s'agit de f'(x)
+        liste_point=[(x,delta*(x-ax)+ay) for x in range(ax,bx)]     #on parcours chaque x entre ax et bx et 
+                                                                    #on met dans la liste_point le point de coordonnées ( x; f'(x)(x-ax)+f(ax) )
+    
+    except ZeroDivisionError:                                       #Une ZeroDivisionError sera interceptée si la droite est vericale.
 
-    except ZeroDivisionError:
-
-        liste_point=[(ax,y) for y in range(ay,by,3)]
-
+        liste_point=[(ax,y) for y in range(ay,by,3)]                #Si la droite est vericale, on fait la liste en parcourant les y entre ay et by avec un pas de 3 pour eviter qu'il y ait trop de termes.
+                                                                    #Tous les points ont la meme abscisse que A et ont comme ordonnée y.
     return liste_point
 
 def croissance(liste):
-    """ Retourne les variations d'une liste (Minima+Maxima, Indices)"""
+    """ La fonction prend en paramètres une liste. On considère qu'il s'agit d'une suite.
+    Elle renvoie une liste_p qui possède les indices dans la liste des extremums locaux ainsi que les variations de cette liste dans liste_c.
+    """
 
-    liste_c=[]
-    liste_p=[]
-    croissant=None
+    liste_c=[]                          #Cette liste va avoir les variations de la liste. Croissant=True et décroissant=True
+    liste_p=[]                          #Cette liste va avoir les indices des extremums locaux.
+    croissant=None                      #croissant est une variable qui va indiquer True ou False.
+                                        #Pour le premier terme, croissant = None        
+    for i in range(len(liste)-1):       #On parcours la liste sans le dernier terme.
+        
+        if liste[i+1]>liste[i]:         #Si u(n+1)>u(n), la suite est croissante en i.
+            if croissant==None:         #S'il s'agit du premier terme:
+                liste_c.append(True)    #On peut ajouter True dans la liste_c
+    
+            elif croissant==False:      #Si la suite était décroissante en i-1, et qu'elle est croissante en i,
+                liste_p.append(i)       #On pose i en tant qu'extremum
+                liste_c.append(True)    #On peut ajouter True dans la liste_c
+        
+                                        #Si la suite était déjà croissante, on ne change rien
+            
+            croissant=True              #On change ici croissant
 
-    for i in range(len(liste)-1):
-        if liste[i+1]>liste[i]:
-
-            if croissant==None:
-                liste_c.append(True)
-
-            elif croissant==False:
-                liste_p.append(i)
-
-                liste_c.append(True)
-
-            croissant=True
-
-        elif liste[i+1]<liste[i]:
-
+            
+        elif liste[i+1]<liste[i]:       #Si u(n+1)<u(n), la suite est décroissante en i.
+                                        #Il d'agit du même raisonnement que si la suite était croissante, mais nous avons changé les True en False
             if croissant==None:
                 liste_c.append(False)
+                
             elif croissant==True:
                 liste_p.append(i)
-
                 liste_c.append(False)
 
             croissant=False
 
-    return liste_p,liste_c
+    return liste_p,liste_c              #On peut retourner liste_p et liste_c
 
 def calc_ecart_type(liste):
-    moyenne_l=moyenne(liste)
-    l=[(i-moyenne_l)*(i-moyenne_l) for i in liste]
-    return math.sqrt(sum(l))
+    """La fonction prend en paramètre une liste.
+    Elle renvoie la valeur de l’écart type. 
+    """
+    moyenne_l=moyenne(liste)                        #On réutilise la fonction moyenne() pour trouver la moyenne de la liste
+    l=[(i-moyenne_l)*(i-moyenne_l) for i in liste]  #On crée une liste qui possède le carrée de la différence entre le terme et la moyenne.
+    return math.sqrt(sum(l))                        #sum(l) est donc la variance de la liste. Pour avoir l'écart type, on peut prendre la racine carrée.
 
 def interdiagonalequadri(a,b,c,d):
+    """La fonction prend en paramètres quatres tuples qui sont sont les coordonnées de quatres points A,B,C,D. 
+    On renvoie ainsi les coordonnées de l’intersection I de la diagonale du quadrilatère ABCD.
+    """
     v_ac=(c[0]-a[0],c[1]-a[1])
     v_bd=(d[0]-b[0],d[1]-b[1])
-
-##    eq_a={a[0]+v_ac[0]*t,
-##          a[1]+v_ac[1]*t}
-##    eq_b={b[0]+v_bd[0]*t,
-##          b[1]+v_bd[1]*t}
-##
-##    a[0]+v_ac[0]*t=b[0]+v_bd[0]*k,
-##    a[1]+v_ac[1]*t=b[1]+v_bd[1]*k
-##
-##    t=(b[0]+v_bd[0]*k-a[0])/v_ac[0],
-##    a[1]+v_ac[1]*(b[0]+v_bd[0]*k-a[0])/v_ac[0]=b[1]+v_bd[1]*k
-##
-##    t=(b[0]+v_bd[0]*k-a[0])/v_ac[0],
-##    a[1]+(v_ac[1]*b[0]-v_ac[1]*a[0])/v_ac[0]-b[1]=v_bd[1]*k-v_ac[1]*v_bd[0]*k/v_ac[0]
-##
-##    t=(b[0]+v_bd[0]*k-a[0])/v_ac[0],
-##    k=(a[1]+(v_ac[1]*b[0]-v_ac[1]*a[0])/v_ac[0]-b[1])/(v_bd[1]-v_ac[1]*v_bd[0]/v_ac[0])
-
+    
     try:
         x=b[0]+v_bd[0]*(a[1]+(v_ac[1]*b[0]-v_ac[1]*a[0])/v_ac[0]-b[1])/(v_bd[1]-v_ac[1]*v_bd[0]/v_ac[0])
         y=b[1]+v_bd[1]*(a[1]+(v_ac[1]*b[0]-v_ac[1]*a[0])/v_ac[0]-b[1])/(v_bd[1]-v_ac[1]*v_bd[0]/v_ac[0])
