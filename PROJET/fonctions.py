@@ -306,3 +306,12 @@ def r_tp(liste_pos,rect_perso,liste_tp):
                 return i
             
     return -1                               #Si rien n'a été renvoyé, on retourne -1
+
+#--------------------------------------------Autres fonctions-------------------------------------------------------
+def musique(music):
+    """La fonction prend en paramètre le chemin vers le fichier audio. Son intéret est d'arreter la musique actuelle et de lancer une nouvelle.
+    """
+    pygame.mixer.stop()
+    pygame.mixer.music.load(music)
+    pygame.mixer.music.play()
+
