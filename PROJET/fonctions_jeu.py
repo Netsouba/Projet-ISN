@@ -394,23 +394,14 @@ def jeu(niveau_actuel):
             perso.vitesse_x+=100                                                            #On ajoute une vitesse de 100 pixels par seconde
             perso.deplacement=True                                                          #On met déplacement True (notamment utile pour l'animation)
             perso.direction="droite"                                                        #On met direction à droite
-            for i in niveau_actuel.dict_element["caisse"]:                                  #Si le personnage s'éloigne trop d'une caisse:
-                if distance(i.rect.center,perso.rect.center)>35:                            #L'attribut hold de la caisse devient False
-                    i.hold=False
     
         if touches[K_LEFT] and perso.deplacement==False:                                    #Même raisonnement que pour la droite
             perso.vitesse_x-=100                                                            #On soustrait maintenant la vitesse
             perso.deplacement=True
             perso.direction="gauche"
-            for i in niveau_actuel.dict_element["caisse"]:
-                if distance(i.rect.center,perso.rect.center)>35:
-                    i.hold=False
 
         if touches[K_UP] and perso.saut==False:                                             #Si on appuie sur la flèche directionnelle haut pour la première fois
             perso.vitesse_y=-6                                                              #On met une vitesse y de 6 pixels par frame vers le haut
-            for i in niveau_actuel.dict_element["caisse"]:                                  #On lache la caisse
-                i.hold=False
-
 
         if etat_jeu==1:                                                                     #Si on est dans l'interface de dessin
             souris=pygame.mouse.get_pressed()                                               #C'est une liste de l'état des boutons de la souris. L'avantage est de pouvoir gérer plusieurs boutons pressés en même temps
