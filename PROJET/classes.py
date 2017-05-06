@@ -63,20 +63,20 @@ class Niveau():                         '''créer une classe Niveau'''
                     self.structure.append(ligne)                                            #si ce n'est pas le cas, on insert la totalité de la ligne dans la liste "structure"
 
 
-        for y,ligne in enumerate(self.structure):
-            if y<=17:
-                for x,car in enumerate(ligne):
-                    if car!=" ":
-                        try:
-                            int(car)
-                            chiffre=True
-                        except ValueError:
-                            chiffre=False
+        for y,ligne in enumerate(self.structure):                                           #parcours la liste "structure" en donnant l'élément ("ligne") et son indice ("y")
+            if y<=17:                                                                       #test si l'indice de la ligne est inférieur ou égal à 17. 17 correspond au nombre de ligne de structure du fichier text. Au dela de 17, ce sont des lignes d'astuce
+                for x,car in enumerate(ligne):                                              #parcours la chaine de caractère "ligne" en donnant le caractère ("car") et son indice ("x")                                        
+                    if car!=" ":                                                            #test si "car" n'est pas un espace. Nos fichiers textes sont fait de sorte que un espace ne correspond à rien  
+                        try:                    
+                            int(car)                                                        #test si "car" est un chiffre
+                            chiffre=True                                                    #si "car" est un chiffre, alors la variable "chiffre est True
+                        except ValueError:                                                  #évite le message d'erreur si "car" n'est pas un chiffre
+                            chiffre=False                                                   #si "car n'est pas un chiffre, alors la variable "chiffre" est False
 
 
-                        if chiffre:
-                            if car=='1':
-                                r=Bloc(self.dict_images["bloc"],(x*bloc_x , y*bloc_y))
+                        if chiffre:                                                         #test si "chiffre" est True, donc test si "car" est un chiffre
+                            if car=='1':                                                    #"car" est un chiffre, test si "car" est égal à 1
+                                r=Bloc(self.dict_images["bloc"],(x*bloc_x , y*bloc_y))      #"car"=1, on attribut la classe Bloc à la lettre "r", on donne comme parametre l'image du dictionnaire d'ima qui correspond à "bloc", et la position qu'aura le bloc dans le niveau. On multiplie son indice par ses dimension pour trouver son emplacement exact
                                 self.dict_element["bloc"].append(r)
 
                             elif car=='2':
