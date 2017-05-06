@@ -414,7 +414,7 @@ def jeu(niveau_actuel):
         if etat_jeu==0:                                                                     #Si on est dans le jeu (ainsi, dans le tutoriel ou l'interface de dessin, les objets ne se mettent pas à jour, ce qui donne l'impression d'arreter le temps)
                                                                                             #On va mettre à jour tous les éléments grâce à la méthode update()
                                                                                             
-            niveau_actuel.update(perso)                                                     #On met à jour le niveau 
+            niveau_actuel.update()                                                          #On met à jour le niveau 
             
             p=perso.update(duree_frame,niveau_actuel)                                       #On met à jour le personnage, et l'éventuel retour de la méthode est capturé dans une variable
             if p!=None:                                                                     #S'il ne c'est pas rien passé
