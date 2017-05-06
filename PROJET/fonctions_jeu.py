@@ -118,77 +118,83 @@ def menu():
 
 
 def jeu(niveau_actuel):
+    """La fonction prend en paramètre le niveau joué. 
+    Il retourne “fin” si le joueur quitte le jeu, “menu” s’il appuie sur le bouton du menu, 
+    “reset” s’il appuie sur le bouton “reset”, “suivant” quand la méthode perso.update() retourne “suivant”, 
+    et ce que la fonction game_over() retourne quand la méthode perso.update() retourne “mort”.
+    """
+    
+    #-----------------------------------------------------Variables diverses---------------------------------------
 
-    #Variables diverses
-
-
-    niveau_actuel.creation()
-    perso=Personnage(niveau_actuel.depart,megaman_images)
-    liste_pos=[]
-                                 # 0      1     2    3    4     5       6
-    liste_t_forme=[0,0,0,0,0,0,0]#Trait,point,cercle,tp,angle,eclair,ellipse
-    liste_base_cooldown=[3000,2000,8000,1,5000,5000,10000]
-    liste_cooldown=deepcopy(liste_base_cooldown)
-    duree_frame=0
-    etat_jeu=0  # 0: jeu de plateforme  1:jeu de dessin     2:astuce
-    pygame.time.set_timer(ANIMER,100)
-    timer=pygame.time.Clock()
-    animation=0
-    longueur=0
-
-    #-----------------------------Boucle--------------------------------------
-
+    niveau_actuel.creation()                                        #Réinitialisation du niveau
+    perso=Personnage(niveau_actuel.depart,megaman_images)           #Recréation du personnage
+    
+    liste_pos=[]                                                    #Liste qui va contenir tous les points du dessin 
+    
+    #Pour les listes des formes qui suivent, l'ordre est :Trait,point,cercle,tp,angle,eclair,ellipse
+    liste_t_forme=[0,0,0,0,0,0,0]                                   #Liste qui possède pour chaque pouvoir le durée depuis la dernière fois que le pouvoir est utilisé
+    liste_base_cooldown=[3000,2000,8000,1,5000,5000,10000]          #Liste qui gère le temps nécessaire à attendre entre chaque sort
+    liste_cooldown=[0,0,0,0,0,0,0]                                  #Liste qui indique le temps restant avant que le sort soit réutilisable
+    
+    duree_frame=0                                                   #La durée d'une frame. Elle est actualisée à la fin de la boucle. Elle est égale à 0 pour la première frame pour éviter les erreurs de valeurs non définies.
+    etat_jeu=0  #Variable qui change selon ce qui doit être affiché (0: jeu de plateforme  1:jeu de dessin     2:astuce)
+    pygame.time.set_timer(ANIMER,100)                               #On va appeller l'évenement ANIMER toutes les 0.1 secondes qui va servir à animer les objets
+    timer=pygame.time.Clock()                                       #On crée l'objet timer pour gérer le temps
+    animation=0                                                     #Indique quel image de l'animation doit être affichée pour l'animation du tutoriel
+    longueur=0                                                      #Indique la longeur de l'animation du tutoriel
+    
+    #Boucle infinie
     while True:
 
     #----------------------------Gestion des events---------------------------
         for event in pygame.event.get():
 
-            if event.type==QUIT:
-                return "fin"
+        for event in pygame.event.get():                        #On capture tous les évenements que l'ordinateur va intercepter en tant que la variable event
+            if event.type==QUIT:    return "fin"                #Si l'évenement est un ordre de quitter le jeu (comme cliquer sur la croix rouge), retourne "fin"
 
-            if event.type==KEYDOWN:
-                for i in niveau_actuel.dict_element["caisse"]:
-                    if event.key==K_SPACE and distance(perso.rect.center,i.rect.center)<=30:
-                        if i.hold==None:
-                            if perso.rect.x<i.rect.x:
+            if event.type==KEYDOWN and event.key==K_SPACE:      #Si l'utilisateur appuis sur la barre espace. 
+                for i in niveau_actuel.dict_element["caisse"]:  #On parcours la liste des caisses du niveau
+                    if distance(perso.rect.center,i.rect.center)<=30:   #Si le personnage et la caisse sont suffisament proches
+                        if i.hold==None:                        #Si la caisse n'était pas déjà tenue
+                            if perso.rect.x<i.rect.x:           #Si le personnage est à gauche de la caisse
                                 i.hold="gauche"
-                            else:
+                            else:                               #Si le personnage est à droite de la caisse
                                 i.hold="droite"
-                        else:
-                            i.hold=None
+                        else:                                   #Si la caisse était déjà tenue
+                            i.hold=None                         
 
-            if event.type==KEYUP:
-                if event.key==K_RIGHT or event.key==K_LEFT:
-                    perso.vitesse_x=0
-                    perso.deplacement=False
+            if event.type==KEYUP:                               #Si l'utilisateur enlève le doigt des touches:
+                if event.key==K_RIGHT or event.key==K_LEFT:     #droite ou gauche
+                    perso.vitesse_x=0                           #La vitesse du personnage redevient nulle
+                    perso.deplacement=False                     #Le personnage n'est plus en déplacement
 
-            if event.type==MOUSEBUTTONDOWN:
-                if event.button==3 and etat_jeu==0:
-                    etat_jeu=1
+            if event.type==MOUSEBUTTONDOWN:                     #L'utilisateur appuie sur un bouton de la souris
+                if event.button==3 and etat_jeu==0:             #S'il appuyé sur le clic droit et qu'il était dans le jeu de plateforme
+                    etat_jeu=1                                  #On met l'interface de dessin
+                    liste_pos=[]                                #On remet à 0 la liste des points du dessin précédent
 
-                    liste_pos=[]
-
-                if event.button==1:
-                    if pygame.Rect(400,2,40,40).collidepoint(event.pos):
-                        musique("Sons/fond_menu.wav")
-                        return "menu"
-                    if pygame.Rect(450,2,40,40).collidepoint(event.pos):
-                        return "reset"
-                    if pygame.Rect(500,2,40,40).collidepoint(event.pos):
-                        a_e=etat_jeu
-                        etat_jeu=2
-                    if pygame.Rect(550,2,40,40).collidepoint(event.pos) and etat_jeu==2:
-                        if niveau_actuel.dict_element["bloc_tuto"]!=[]:
-                            niveau_actuel.dict_element["bloc_tuto"][0].toucher=True
-                        etat_jeu=a_e
+                if event.button==1:                                         #Si l'utilisateur appuie sur le clic gauche
+                    if pygame.Rect(400,2,40,40).collidepoint(event.pos):    #Si la position de sa souris collisione avec le rectangle du menu
+                        musique("Sons/fond_menu.wav")                       #On met la musique du menu
+                        return "menu"                                       #On retourne "menu"
+                    if pygame.Rect(450,2,40,40).collidepoint(event.pos):    #Si la position de sa souris collisione avec le rectangle du reset
+                        return "reset"                                      #On retourne "reset"
+                    if pygame.Rect(500,2,40,40).collidepoint(event.pos):    #Si la position de sa souris collisione avec le rectangle du tutoriel
+                        a_e=etat_jeu                                        #On enregistre dans a_e l'état précédent pour y revenir quand on quittera le tuto
+                        etat_jeu=2                                          #On met l'interface du tutoriel
+                    if pygame.Rect(550,2,40,40).collidepoint(event.pos) and etat_jeu==2:        #Si on appuie sur le rectangle retour du tutoriel et qu'on est dans le tutoriel
+                        if niveau_actuel.dict_element["bloc_tuto"]!=[]:                         #S'il y a un bloc tutoriel dans le niveau
+                            niveau_actuel.dict_element["bloc_tuto"][0].toucher=True             #On dit qu'on a touché ce bloc pour éviter de toujours lancer le tutoriel quand on le collisionne
+                        etat_jeu=a_e                                                            #On remet l'état du jeu à l'état précédent
 
 
-            if event.type==MOUSEBUTTONUP:
-                if event.button==1 and etat_jeu==1:
-                    etat_jeu=0
+            if event.type==MOUSEBUTTONUP:                       #Si l'utilisateur lache un bouton de la souris
+                if event.button==1 and etat_jeu==1:             #S'il lache le clic gauche et qu'il était dans l'interface de dessin
+                    etat_jeu=0                                  #On remet l'interface du jeu 
 
-                    #Reconnaissance
-                    if liste_pos!=[]:
+                    #---------------------------------------------Reconnaissance--------------------------------------------------------
+                    if liste_pos!=[]:                           #S'il y a bien au moins un point (ce qui est toujours le cas, sauf en cas de bug)
+                        #On donne à b_(forme) les valeurs True ou False selon si les fonctions ont "reconnu" la forme, et 
                         i_tp=r_tp(liste_pos,perso.rect,[i.rect for i in niveau_actuel.dict_element["tp"]])
                         b_angle,pos_angle=r_angle(liste_pos)
                         b_arc=r_arc_cercle(liste_pos)
