@@ -11,13 +11,12 @@ pygame.init()
 
 #--------------------------------------------Sons----------------------------------------------------------------------------------------------------------------
 son_slash=pygame.mixer.Sound("Sons/Slash.wav")
-son_wind=pygame.mixer.Sound("Sons/wind.wav")
 son_fire=pygame.mixer.Sound("Sons/fire.wav")
 son_pop=pygame.mixer.Sound("Sons/pop.wav")
 son_electric=pygame.mixer.Sound("Sons/electricity.wav")
 son_game_over=pygame.mixer.Sound("Sons/Game_over.wav")
 son_victory=pygame.mixer.Sound("Sons/victory.wav")
-pygame.mixer.music.load("Sons/fond_menu.wav")
+son_clap=pygame.mixer.Sound("Sons/clap.wav")
 
 
 

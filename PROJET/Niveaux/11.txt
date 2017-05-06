@@ -16,3 +16,4 @@ AAA1         1       1  k
    1         1       1     15 1 
    1  11111  1       1 a b  1 1 
 11111111111111111117111111111711
+Indice : ce sont les "Koopas" qui vous permettent d'ouvrir les portes.

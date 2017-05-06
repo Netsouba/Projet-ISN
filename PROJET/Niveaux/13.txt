@@ -16,3 +16,5 @@
     1     1         p  1  1      
     1   2 1    k    1  8xp1 a   
 11111111111111111111111111111111
+Indice : Vous pouvez utiliser la bulle autour des caisses, 
+et la prendre même si elle est encore dans la bulle.

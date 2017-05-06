@@ -16,3 +16,4 @@
    1              1A1B  8  9     
    1ppppp1 a  b  11 AB  8  9  2
 1711111111 11111111111111111 
+Indice : servez vous du "Goomba" pour activer l'interrupteur.

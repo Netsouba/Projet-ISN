@@ -17,4 +17,7 @@ AAAAA11111111111111111111111111
 pp  t  p     p a p b p   A Bp pp   
 11111111111111111111111111111111
 Eclairez vous avec l'eclair puis 
-arretez rapidement le temps pour analyser le niveau.
+arretez rapidement le temps en ouvrant l'interface de dessin, 
+pour analyser le niveau.
+L'éclair peut aussi allumer les torches 
+si vous le dessinez sur l'une d'elles.

@@ -13,7 +13,7 @@ from init import *
 
 
 def accueil():
-    pygame.mixer.music.play()
+    musique("Sons/fond_menu.wav")
     titre_rect=titre.get_rect()
     titre_2_rect=titre_2.get_rect()
     titre_rect.center=fenetre_x/2,fenetre_y/4
@@ -106,6 +106,7 @@ def jeu(niveau_actuel):
 
     #Variables diverses
 
+
     niveau_actuel.creation()
     perso=Personnage(niveau_actuel.depart,megaman_images)
     liste_pos=[]
@@ -154,6 +155,7 @@ def jeu(niveau_actuel):
 
                 if event.button==1:
                     if pygame.Rect(400,2,40,40).collidepoint(event.pos):
+                        musique("Sons/fond_menu.wav")
                         return "menu"
                     if pygame.Rect(450,2,40,40).collidepoint(event.pos):
                         return "reset"
@@ -405,10 +407,12 @@ def jeu(niveau_actuel):
             p=perso.update(duree_frame,niveau_actuel)
             if p!=None:
                 if p=="mort":
+                    pygame.mixer.music.stop()
                     pygame.image.save(fenetre,"temp/save.png")
                     son_game_over.play()
                     return game_over(pygame.image.load("temp/save.png"))
                 if p=="suivant":
+                    son_clap.play()
                     return p
                 if p=="touche":
                     pygame.time.set_timer(INVINCIBLE,2000)
@@ -533,10 +537,13 @@ def game_over(fond):
                 return "fin"
             if event.type==MOUSEBUTTONDOWN and event.button==1:
                 if rect_menu.collidepoint(event.pos):
+                    musique("Sons/fond_menu.wav")
                     return "menu"
                 elif rect_reessayer.collidepoint(event.pos):
+                    musique("Sons/music_jeu.wav")
                     return "reset"
                 elif rect_suivant.collidepoint(event.pos):
+                    musique("Sons/music_jeu.wav")
                     return "suivant"
 
 
@@ -550,6 +557,7 @@ def game_over(fond):
 
 
 def victoire(fond):
+    pygame.mixer.music.stop()
     son_victory.play()
     rect_vctr=vctr.get_rect()
     rect_congrats=congrats.get_rect()
@@ -571,7 +579,7 @@ def victoire(fond):
                 return "fin"
             if event.type==MOUSEBUTTONDOWN and event.button==1:
                 if rect_menu.collidepoint(event.pos):
-
+                    musique("Sons/fond_menu.wav")
                     return "menu"
 
         fenetre.blit(fond,(0,0))
@@ -581,5 +589,14 @@ def victoire(fond):
         fenetre.blit(congrats,rect_congrats)
         fenetre.blit(txt_vctr,rect_txt_vctr)
         pygame.display.flip()
+
+
+def musique(music):
+    pygame.mixer.stop()
+    pygame.mixer.music.load(music)
+    pygame.mixer.music.play()
+
+
+    return True
 
 

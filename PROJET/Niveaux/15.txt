@@ -16,3 +16,4 @@ BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB55
                        
                               e
 1111  1111 11111111 111111 111111
+Indice : Observez bien quel interrupteur est lie avec quel bloc.
