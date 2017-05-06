@@ -10,17 +10,12 @@ from fonctions import *
 from init import *
 
 
-class Niveau():                         
-    """Un objet niveau est l'environnement dans lequel intéragie et se déplace le personnage.
-       Il également tous les éléments qui le consititue
-       Il y a 2 méthodes: création() et update()
-    """
-    liste=[]                                                                                #Cette liste qui possède tous les objets Niveaux
+#----------------------------Classes---------------------------------------
+class Niveau():                         '''créer une classe Niveau'''
+    liste=[]                                                                                #créer une liste vide
 
-    def __init__(self,n,images,depart): 
-    """La création du niveau prend 3 paramètres : son numéro, ses images, et la position de depart du personnage
-        
-    """
+    def __init__(self,n,images,depart): '''initialise la classe Niveau'''
+
         self.numero=n                                                                       #correspond au numéro du niveau
         self.fichier="Niveaux//"+str(self.numero+1)+".txt"                                  #charge le fichier text du niveau actuel (numero+1 car le numéro commence à partir de 0)
         self.dict_images=images                                                             #créer un dictionnaire de toutes les images des éléments du niveau 
@@ -30,9 +25,7 @@ class Niveau():
 
         Niveau.liste.append(self)                                                           #insert dans la liste tous les niveaux
 
-    def creation(self): 
-        """La méthode permet de recréer le niveau. Il est appelé lors de __init__() mais également quand on réinitialise le niveau.
-        """
+    def creation(self):                 '''fonction qui créer tous les niveaux ainsi que ses éléments'''
 
         self.dict_images["ombre"].set_alpha(240)                                            #établi une transparance sur les images "ombres" du dictionnaire d'image
         self.noir=False                                                                     #détermine si le niveau est sombre ou pas, par défaut le niveau n'est pas sombre
@@ -83,52 +76,58 @@ class Niveau():
 
                         if chiffre:                                                         #test si "chiffre" est True, donc test si "car" est un chiffre
                             if car=='1':                                                    #"car" est un chiffre, test si "car" est égal à 1
-                                r=Bloc(self.dict_images["bloc"],(x*bloc_x , y*bloc_y))      #"car"=1, "r" devient un bloc en utillisant la classe "Bloc" avec comme parametre l'image du dictionnaire d'image qui correspond à "bloc", et la position qu'aura le bloc dans le niveau. On multiplie x (qui est le numero de la colonne) par bloc_x (qui est la longueur d'un bloc) et y (qui est le numero de la ligne) par bloc_y (qui est la hauteur d'un bloc)
+                                r=Bloc(self.dict_images["bloc"],(x*bloc_x , y*bloc_y))      #"car"=1, on crée un objet de la classe bloc avec comme parametre l'image du dictionnaire d'image qui correspond à "bloc", et la position qu'aura le bloc dans le niveau. On multiplie x (qui est le numero de la colonne) par bloc_x (qui est la longueur d'un bloc) et y (qui est le numero de la ligne) par bloc_y (qui est la hauteur d'un bloc)
                                 self.dict_element["bloc"].append(r)                         #on ajoute le bloc dans le dictionnaire d'élément du niveau
 
                             elif car=='2':                                                  #test si "car"=2
-                                f=Fin(self.dict_images["fin"],(x*bloc_x , y*bloc_y))        #"car"=2, "f" devient le point de fin de niveau en utillisant la classe "Fin" avec comme parametre l'image du dictionnaire d'image qui correspond à "fin", et la position qu'aura le bloc dans le niveau. On multiplie x (qui est le numero de la colonne) par bloc_x (qui est la longueur d'un bloc) et y (qui est le numero de la ligne) par bloc_y (qui est la hauteur d'un bloc)
+                                f=Fin(self.dict_images["fin"],(x*bloc_x , y*bloc_y))        #"car"=2, on crée un objet de la classe fin avec comme parametre l'image du dictionnaire d'image qui correspond à "fin", et la position qu'aura le bloc dans le niveau. On multiplie x (qui est le numero de la colonne) par bloc_x (qui est la longueur d'un bloc) et y (qui est le numero de la ligne) par bloc_y (qui est la hauteur d'un bloc)
                                 self.dict_element["fin"].append(f)                          #on ajoute la fin dans le dictionnaire d'élément du niveau
 
-                            elif car=='3':
-                                t=Teleport(self.dict_images["tp"],(x*bloc_x , y*bloc_y))
-                                self.dict_element["tp"].append(t)
+                            elif car=='3':                                                  #test si le chiffre "car" est égal à 3
+                                t=Teleport(self.dict_images["tp"],(x*bloc_x , y*bloc_y))    #"car"=3, on crée un objet de la classe Teleport et utilise  l'image du dictionnaire qui represente le "Teleportation", et la position qu'aura le bloc teleportation dans le niveau. Ensuite on multiplie x (qui est le numero de la colonne) par bloc_x (qui est la longueur d'un bloc) et y (qui est le numero de la ligne) par bloc_y (qui est la hauteur d'un bloc)
+                                self.dict_element["tp"].append(t)                           #on ajoute finalement  l'element du niveau dans le dictionnaire
 
-                            elif car=='4':
-                                t=Torche(self.dict_images["torche"],(x*bloc_x , y*bloc_y))
-                                self.dict_element["torche"].append(t)
+                            elif car=='4':                                                 #on test si le chiffre "car" est égal à 4
+                                t=Torche(self.dict_images["torche"],(x*bloc_x , y*bloc_y)) #"car"=4, on crée un objet de la classe Torche, et on utilise l'image du dictionnaire qui represente la "Torche", et la position qu'aura la torche dans le niveau. Ensuite on multiplie x (qui est le numero de la colonne) par bloc_x (qui est la longueur d'un bloc) et y (qui est le numero de la ligne) par bloc_y (qui est la hauteur d'un bloc)
+                                self.dict_element["torche"].append(t)                      #on ajoute finalement l'element du niveau dans le dictionnaire
 
-                            elif car=='5':
-                                p=Porte(self.dict_images["porte"],(x*bloc_x , y*bloc_y))
-                                self.dict_element["porte"].append(p)
+                            elif car=='5':                                                 #on test si le chiffre "car" est égal à 5
+                                p=Porte(self.dict_images["porte"],(x*bloc_x , y*bloc_y))   #"car"=5, on crée un objet de la classe Porte et la position qu'aura la porte dans le niveau. Ensuite on multiplie x (qui est le numero de la colonne) par bloc_x (qui est la longueur d'un bloc) et y (qui est le numero de la ligne) par bloc_y (qui est la hauteur d'un bloc)
+                                self.dict_element["porte"].append(p)                       #on ajoute finalement l'element du niveau dans le dictionnaire
 
-                            elif car=='6':
-                                go=Goomba(self.dict_images["goomba"],(x*bloc_x , y*bloc_y))
-                                self.dict_element["goomba"].append(go)
+                            elif car=='6':                                                 #on test si le chifre "car" est égal a 6
+                                go=Goomba(self.dict_images["goomba"],(x*bloc_x , y*bloc_y))#"car"=6, on crée un objet de la classe Goomba et la position qu'aura le goomba dans le niveau
+                                self.dict_element["goomba"].append(go)                     #on ajoute finalement l'element du niveau dans le dictionnaire
 
-                            elif car=="7":
-                                b=Bouton(self.dict_images["bouton"],((x*bloc_x , y*bloc_y)))
-                                self.dict_element['bouton'].append(b)
-                            elif car=="8":
-                                p=Porte_interrupeur(self.dict_images["porte bouton"],(x*bloc_x , y*bloc_y),car)
-                                self.dict_element["porte bouton"].append(p)
-                            elif car=="9":
-                                p=Pic(self.dict_images["pic"],(x*bloc_x , y*bloc_y))
-                                self.dict_element["pic"].append(p)
+                            elif car=="7":                                                  #on test si le chifre "car" est égal a 7
+                                b=Bouton(self.dict_images["bouton"],((x*bloc_x , y*bloc_y)))#"car"=7, on crée un objet de la classe Bouton et la position qu'aura le bouton dans le niveau
+                                self.dict_element['bouton'].append(b)                       #on ajoute finalement l'element du niveau dans le dictionnaire
+                                 
+                            elif car=="8":                                                               #on test si le chifre "car" est égal a 8
+                                p=PorteBouton(self.dict_images["porte bouton"],(x*bloc_x , y*bloc_y),car)#"car"=8, on crée un objet de la classe PorteBouton et la position qu'aura la portebouton dans le niveau
+                                self.dict_element["porte bouton"].append(p)                              #on ajoute finalement l'element du niveau dans le dictionnaire
+                                
+                            elif car=="9":                                          #on test si le chifre "car" est égal a 9
+                                p=Pic(self.dict_images["pic"],(x*bloc_x , y*bloc_y))#"car"=9, on crée un objet de la classe Pic et la position qu'aura le pic dans le niveau
+                                self.dict_element["pic"].append(p)                  #on ajoute finalement l'element du niveau dans le dictionnaire
 
                         else:
-                            if car=="p":
-                                p=Pot(self.dict_images["pot"],(x*bloc_x+15 , y*bloc_y+15))
-                                self.dict_element["pot"].append(p)
+                            if car=="p":                                                  #on test si le chifre "car" est égal a p
+                                p=Pot(self.dict_images["pot"],(x*bloc_x+15 , y*bloc_y+15))#"car"=p, on crée un objet de la classe Pot et la position qu'aura le pot dans le niveau
+                                self.dict_element["pot"].append(p)                        #on ajoute finalement l'element du niveau dans le dictionnaire
+                                
                             elif car=="c":
                                 c=Coeur(self.dict_images["coeur"],(x*bloc_x+15, y*bloc_y+15))
                                 self.dict_element["coeur"].append(c)
+                                
                             elif car=="k":
                                 ko=Koopa(self.dict_images["koopa"],(x*bloc_x,y*bloc_y))
                                 self.dict_element["koopa"].append(ko)
+                                
                             elif car=="x":
                                 box=Caisse(self.dict_images["caisse"],(x*bloc_x,y*bloc_y))
                                 self.dict_element["caisse"].append(box)
+                                
                             elif car=="t":
                                 t=Tuto(self.dict_images["bloc_tuto"],(x*bloc_x,y*bloc_y))
                                 self.dict_element["bloc_tuto"].append(t)
