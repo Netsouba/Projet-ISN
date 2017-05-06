@@ -34,7 +34,7 @@ def distance(point_a,point_b):
 
 def droite(point_a,point_b):
     """La fonction prend en paramètres deux tuples qui sont sont les coordonnées de deux points A et B. 
-    Elle renvoie une liste de points qui appartiennent à la droite (AB):
+    Elle renvoie une liste de points qui appartiennent au segement [AB]:
     """
     
     if point_a[0]>point_b[0]:               #On va admettre que le point A est à gauche du point B.
@@ -109,55 +109,66 @@ def interdiagonalequadri(a,b,c,d):
         x=b[0]+v_bd[0]*(a[1]+(v_ac[1]*b[0]-v_ac[1]*a[0])/v_ac[0]-b[1])/(v_bd[1]-v_ac[1]*v_bd[0]/v_ac[0])    #Voir le dossier pour une explication approfondie de la formule
         y=b[1]+v_bd[1]*(a[1]+(v_ac[1]*b[0]-v_ac[1]*a[0])/v_ac[0]-b[1])/(v_bd[1]-v_ac[1]*v_bd[0]/v_ac[0])
         return int(x),int(y)
+    
     except ZeroDivisionError:   #On renvoie "erreur" s'il y a une division erreur. 
-    return 'Erreur'             #Puisque les points sont posés avec les souris, l'erreur est assez rare.
+        return 'Erreur'             #Puisque les points sont posés avec les souris, l'erreur est assez rare.
 
 
 #--------------------------------Fonctions reconnaissance----------------------
 def r_droite(liste_pos):
-    acroissement=[]
-    for i in range(len(liste_pos)-1):
-        try:
-            acroissement.append((liste_pos[i+1][1]-liste_pos[i][1])/(liste_pos[i+1][0]-liste_pos[i][0]))
-        except ZeroDivisionError:
+    """La fonction prend en paramètre la liste des points du dessin.
+    Elle renvoie un booléen indiquant s'il s'agissait à peu près d'une droite, et une liste de points qui relie le premier et le dernier point du dessin.
+    Stratégie utilisée : capturer les taux d'accroissement à chaque point vérifier qu'il n'y a pas de grandes différences entre eux.
+    """
+    acroissement=[]                     #cette liste va avoir les taux d'accroissement à chaque points         
+    for i in range(len(liste_pos)-1):   #On parcours la liste de points sans la derniere.
+        try:                            #On ne travaille pas sur deux points successifs qui ont la même abscisse. 
+            acroissement.append((liste_pos[i+1][1]-liste_pos[i][1])/(liste_pos[i+1][0]-liste_pos[i][0]))    # On utilise la formule (yb-ya)/(xb-xa)
+        except ZeroDivisionError:       #Puisque le dessin est manuel, il est difficile de tracer verticalement. Ainsi, cette exception pose assez peu de problèmes. 
             pass
 
-
-    ecart_type=calc_ecart_type(acroissement)
-
-
-    if ecart_type<=1.5:
-        return True,droite(liste_pos[0],liste_pos[-1])
-    else:
-        return False,None
+                                                            #On réutilise notre fonction de l'écart type.
+    ecart_type=calc_ecart_type(acroissement)                #L'écart type est un bon indicateur de la dispersion et de l'homogénéité de la liste
+                                                            #Plus l'écart type est petit, plus la liste est homogène.
+        if ecart_type<=1.5:                                 #La valeur a été choisie arbitrairement après plusieurs tests.                
+            return True,droite(liste_pos[0],liste_pos[-1])  #Si l'écart type est suffisament petit, on peut revoie True et on réutilise notre fonction droite pour avoir une liste de points qui relie le premier et le dernier point du dessin. 
+        else:                                               
+            return False,None
 
 def r_point(liste_pos):
-    liste_distance=[distance(liste_pos[0],point) for point in liste_pos]
-    moy= moyenne(liste_distance)
-    if moy<=1:
-        return True,liste_pos[0]
+    """La fonction prend en paramètre la liste des points du dessin.
+    Elle renvoie un booléen indiquant s'il s'agissait à peu près d'un point, et la position de ce point.
+    Stratégie utilisée : Vérifier si la distance entre le premier point et chaque autre point est très petite.
+    """    
+    liste_distance=[distance(liste_pos[0],point) for point in liste_pos]    #On parcours la liste des points et on réutilise notre fonction distance
+    moy= moyenne(liste_distance)                                            #On réutilise notre fonction moyenne
+    if moy<=1:                                                              #La valeur a été choisie arbitrairement après plusieurs tests.                                          
+        return True,liste_pos[0]                                            #Si les points sont assez proches entre eux, on retourne True et le premier point du dessin 
     else:
         return False,None
 
 
 def r_angle(liste_pos):
-
-    liste_x=[i[0] for i in liste_pos]
+    """La fonction prend en paramètre la liste des points du dessin.
+    Elle renvoie "bas","droite",gauche" ou "haut" en fonction de la direction de l'angle, et la position du pic de l'angle
+    Stratégie utilisée : Regarder les variations de x et y, puis réutiliser la fonction de reconnaissance r_droite pour vérifier si les traits sont droits
+    """    
+    liste_x=[i[0] for i in liste_pos]                                       #On parcours la liste pour avoir seulement les x et les y dans une liste
     liste_y=[i[1] for i in liste_pos]
 
-    if liste_y==sorted(liste_y) or liste_y==reversed(sorted(liste_y)):
-
-        liste_pics,l_croissance=croissance(liste_x)
-        nb_pics=len(liste_pics)
-
-        if nb_pics==1:
-            if r_droite(liste_pos[:liste_pics[0]])[0] and r_droite(liste_pos[liste_pics[0]:])[0]:
-                if l_croissance==[True,False]:
-                    return "droite",liste_pos[liste_pics[0]]
-                elif l_croissance==[False,True]:
-                    return "gauche",liste_pos[liste_pics[0]]
-
-    if liste_x==sorted(liste_x) or liste_x==reversed(sorted(liste_x)):
+    if liste_y==sorted(liste_y) or liste_y==reversed(sorted(liste_y)):      #Si la liste y est déjà triée de manière croissante ou décroissante:
+                                                                            #L'utilisateur a dessiné de haut en bas ou de bas en haut.
+        liste_pics,l_croissance=croissance(liste_x)                         #On reprend notre fonction croissance pour connaître les variations de la liste x
+        nb_pics=len(liste_pics)                                             #liste_pics est la liste des indices des extremums, l_croissance est la liste des variations, nb_pics est le nombre d'extremums
+        if nb_pics==1:                                                      #S'il y a un extremum dans la liste x, cela veut dire que l'utilisateur a changé de direction une seule fois.
+            if r_droite(liste_pos[:liste_pics[0]])[0] and r_droite(liste_pos[liste_pics[0]:])[0]:   #On teste si les deux parties de part et d'autre du seul pic sont des traits avec notre fonction r_droite. Le [0] permet de ne prendre que le booléen renvoyé par la fonction.
+                if l_croissance==[True,False]:                              #Si la liste des x est croissante puis décroissante:
+                    return "droite",liste_pos[liste_pics[0]]                #L'utilisateur a fait des droites vers la droite/bas puis vers la gauche/bas : il s'agit bien d'un angle ves la droite : On renvoie "droite" puis l'extremum.
+                elif l_croissance==[False,True]:                            #Si la liste des x est croissante puis décroissante:
+                    return "gauche",liste_pos[liste_pics[0]]                #L'utilisateur a fait des droites vers la gauche/bas puis vers la droite/bas : il s'agit bien d'un angle ves la gauche : On renvoie "gauche" puis l'extremum.
+    
+                                
+    if liste_x==sorted(liste_x) or liste_x==reversed(sorted(liste_x)):      #Pour le haut et le bas, il s'agit du même raisonnement mais les x et y ont été échangés.
 
         liste_pics,l_croissance=croissance(liste_y)
         nb_pics=len(liste_pics)
@@ -169,63 +180,73 @@ def r_angle(liste_pos):
                 elif l_croissance==[False,True]:
                     return "haut",liste_pos[liste_pics[0]]
 
-
-    return False,None
+    
+    return False,None   #Si rien n'a été renvoyé, on peut revoyer False et None.
 
 
 
 def r_eclair(liste_pos):
-
-    liste_x=[i[0] for i in liste_pos]
+    """La fonction prend en paramètre la liste des points du dessin.
+    Elle renvoie un booléen s'il s'agit a peu près d'un eclair
+    Stratégie utilisée : Regarder les variations de x et y, puis réutiliser la fonction de reconnaissance r_droite pour vérifier si les traits sont droits
+    Il y a deux moyens de faire un éclair : descendre vers la gauche, monter vers la droite puis descendre vers la gauche, ou toujours descendre en faisant gauche/droite/gauche
+    """    
+    liste_x=[i[0] for i in liste_pos]                                       #On parcours la liste pour avoir seulement les x et les y dans une liste
     liste_y=[i[1] for i in liste_pos]
 
-    liste_pics_x,l_croissance_x= croissance(liste_x)
+    liste_pics_x,l_croissance_x= croissance(liste_x)                        #On reprend notre fonction croissance pour connaître les variations de la liste x
     nb_pics_x= len(liste_pics_x)
 
-    liste_pics_y,l_croissance_y= croissance(liste_y)
+    liste_pics_y,l_croissance_y= croissance(liste_y)                        #On reprend notre fonction croissance pour connaître les variations de la liste y
     nb_pics_y= len(liste_pics_y)
 
 
 
-    if nb_pics_x==2:
+    if nb_pics_x==2:                                                        #L'eclair se fait en allant à gauche, puis à droite, puis à gauche : il y a 2 pics.
+        if l_croissance_x==[False,True,False]:
+            if r_droite(liste_pos[:liste_pics_x[0]])[0] and r_droite(liste_pos[liste_pics_x[0]:liste_pics_x[1]])[0] and r_droite(liste_pos[liste_pics_x[1]:])[0]:   #On sépare le dessin en 3 parties grâce aux extremums et on verifie si chaque partie est bien à peut près une droite de la même manière que pour l'angle
+                if l_croissance_y==[True] or l_croissance_y==[True, False,True]:    #On teste maintenant les y : [True] montre que le trait ne fait que descendre, [True, False,True] montre que le trait a descendu puis monté puis redescendu
+                    return True                                             #Si toutes ses conditions sont vérifiées, on retourne True
 
-        if r_droite(liste_pos[:liste_pics_x[0]])[0] and r_droite(liste_pos[liste_pics_x[0]:liste_pics_x[1]])[0] and r_droite(liste_pos[liste_pics_x[1]:])[0]:
-            if l_croissance_x==[False,True,False]:
-                if (nb_pics_y==0 and l_croissance_y==[True]) or (nb_pics_y==2 and l_croissance_y==[True, False,True]):
-                    return True
-
-    return False
+    return False                                                            #Si rien n'a été renvoyé, on peut revoyer False
 
 def r_cercle(liste_pos):
-    liste_x=[i[0] for i in liste_pos]
-    liste_y=[i[1] for i in liste_pos]
-
-    for point in liste_pos:
-            if point[0]==max(liste_x):
-                a=point
-            if point[1]==min(liste_y):
-                b=point
+    """La fonction prend en paramètre la liste des points du dessin.
+    Elle renvoie un booléen indiquant s'il s'agissait à peu près d'un cercle, et un tuple possèdant le centre et le rayon du cercle.
+    Stratégie utilisée :  Capturer les distances de chaque point avec le centre et vérifier qu'il n'y a pas de grandes différences entre elles.
+    """    
+    liste_x=[i[0] for i in liste_pos]                                       #On parcours la liste pour avoir seulement les x et les y dans une liste
+    liste_y=[i[1] for i in liste_pos]                                                                            
+                                                                            
+    for point in liste_pos:                                                 #On parcours la liste
+            if point[0]==max(liste_x):                                      #Si l'abscisse du point est la maximale, il s'agit du point le plus à droite.
+                a=point                                                     #On capture ce point dans la variable a
+            if point[1]==min(liste_y):                                      #On fait cela pour les points les plus en haut, a gauche et en bas du dessin
+                b=point                                                     #Voir le dossier pour un schéma de la construction
             if point[0]==min(liste_x):
                 c=point
             if point[1]==max(liste_y):
                 d=point
-    centre=interdiagonalequadri(a,b,c,d)
+    centre=interdiagonalequadri(a,b,c,d)                                    #En trouvant les coordonnées de l'intersection des diagonales de abcd, on a une approximation du centre.
 
-    if centre!="Erreur":
-        liste_distance=[distance(point,centre) for point in liste_pos]
-        if max(liste_distance)<=2*min(liste_distance):
+    if centre!="Erreur":                                                    #On ne travaille pas si le calcul précédent a intercepté une erreur
+        liste_distance=[distance(point,centre) for point in liste_pos]      #La liste des distances se fait grâce à un parcours de la liste des points et la fonction distance
+        
+        if max(liste_distance)<=2*min(liste_distance):                      #La valeur du coefficient a été choisie arbitrairement après plusieurs tests.
+            if distance(liste_pos[0],liste_pos[-1])<30:                     #On teste également si l'utilisateur a bien fermé le cercle en regardant la distance entre le premier et le dernier point. La valeur a également été choisie arbitrairement après plusieurs tests.
+                return True,(centre,max(liste_distance))                    #On peut retourne True et les valeurs.
 
-            if distance(liste_pos[0],liste_pos[-1])<30:
-                return True,(centre,max(liste_distance))
-
-    return False,(None,None)
-
+    return False,(None,None)                                                #Si rien n'a été renvoyé:
+    
 def r_ellipse(liste_pos):
-
-    liste_x=[i[0] for i in liste_pos]
+    """La fonction prend en paramètre la liste des points du dessin.
+    Elle renvoie un booléen indiquant s'il s'agissait à peu près d'une ellipse, et un tuple possèdant le centre et les grand et petit rayons de l'ellipse.
+    Stratégie utilisée :  Capturer les sommes des distances entre chaque point et les foyers et vérifier qu'il n'y a pas de grandes différences entre elles.
+    """    
+    liste_x=[i[0] for i in liste_pos]                                       #On parcours la liste pour avoir seulement les x et les y dans une liste
     liste_y=[i[1] for i in liste_pos]
 
-
+                                                                            #On trouve le centre de la même manière que le cercle
     for point in liste_pos:
             if point[0]==max(liste_x):
                 a=point
@@ -239,25 +260,24 @@ def r_ellipse(liste_pos):
 
     if centre!='Erreur':
 
-        axe_x=droite(a,c)
+        axe_x=droite(a,c)                                                   #On crée le segement [AC] avec notre fonction droite
 
-        d_a=distance(centre,a)
-        d_b=distance(centre,b)
-        if d_a<d_b:
+        d_a=distance(centre,a)                                              #On calcule les demi-axes de l'ellipse
+        d_b=distance(centre,b)                                              
+        if d_a<d_b:                                                         #Les calculs qui vont suivre ne fonctionnent que l'ellipse est allongée. Si ce n'est pas le cas, on échange les deux valeurs
             d_a,d_b=d_b,d_a
 
-        d_c=math.sqrt(d_a**2-d_b**2)
+        d_c=math.sqrt(d_a**2-d_b**2)                                        #d_c représente la distance entre le centre et les foyers
 
-        foyers=[i for i in axe_x if abs(distance(centre,i)-d_c)<3]
+        foyers=[i for i in axe_x if abs(distance(centre,i)-d_c)<3]          #foyers est la liste de chaque point qui appartiennent à [AC] et qui ont une distance avec le centre environ égale à d_c, à 3 pixels près
         try:
-            f1,f2=foyers[0],foyers[-1]
-        except IndexError:
+            f1,f2=foyers[0],foyers[-1]                                      #On selectionne le premier et le dernier point pour avoir les deux foyers
+        except IndexError:                                                  #Si on n'a pas trouvé de foyer, on pose les foyers à (0,0)
             f1,f2=(0,0),(0,0)
 
-        liste_d_somme=[distance(point,f1)+distance(point,f2) for point in liste_pos]
-
+        liste_d_somme=[distance(point,f1)+distance(point,f2) for point in liste_pos]    #Le raisonnement est le même que pour le cercle:
+                                                                                        #Il faut que les sommes des distances entre chaque point et les foyers soient à peu près égales
         if max(liste_d_somme)<=2*min(liste_d_somme):
-
             if distance(liste_pos[0],liste_pos[-1])<30:
                 return True,(centre,(d_a,d_b))
 
@@ -265,59 +285,24 @@ def r_ellipse(liste_pos):
 
 
 
-
-
-def r_arc_cercle(liste_pos):
-
-    liste_x=[i[0] for i in liste_pos]
-    liste_y=[i[1] for i in liste_pos]
-
-    if liste_y==sorted(liste_y) or liste_y==reversed(sorted(liste_y)):
-
-        liste_pics,l_croissance=croissance(liste_x)
-        nb_pics=len(liste_pics)
-
-        if nb_pics==1:
-
-            if l_croissance==[True,False]:
-                return "droite"
-            elif l_croissance==[False,True]:
-                return "gauche"
-
-
-
-    return False
-
-
 def r_tp(liste_pos,rect_perso,liste_tp):
-
-    """ La liste retourne l'indice du rectangle de téléportation. Sinon, retourne -1
+    
+    """La fonction prend en paramètre la liste des points du dessin.
+    Elle renvoie l'indice du rectangle de téléportation. Sinon, retourne -1.
+    Stratégie utilisée : Verifier que le premier point du trait est dans le rectangle de teleportation, et que le dernier est dans le rectangle du personnage, ou vice versa.
     """
 
-    deb=liste_pos[0]
+    deb=liste_pos[0]                        #On pose deb et fin pour le premier et le dernier point de la liste 
     fin=liste_pos[-1]
 
-    if rect_perso.collidepoint(deb):
-        for i,rect in enumerate(liste_tp):
-            if rect.collidepoint(fin):
-                return i
-    elif rect_perso.collidepoint(fin):
+    if rect_perso.collidepoint(deb):        #On teste si le premier point collisionne avec le rectangle du personnage
+        for i,rect in enumerate(liste_tp):  #On parcours la liste_tp avec les indices
+            if rect.collidepoint(fin):      #On teste si le dernier point collisionne avec le rectangle de teleportation
+                return i                    #On retourne l'indice de ce rectangle
+                            
+    elif rect_perso.collidepoint(fin):      #Même raisonnement en changeant deb et fin
         for i,rect in enumerate(liste_tp):
             if rect.collidepoint(deb):
                 return i
-    return -1
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            
+    return -1                               #Si rien n'a été renvoyé, on retourne -1
