@@ -209,7 +209,7 @@ class Personnage():
 
 
     def update(self,d_frame,niveau_actuel):               
-    """ La méthode prend en paramètre la durée d’une frame et le niveau actuel et peut renvoyer None si rien de particulier est arrivé ou des chaînes de caractères dans le cas contraire. 
+        """ La méthode prend en paramètre la durée d’une frame et le niveau actuel et peut renvoyer None si rien de particulier est arrivé ou des chaînes de caractères dans le cas contraire. 
         On renvoie :
         “mort” si le personnage n’a plus de point de vie, s’il sort de la fenêtre par le bas, s’il touche un pic ou un ennemi invisible.
         “ touche” s’il se fait toucher par un ennemi basique,
