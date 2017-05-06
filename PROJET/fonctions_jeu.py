@@ -555,7 +555,6 @@ def game_over(fond):
         
         for event in pygame.event.get():                    #On capture tous les évenements que l'ordinateur va intercepter en tant que la variable event
             if event.type==QUIT:    return "fin"             #Si l'évenement est un ordre de quitter le jeu (comme cliquer sur la croix rouge), retourne "fin"
-
             if event.type==MOUSEBUTTONDOWN and event.button==1: #Si l'utilisateur fait un clic gauche
                 if rect_menu.collidepoint(event.pos):           #Si la position du curseur collisionne avec le rectangle "retour au menu"
                     musique("Sons/fond_menu.wav")               #On lance la musique du menu
@@ -578,9 +577,14 @@ def game_over(fond):
 
 
 def victoire(fond):
-    pygame.mixer.music.stop()
-    son_victory.play()
-    rect_vctr=vctr.get_rect()
+    """La fonction prend en paramètre une capture d’écran du jeu. 
+    Il peut retourner “fin” si le joueur quitte le jeu, “menu” s’il appuie sur le bouton du menu
+
+    """
+    pygame.mixer.music.stop()           #On arrete la musique du jeu
+    son_victory.play()                  #On joue l'effet sonore correspondant
+    
+    rect_vctr=vctr.get_rect()           #Création et placement des rectangles textes
     rect_congrats=congrats.get_rect()
     rect_txt_vctr=txt_vctr.get_rect()
     rect_menu=menu_vctr.get_rect()
@@ -591,33 +595,23 @@ def victoire(fond):
     rect_txt_vctr.centery=(fenetre_y/2)+25
     rect_menu.centery=3*fenetre_y/4
 
+    #Boucle infinie
+    while True:
+        for event in pygame.event.get():                        #On capture tous les évenements que l'ordinateur va intercepter en tant que la variable event
+            if event.type==QUIT:    return "fin"                #Si l'évenement est un ordre de quitter le jeu (comme cliquer sur la croix rouge), retourne "fin"
 
-    continuer=True
-    while continuer:
-        for event in pygame.event.get():
-            if event.type==QUIT:
-
-                return "fin"
-            if event.type==MOUSEBUTTONDOWN and event.button==1:
-                if rect_menu.collidepoint(event.pos):
-                    musique("Sons/fond_menu.wav")
-                    return "menu"
-
-        fenetre.blit(fond,(0,0))
-        fenetre.blit(fond_vctr,(0,0))
-        fenetre.blit(menu_vctr,rect_menu)
+            if event.type==MOUSEBUTTONDOWN and event.button==1: #Si l'utilisateur fait un clic gauche
+                if rect_menu.collidepoint(event.pos):           #Si la position du curseur collisionne avec le rectangle "retour au menu"
+                    musique("Sons/fond_menu.wav")               #On lance la musique du menu
+                    return "menu"                               #On retourne menu
+        
+        fenetre.blit(fond,(0,0))                                #Afficher le fond en arrière plan, qui est la capture d'écran
+        fenetre.blit(fond_vctr,(0,0))                           #Afficher un rectangle noir transparent pour assombrir l'écran
+        fenetre.blit(menu_vctr,rect_menu)                       #Affichier tous les textes
         fenetre.blit(vctr,rect_vctr)
         fenetre.blit(congrats,rect_congrats)
         fenetre.blit(txt_vctr,rect_txt_vctr)
         pygame.display.flip()
 
-
-def musique(music):
-    pygame.mixer.stop()
-    pygame.mixer.music.load(music)
-    pygame.mixer.music.play()
-
-
-    return True
 
 
