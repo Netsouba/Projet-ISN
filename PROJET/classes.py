@@ -1,4 +1,4 @@
-﻿import os
+import os
 import pygame
 from pygame.locals import *
 import math
@@ -11,30 +11,30 @@ from init import *
 
 
 #----------------------------Classes---------------------------------------
-class Niveau():
-    liste=[]
+class Niveau():                         '''créer une classe Niveau'''
+    liste=[]                                                                                #créer une liste vide
 
-    def __init__(self,n,images,depart):
+    def __init__(self,n,images,depart): '''initialise la classe Niveau'''
 
-        self.numero=n
-        self.fichier="Niveaux//"+str(self.numero+1)+".txt"
-        self.dict_images=images
+        self.numero=n                                                                       #correspond au numéro du niveau
+        self.fichier="Niveaux//"+str(self.numero+1)+".txt"                                  #charge le fichier text du niveau actuel (numero+1 car le numéro commence à partir de 0)
+        self.dict_images=images                                                             #créer un dictionnaire de toutes les images des éléments du niveau 
 
-        self.depart=depart
-        self.creation()
+        self.depart=depart                                                                  #correspond à la position de départ du personnage
+        self.creation()                                                                     #lance la fnction création
 
-        Niveau.liste.append(self)
+        Niveau.liste.append(self)                                                           #insert dans la liste tous les niveaux
 
-    def creation(self):
+    def creation(self):                 '''fonction qui créer tous les niveaux ainsi que ses éléments'''
 
-        self.dict_images["ombre"].set_alpha(240)
-        self.noir=False
-        self.eclair=False
-        self.ralenti=1
-        self.liste_ombre=[]
-        self.structure=[]
-        self.astuce=[]
-        self.dict_element={ "bloc":[],
+        self.dict_images["ombre"].set_alpha(240)                                            #établi une transparance sur les images "ombres" du dictionnaire d'image
+        self.noir=False                                                                     #détermine si le niveau est sombre ou pas, par défaut le niveau n'est pas sombre
+        self.eclair=False                                                                   #détermine si l'éclair est actif ou non, par défaut l'éclair n'est pas actif
+        self.ralenti=1                                                                      #permet de faire un ralenti dans le niveau, la valeur prise est un mutliplicateur de la vitesse des ennemis
+        self.liste_ombre=[]                                                                 #créer une liste qui va contenir tous les blocs "ombre", qui vont perlettre de faire des niveaux sombres
+        self.structure=[]                                                                   #créer une liste qui va contenir des chaines de caractères. Cette liste va permettre de créer la composition des niveaux
+        self.astuce=[]                                                                      #créer une liste qui va contenir les texte permettant de faire le menu des astuces
+        self.dict_element={ "bloc":[],                                                      #dictionnaire de tous les éléments qui peuventy composer un niveau
                             "fin":[],
                             "tp":[],
                             "torche":[],
@@ -54,13 +54,13 @@ class Niveau():
                             "bloc_tuto":[],
                             }
 
-        with open(self.fichier,'r') as fichier:
-            grille=fichier.readlines()
-            for ligne in grille:
-                if ligne[-1]=='\n':
-                    self.structure.append(ligne[:-1])
+        with open(self.fichier,'r') as fichier:                                             #ouvre le fichier texte du niveau actuel en mode lecture en donnant "fichier" comme nom
+            grille=fichier.readlines()                                                      #lis la totalité du texte on inserant chaques lignes dans une liste appelée "grille"
+            for ligne in grille:                                                            #parcours la liste "grille", chaque élément est une chaine de caractère que l'on a appelé "ligne"
+                if ligne[-1]=='\n':                                                         #test si le dernier caractère de la ligne est un retour à la ligne
+                    self.structure.append(ligne[:-1])                                       #si c'est le cas, on insert la ligne sans le dernier caractère dans la liste "structure"
                 else:
-                    self.structure.append(ligne)
+                    self.structure.append(ligne)                                            #si ce n'est pas le cas, on insert la totalité de la ligne dans la liste "structure"
 
 
         for y,ligne in enumerate(self.structure):
