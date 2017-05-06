@@ -105,12 +105,12 @@ def interdiagonalequadri(a,b,c,d):
     v_ac=(c[0]-a[0],c[1]-a[1])                      #v_ac est le vecteur AC
     v_bd=(d[0]-b[0],d[1]-b[1])                      #b_bd est le vecteur BD
     
-    try:
+    try:  
         x=b[0]+v_bd[0]*(a[1]+(v_ac[1]*b[0]-v_ac[1]*a[0])/v_ac[0]-b[1])/(v_bd[1]-v_ac[1]*v_bd[0]/v_ac[0])    #Voir le dossier pour une explication approfondie de la formule
         y=b[1]+v_bd[1]*(a[1]+(v_ac[1]*b[0]-v_ac[1]*a[0])/v_ac[0]-b[1])/(v_bd[1]-v_ac[1]*v_bd[0]/v_ac[0])
         return int(x),int(y)
-    except ZeroDivisionError:
-        return 'Erreur'
+    except ZeroDivisionError:   #On renvoie "erreur" s'il y a une division erreur. 
+    return 'Erreur'             #Puisque les points sont posés avec les souris, l'erreur est assez rare.
 
 
 #--------------------------------Fonctions reconnaissance----------------------
