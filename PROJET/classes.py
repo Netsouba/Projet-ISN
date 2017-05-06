@@ -111,7 +111,7 @@ class Niveau():
                                 self.dict_element['bouton'].append(b)                       #on ajoute finalement l'element du niveau dans le dictionnaire
                                  
                             elif car=="8":                                                               #on test si le chifre "car" est égal a 8
-                                p=PorteBouton(self.dict_images["porte bouton"],(x*bloc_x , y*bloc_y),car)#"car"=8, on crée un objet de la classe PorteBouton. Ensuite on utilise l'image du dictionnaire qui represente la "PorteBouton" et la position qu'aura la portebouton dans le niveau
+                                p=PorteBouton(self.dict_images["porte bouton"],(x*bloc_x , y*bloc_y))#"car"=8, on crée un objet de la classe PorteBouton. Ensuite on utilise l'image du dictionnaire qui represente la "PorteBouton" et la position qu'aura la portebouton dans le niveau
                                 self.dict_element["porte bouton"].append(p)                              #on ajoute finalement l'element du niveau dans le dictionnaire
                                 
                             elif car=="9":                                          #on test si le chifre "car" est égal a 9
