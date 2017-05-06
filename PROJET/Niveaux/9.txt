@@ -19,5 +19,5 @@ pp  t  p     p a p b p   A Bp pp
 Eclairez vous avec l'eclair puis 
 arretez rapidement le temps en ouvrant l'interface de dessin, 
 pour analyser le niveau.
-L'éclair peut aussi allumer les torches 
+L'eclair peut aussi allumer les torches 
 si vous le dessinez sur l'une d'elles.
