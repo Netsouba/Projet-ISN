@@ -20,3 +20,4 @@ La boule de feu peut etre lancee
 dans les quatres directions.
 
 Faites des traits plus horizontaux si vous avez du mal a dessiner
+Le trait peut aussi eteindre les torches.
