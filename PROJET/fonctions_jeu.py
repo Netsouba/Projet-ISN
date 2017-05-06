@@ -10,53 +10,64 @@ from fonctions import *
 from classes import *
 from init import *
 
-
+#Ces fonctions sont appellées dans main.py où la gestion de ce qui est retourné est expliquée
 
 def accueil():
-    musique("Sons/fond_menu.wav")
-    titre_rect=titre.get_rect()
-    titre_2_rect=titre_2.get_rect()
-    titre_rect.center=fenetre_x/2,fenetre_y/4
+    """L'écran d'accueil. La fonction retourne None si l'utilisateur quitte le jeu ou "continuer" s'il appuie sur une touche
+    """
+    musique("Sons/fond_menu.wav")                           #On lance la musique de l'accueil
+
+    titre_rect=titre.get_rect()                             #On crée les rectangles correspondant à leur texte                                   
+    titre_2_rect=titre_2.get_rect()         
+    titre_rect.center=fenetre_x/2,fenetre_y/4               #On les place sur des emplacements qui dépendent de la taille de la fenetre
     titre_2_rect.center=fenetre_x/2,4*fenetre_y/5
-    visible=True
-    pygame.time.set_timer(ANIMER,500)
+    
+    visible=True                                            #Cette variable est True quand le texte "Appuyez sur une touche pour continuer" est visible et False quand elle ne l'est pas pour créer un clignotement
+    
+    pygame.time.set_timer(ANIMER,500)                       #On va appeller l'évenement ANIMER toutes les 0.5 secondes qui va servir à faire clignoter le texte
 
 
 
-    while True:
-        for event in pygame.event.get():
-            if event.type==QUIT:    return None
-            if event.type==KEYDOWN or event.type==MOUSEBUTTONDOWN:  return "continuer"
-            if event.type==ANIMER: visible=not visible
+    while True:                                             #Comme pour tous les programmes pygame, on crée un boucle infinie
+        
+        for event in pygame.event.get():                    #On capture tous les évenements que l'ordinateur va intercepter en tant que la variable event
+            if event.type==QUIT:    return None             #Si l'évenement est un ordre de quitter le jeu (comme cliquer sur la croix rouge), retourne None
+            if event.type==KEYDOWN or event.type==MOUSEBUTTONDOWN:  return "continuer"  #Si l'utilisateur appuie sur une touche ou sur sa souris, retourne "continuer"
+            if event.type==ANIMER: visible=not visible      #Si l'évenement appelé est ANIMER, on inverse le booléen visible.
+                
+        #---------------------------------Affichage-------------------------------------------
+        
+        fenetre.blit(fond_ecran,(0,0))                      #On affiche le fond d'écran
+        fenetre.blit(titre,titre_rect)                      #On affiche le titre du jeu
+        if visible:fenetre.blit(titre_2,titre_2_rect)       #Si le texte doit être visible, on l'affiche    
+        pygame.display.flip()                               #On met à jour l'affichage de l'écran
 
-        fenetre.blit(fond_ecran,(0,0))
-        fenetre.blit(titre,titre_rect)
-        if visible:fenetre.blit(titre_2,titre_2_rect)
-        pygame.display.flip()
+
+def menu():                             
+    """ L'écran du choix du niveau. La fonction retourne None si le joueur quitte le jeu ou le numéro du niveau qu’il a sélectionné
+    """
+
+    titre_menu_rect=titre_menu.get_rect()                   #On crée les rectangles correspondant à leur texte  
+    titre_menu_rect.center=fenetre_x/2,fenetre_y/4          #On le place sur l'écran
+    
+    nombres_rect=[i.get_rect() for i in nombres]            #On met dans la liste les rectangles correspondant aux textes des nombres
 
 
-def menu():
 
-
-    titre_menu_rect=titre_menu.get_rect()
-    nombres_rect=[i.get_rect() for i in nombres]
-
-    fenetre_actuelle=0
-
-    rect_fleche_droite=img_fleche_droite.get_rect()
+    rect_fleche_droite=img_fleche_droite.get_rect()         #On crée les rectangles correspondant à leur image
     rect_fleche_gauche=img_fleche_gauche.get_rect()
-    rect_fleche_droite.centery=rect_fleche_gauche.centery=9*fenetre_y/10
+    
+    rect_fleche_droite.centery=rect_fleche_gauche.centery=9*fenetre_y/10    #On les place sur l'écran
     rect_fleche_droite.centerx=7*fenetre_x/8
     rect_fleche_gauche.centerx=fenetre_x/8
 
-    liste_boite_rect=[]
-    titre_menu_rect.center=fenetre_x/2,fenetre_y/4
-
+    liste_boite_rect=[]                                     #On crée les rectangles correspondant aux images des boites
+    
+                                                            #On les place en fonction du numero grâce des boucles et on place également les rectangles des nombres
     for i in range(len(nombres)//4):
-
-        nombres_rect[i].center=(i+1)*fenetre_x/7,fenetre_y/2
+        nombres_rect[i].center=(i+1)*fenetre_x/7,fenetre_y/2    
         rect=img_boite.get_rect()
-        rect.center=nombres_rect[i].center
+        rect.center=nombres_rect[i].center                  #On pose chaque boite au même centre que son numéro
         liste_boite_rect.append(rect)
     for i in range(len(nombres)//4):
         nombres_rect[i+6].center=(i+1)*fenetre_x/7,3*fenetre_y/4
@@ -67,38 +78,42 @@ def menu():
         nombres_rect[i+12].center=(i+1)*fenetre_x/7,fenetre_y/2
     for i in range(len(nombres)//4):
         nombres_rect[i+18].center=(i+1)*fenetre_x/7,3*fenetre_y/4
+    #Il y a donc 12 rectangles boites, et 24 rectangles numéro, car il y a 2 fenêtres          
+        
+    fenetre_actuelle=0                                      #0 si on est sur la première fenetre, 12 si on est sur la deuxième
 
 
 
+    while True:                                                     #Boucle infinie
 
-    while True:
+        for event in pygame.event.get():                    #On capture tous les évenements que l'ordinateur va intercepter en tant que la variable event
+            if event.type==QUIT:    return None             #Si l'évenement est un ordre de quitter le jeu (comme cliquer sur la croix rouge), retourne None
+            if event.type==MOUSEBUTTONDOWN:                 #Si l'utilisateur clique avec sa souris
+                for i,rect in enumerate(liste_boite_rect):  #On parcours les rectangles boites avec leur numéro 
+                    if rect.collidepoint(event.pos):        #Si il y a collision entre la position du curseur et une de ces boites    
+                        return i+fenetre_actuelle           #On retourne le numéro de cette boite en additionnant 12 si on est sur la deuxième fenêtre
 
-        for event in pygame.event.get():
-            if event.type==QUIT:
-                return None
-            if event.type==MOUSEBUTTONDOWN:
-                for i,rect in enumerate(liste_boite_rect):
-                    if rect.collidepoint(event.pos):
-                        return i+fenetre_actuelle
-
-                if rect_fleche_droite.collidepoint(event.pos):
+                if rect_fleche_droite.collidepoint(event.pos):  #Si on clique la flèche droite, on met la fenetre à 12
                     fenetre_actuelle=12
-                elif rect_fleche_gauche.collidepoint(event.pos):
+                elif rect_fleche_gauche.collidepoint(event.pos): #Si on clique la flèche gauche, on met la fenetre à 0
                     fenetre_actuelle=0
 
-
-        fenetre.blit(img_fond_menu,(0,0))
-
+        #---------------------------------Affichage-------------------------------------------
+        
+        fenetre.blit(img_fond_menu,(0,0))                                               #On affiche le fond et le titre
         fenetre.blit(titre_menu,titre_menu_rect)
-        for i in range(len(nombres)//2):
-            fenetre.blit(img_boite,liste_boite_rect[i])
-            fenetre.blit(nombres[i+fenetre_actuelle],nombres_rect[i+fenetre_actuelle])
+        
+        for i in range(len(nombres)//2):                                                #On affiche 12 fois:
+            fenetre.blit(img_boite,liste_boite_rect[i])                                 #Les boites
+            fenetre.blit(nombres[i+fenetre_actuelle],nombres_rect[i+fenetre_actuelle])  #Les numéros selon la fenetre
 
+        #Si on est sur la premiere fenetre, on affiche la flèche de droite, si on est sur la deuxième, on affiche la flèche de gauche.
         if fenetre_actuelle==0:
             fenetre.blit(img_fleche_droite,rect_fleche_droite)
         else:
             fenetre.blit(img_fleche_gauche,rect_fleche_gauche)
-        pygame.display.flip()
+                
+        pygame.display.flip()                                                           #On met à jour l'affichage de l'écran
 
 
 
