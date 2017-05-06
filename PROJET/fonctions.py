@@ -130,10 +130,10 @@ def r_droite(liste_pos):
                                                             #On réutilise notre fonction de l'écart type.
     ecart_type=calc_ecart_type(acroissement)                #L'écart type est un bon indicateur de la dispersion et de l'homogénéité de la liste
                                                             #Plus l'écart type est petit, plus la liste est homogène.
-        if ecart_type<=1.5:                                 #La valeur a été choisie arbitrairement après plusieurs tests.                
-            return True,droite(liste_pos[0],liste_pos[-1])  #Si l'écart type est suffisament petit, on peut revoie True et on réutilise notre fonction droite pour avoir une liste de points qui relie le premier et le dernier point du dessin. 
-        else:                                               
-            return False,None
+    if ecart_type<=1.5:                                     #La valeur a été choisie arbitrairement après plusieurs tests.                
+        return True,droite(liste_pos[0],liste_pos[-1])      #Si l'écart type est suffisament petit, on peut revoie True et on réutilise notre fonction droite pour avoir une liste de points qui relie le premier et le dernier point du dessin. 
+    else:                                               
+        return False,None
 
 def r_point(liste_pos):
     """La fonction prend en paramètre la liste des points du dessin.
