@@ -349,10 +349,10 @@ def jeu(niveau_actuel):
                     elif p.ouvert==False and p.animation>0:
                         p.animation-=1
 
-                for p in niveau_actuel.dict_element["porte interrupteur"]:
-                    if p.ouvert==True and p.animation<3:
-                        p.animation+=1
-                    elif p.ouvert==False and p.animation>0:
+                for p in niveau_actuel.dict_element["porte interrupteur"]:  #Pour les portes:
+                    if p.ouvert==True and p.animation<3:                    #Si les portes sont ouvertes 
+                        p.animation+=1                                      #L'animation augmente jusqu'à 4 (Donc, quand elle s'ouvre, l'animation fait 0/1/2/3/4 puis reste à 4)
+                    elif p.ouvert==False and p.animation>0:                 #Inversement si les portes se ferment
                         p.animation-=1
 
                 for p in niveau_actuel.dict_element["porte bouton"]:
