@@ -18,3 +18,5 @@
 1111111111 111111111111111  1111
 Utiliser les fleches directionnelles pour se deplacer.
 Le but du jeu est d'atteindre le point rouge.
+Si vous etes bloque dans un niveau cliquez sur le
+I, un indice s'y trouvera.
