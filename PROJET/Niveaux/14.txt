@@ -16,4 +16,4 @@ AAA1   B    1     1  11111
    1   B
   a1 p B  b9999999999999999999999 
 711111111111111111111111111111111
-Indice : Faites tomber le "Goomba" au bon endroit pour qu'il deverouille la porte. 
+Indice : Faites tomber le "Goomba" au bon endroit poour qu'il deverouille la porte. 
