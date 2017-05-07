@@ -147,7 +147,6 @@ def jeu(niveau_actuel):
     while True:
 
     #----------------------------Gestion des events---------------------------
-        for event in pygame.event.get():
 
         for event in pygame.event.get():                        #On capture tous les évenements que l'ordinateur va intercepter en tant que la variable event
             if event.type==QUIT:    return "fin"                #Si l'évenement est un ordre de quitter le jeu (comme cliquer sur la croix rouge), retourne "fin"
