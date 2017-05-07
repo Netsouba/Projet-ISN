@@ -243,10 +243,10 @@ class Personnage():
 
 
         #--------Restraindre position dans la fenetre-----------    (voir annexe pour schémas)
-        if self.rect.top>=fenetre_y:            #Si le haut du personnage est au dessous du bas de la fenetre
+        if self.rect.top>=fenetre_y:            #Si le haut du personnage est en dessous du bas de la fenetre
             return "mort"                       #Le personnage est mort, on retourne "mort" vers la fonction jeu()
         elif self.rect.top<0:                   #Si le haut du personnage percute le haut de la fenetre
-            self.rect.top=0                     #On remet le haut au bon endroite
+            self.rect.top=0                     #On remet le haut au bon endroit
             self.vitesse_y=0                    #Le personnage perd sa vélocité verticale
         if self.rect.right>=fenetre_x:          #Même raisonnement
             self.rect.right=fenetre_x
