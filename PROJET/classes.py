@@ -348,129 +348,150 @@ class Bloc():
         La structure de cette classe est la structure par défaut de toutes les autres classes
     """
     def __init__(self,img,pos):
-        """La création du b
+        """La création se fait avec l'image qui lui correspond et sa position, obtenue précédemment avec le fichier niveau
         """
+        
         self.img=img
-        self.rect=self.img.get_rect()
-        self.rect.topleft=pos
+        self.rect=self.img.get_rect()               #Création du Rect à partir de l'image
+        self.rect.topleft=pos                       #Positionnment du Rect grâce au paramètre position
     def update(self,perso,d_frame,niveau_actuel):
-        pass
+        """Tous les objet.update() des éléments du niveau prennent les mêmes paramètres pour simplifier le programme lors de l'appel de cette méthode (voir jeu() dans fonctions_jeu.py)
+            L'objet personnage, la durée d'une frame, et l'objet Niveau
+        """
+        pass                                        #Pour le bloc, il n'y a pas d'interraction particulière (la collision est gérée dans la méthode update du personnage)
 
 class Pot():
+    """L'objet Pot est l'objet qui redonne de l'energie au personnage si il y a collision
+    """
     def __init__(self,img,pos):
         self.img=img
         self.rect=self.img.get_rect()
         self.rect.topleft=pos
     def update(self,perso,d_frame,niveau_actuel):
-        pass
+        pass                                        #Pour le pot d'encre, il n'y a pas d'interraction particulière (le gain d'énergie est géré dans jeu() )
 
 class Coeur():
+    """L'objet Coeur est l'objet qui redonne de la vie au personnage si il y a collision
+    """
     def __init__(self,img,pos):
         self.img=img
         self.rect=self.img.get_rect()
         self.rect.topleft=pos
     def update(self,perso,d_frame,niveau_actuel):
-        pass
+        pass                                        #Pour le coeur, il n'y a pas d'interraction particulière (le gain de points de vie est géré dans jeu() )
 
 class Pic():
+    """L'objet Pic est l'objet qui tue le personnage s'il y a collision
+    """
     def __init__(self,img,pos):
         self.img=img
         self.rect=self.img.get_rect()
         self.rect.topleft=pos
     def update(self,perso,d_frame,niveau_actuel):
-        pass
+        pass                                        #Pour les pics, il n'y a pas d'interraction particulière (la collision est gérée dans la méthode update du personnage)
 
 class Bouton():
+    """L'objet Bouton est un bloc qui ouvre les objets PorteBouton si tous les objet Boutons sont appuyés
+    """
     def __init__(self,liste_img,pos):
-        self.liste_img=liste_img
-        self.img=self.liste_img[1]
+        self.liste_img=liste_img                    #Ici, la paramètre image est une liste d'image: 0 pour l'image du bouton appuyé, et 1 pour l'image du bouton non appuyé
+        self.img=self.liste_img[1]                  #On crée l'image à afficher (par défaut : non appuyé)
         self.rect=self.img.get_rect()
         self.rect.topleft=pos
-        self.appuye=False
+        self.appuye=False                           #On donne l'attribut appuyé qui indique si le bouton est appuyé ou non
 
     def update(self,perso,d_frame,niveau_actuel):
-        liste_collision=[]
-        liste_collision.append(perso.rect)
-        for i in niveau_actuel.dict_element["goomba"]:
+        liste_collision=[]                              #La liste contient tous les Rect des objets qui peuvent appuyer sur le bouton
+        liste_collision.append(perso.rect)              #On met le rect du personnage,
+        for i in niveau_actuel.dict_element["goomba"]:  #les rects des goomba,
             liste_collision.append(i.rect)
-        for i in niveau_actuel.dict_element["koopa"]:
+        for i in niveau_actuel.dict_element["koopa"]:   #les rects des koopa,
             liste_collision.append(i.rect)
-        for i in niveau_actuel.dict_element["caisse"]:
+        for i in niveau_actuel.dict_element["caisse"]:  #les rects des caisses
             liste_collision.append(i.rect)
 
-        self.appuye=False
-        for rect in liste_collision:
-            if rect.bottom==self.rect.top and self.rect.left<rect.centerx<self.rect.right:
-                self.appuye=True
+        self.appuye=False                           #On met par défaut appuyé=False (on va mettre True s'il y a collision)
+        for rect in liste_collision:                #On travaille sur tous les rects de liste crée ci-dessus
+            if rect.bottom==self.rect.top and self.rect.left<rect.centerx<self.rect.right:  #Si le bas de l'objet est au même niveau que le haut du bouton (donc si l'objet est sur le bouton), et que son centre se trouve bien entre les bords gauche et droits du bouton(il est bien juste au dessus)
+                self.appuye=True                    #L'objet est bien sur le bouton, on met l'attribut appuyé à True
 
 
-        if False not in [i.appuye for i in niveau_actuel.dict_element["bouton"]]:
-            for i in niveau_actuel.dict_element["porte bouton"]:
-                i.ouvert=True
-        else:
-            for i in niveau_actuel.dict_element["porte bouton"]:
+        if False not in [i.appuye for i in niveau_actuel.dict_element["bouton"]]:   #On prend la liste des attributs appuyé de tous les boutons du niveau, puis on vérifie s'il sont tous True (donc qu'il n'y a pas de False)
+            for i in niveau_actuel.dict_element["porte bouton"]:                    #Donc, tous les boutons sont appuyés, on va interragir avec toutes les portes boutons 
+                i.ouvert=True                                                       #On va les ouvrir.
+        else:                                                                       #S'il y a au moins un False (si au moins un bouton n'est pas appuyé)
+            for i in niveau_actuel.dict_element["porte bouton"]:                    #On va fermer les portes
                 i.ouvert=False
-
-        if self.appuye: self.img=self.liste_img[0]
-        else:           self.img=self.liste_img[1]
+    
+        #On gère les images   
+        if self.appuye: self.img=self.liste_img[0]                                  #On met l'image à afficher : 0 si appuyé
+        else:           self.img=self.liste_img[1]                                  # 1 si non appuyé
 
 class PorteBouton():
-
+    """L'objet PorteBouton est le bloc qui doit s'ouvrir si tous les boutons sont appuyés.
+    """
     def __init__(self,liste_img,pos):
-        self.liste_img=liste_img
-        self.img=liste_img[0]
+        self.liste_img=liste_img                #On a une liste d'image à cause de l'animation
+        self.img=liste_img[0]                   #On met par défaut l'image à afficher 0
         self.rect=self.img.get_rect()
         self.rect.topleft=pos
-        self.ouvert=False
-        self.animation=0
+        self.ouvert=False                       #On a l'attribut ouvert
+        self.animation=0                        
 
     def update(self,perso,d_frame,niveau_actuel):
-        self.img=self.liste_img[self.animation]
+        self.img=self.liste_img[self.animation] #On change l'image en fonction de l'animation (voir les animations dans jeu() de fonctions_jeu.py)
 
-class Fin():
+class Fin():                    
+    """L'objet fin est le point que le personnage doit atteindre
+    """
     def __init__(self,img,pos):
         self.img=img
         self.rect=self.img.get_rect()
         self.rect.topleft=pos
     def update(self,perso,d_frame,niveau_actuel):
-        pass
+        pass                                    #Pour la fin, il n'y a pas d'interraction particulière (la collision est gérée dans la méthode update du personnage)
 
 
 class Teleport():
-
+    """ L'objet Teleport est le bloc qui permet la téléportation
+        Il a 4 états qui changent selon la distance.
+    """
     def __init__(self,liste_img,pos):
-        self.etat=4
-        self.liste_img=liste_img
-        self.img=self.liste_img[self.etat]
+        self.etat=4                             #On met l'état qui va changer selon la distance avec le personnage qui va déterminer l'énergie nécessaire
+        self.liste_img=liste_img                #il y a ici une liste d'images
+        self.img=self.liste_img[self.etat]      
         self.rect=self.img.get_rect()
         self.rect.topleft=pos
 
     def update(self,perso,d_frame,niveau_actuel):
         #Changement couleur
-        d=distance(perso.rect.center,self.rect.center)
+        
+        d=distance(perso.rect.center,self.rect.center)  #On calcule grâce à notre fonction distance la distance entre le centre du Rect du personnage le centre du Rect du bloc de téléportation
 
-        if d<100:       self.etat=0
+        if d<100:       self.etat=0                     #On change l'état en fonction de cette distance
         elif d<200:     self.etat=1
         elif d<300:     self.etat=2
         elif d<400:     self.etat=3
         else:           self.etat=4
 
-        self.img=self.liste_img[self.etat]
+        self.img=self.liste_img[self.etat]              #On change l'image à afficher selon l'état
 
 class BouleFeu():
-
+    """L'objet BouleFeu est la boule de feu crée par le sort qui correspond (l'angle)
+    """
     def __init__(self,dict_img,direction,perso):
-
-        self.dict_img=dict_img
-        self.direction=direction
-        self.img=self.dict_img[self.direction][0]
+        """La création se fait dans jeu() de fonctions_jeu.py. Elle nécessite une direction (choisie par la direction de l'angle : voir r_angle() dans fonctions() )
+        """
+        self.dict_img=dict_img                          #On a un dictionnaire dont les valeurs sont une liste d'image qui correspond à l'animation de la boule. Les clés du dictionnaire sont les 4 directions
+        self.direction=direction                        #On met l'attribut direction
+        self.img=self.dict_img[self.direction][0]       #On crée l'image à afficher
 
         self.rect=self.img.get_rect()
-        self.rect.center=perso.rect.center
-        self.acceleration_x=0
+        self.rect.center=perso.rect.center      
+        self.acceleration_x=0                           #Le système de mouvement est le même que pour le personnage (même s'il n'y a pas d'acceleration)
         self.acceleration_y=0
 
-        if self.direction=="droite":
+        if self.direction=="droite":                    #On donne une vitesse initiale selon la direction
             self.vitesse_x=200
             self.vitesse_y=0
         elif self.direction=="gauche":
@@ -484,33 +505,33 @@ class BouleFeu():
             self.vitesse_y=6
 
 
-        self.animation=0
+        self.animation=0                                
 
     def update(self,perso,d_frame,niveau_actuel):
 
 
-        #Mouvement
+        #-----------------Mouvement----------------- (voir Personnage.update() )
 
         self.vitesse_x+=self.acceleration_x
         self.vitesse_y+=self.acceleration_y
         self.rect=self.rect.move(self.vitesse_x*d_frame,self.vitesse_y)
 
 
-        #Animation
-        self.img=self.dict_img[self.direction][self.animation]
+        #------------------------Animation-------------------
+        self.img=self.dict_img[self.direction][self.animation]  #Le dictionnaire est sous la forme : dict["direction"][numero de l'animation]
 
-        #Restraindre position dans la fenetre
-        if self.rect.left>fenetre_x or self.rect.bottom<0 or self.rect.right<0 or self.rect.top>fenetre_y:
-            niveau_actuel.dict_element["boule feu"].remove(self)
-            del self
-            return 0
+        #---------------Restraindre position dans la fenetre-----------
+        if self.rect.left>fenetre_x or self.rect.bottom<0 or self.rect.right<0 or self.rect.top>fenetre_y:  #Voir Personnage.update()
+            niveau_actuel.dict_element["boule feu"].remove(self)            #On retire l'objet de la liste des éléments du niveau       
+            del self                                                        #On supprime l'objet en question
+            return 0                                                        #On retourne une valeur pour quitter la méthode et éviter les erreurs suite à la suppression de l'objet
 
-        #Collision
+        #----------------------Collision-----------------------------
 
-        liste_collision=[]  #Liste des objets ou la boule s'arrete sans effets
-        for i in niveau_actuel.dict_element["bloc"]:
+        liste_collision=[]                              #Liste des Rect des objets où la boule s'arrete sans effets lors d'une collision
+        for i in niveau_actuel.dict_element["bloc"]:    
             liste_collision.append(i.rect)
-        for i in niveau_actuel.dict_element["porte"]:
+        for i in niveau_actuel.dict_element["porte"]:   #On ajoute les rect des portes si elles ne sont pas ouvertes
             if i.ouvert==False:
                 liste_collision.append(i.rect)
         for i in niveau_actuel.dict_element["porte interrupteur"]:
@@ -519,10 +540,10 @@ class BouleFeu():
         for i in niveau_actuel.dict_element["caisse"]:
             liste_collision.append(i.rect)
 
-        i_collision_torche=self.rect.collidelist(niveau_actuel.dict_element["torche"])
-        i_collision_goomba=self.rect.collidelist(niveau_actuel.dict_element["goomba"])
-
-        if i_collision_torche!=-1 and niveau_actuel.dict_element["torche"][i_collision_torche].enflamme==False:
+        i_collision_torche=self.rect.collidelist(niveau_actuel.dict_element["torche"])      #On calcule l'indice de la torche collisionnée dans le dict_element (-1 s'il n'y a pas collision)
+        i_collision_goomba=self.rect.collidelist(niveau_actuel.dict_element["goomba"])      #On calcule l'indice du "goomba" collisionné dans le dict_element (-1 s'il n'y a pas collision)
+    
+        if i_collision_torche!=-1 and niveau_actuel.dict_element["torche"][i_collision_torche].enflamme==False: #Si il y a bien eu collision, et que la torche en question est bien éteinte.
             niveau_actuel.dict_element["torche"][i_collision_torche].enflamme=True
             niveau_actuel.dict_element["boule feu"].remove(self)
             del self
