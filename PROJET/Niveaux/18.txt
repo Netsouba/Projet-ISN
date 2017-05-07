@@ -16,4 +16,4 @@
   11  11  11  11  11  11  11  11                             
                            
 1111111111 111111111111111 11111
-Indice : Le bloc "TP" est accessible à un certain endroit.
+Indice : Le bloc "TP" est accessible a un certain endroit.
