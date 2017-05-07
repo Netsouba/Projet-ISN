@@ -196,7 +196,6 @@ def jeu(niveau_actuel):
                         #On donne à b_(forme) les valeurs True ou False selon si les fonctions ont "reconnu" la forme, et eventuellement les valeurs nécessaires
                         i_tp=r_tp(liste_pos,perso.rect,[i.rect for i in niveau_actuel.dict_element["tp"]])
                         b_angle,pos_angle=r_angle(liste_pos)
-                        b_arc=r_arc_cercle(liste_pos)
                         b_eclair=r_eclair(liste_pos)
                         b_cercle,(c_centre,c_rayon)=r_cercle(liste_pos)
                         b_point,pos_point=r_point(liste_pos)
@@ -236,7 +235,7 @@ def jeu(niveau_actuel):
                                     if i.rect.collidepoint(p):                  #Si le point collisionne avec l'interrupteur
                                         i.ouvert=not i.ouvert                   #L'attribut ouvert de l'interrupteur change
                                         break                                   #On quitte la boucle
-                                for go in niveau_actuel.dict_element["goomba"]: #On parcours les objets "goomba" du niveau
+                            for go in niveau_actuel.dict_element["goomba"]: #On parcours les objets "goomba" du niveau
                                 for p in liste_pos:                             
                                     if go.rect.collidepoint(p):                 #Si le point collision avec le goomba
                                         niveau_actuel.dict_element["goomba"].remove(go)     #On l'enlève de sa liste
