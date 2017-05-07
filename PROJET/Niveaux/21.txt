@@ -1,20 +1,20 @@
-                       9        
-   a                x p9       2
-11111111111111551111111111111115
-                   9          9
-    b  1 k   1    p9          9
-BBB1111111111111711111        9
-   1          8      9        9
-   1          8      9        9
-   1          8      5        9
-   5          8      5        9    
-   1        p 8      9        9
-   1      111 8   1  11111111 9         
-   1          8      1        9
-99999         8      16 6     9
-              8      111111   9
-              8      1        9
-              8      1 6 6    A
-1111          8      11111111111
-Indice : l'interrupteur est cache derriere 
-la barre d'energie
+                                
+                                
+                                
+                                
+ a                              
+111                   2           
+                                
+                                
+                                
+                                
+                            
+                            
+999995     65              AAAAAA
+9   91111111111111111111111888888
+9   9           5    k       5
+9   9           11111111111111
+9   91   c              x
+11111111111111111111111111111177
+Vous devenez invincible si vous etes touches par un goomba.
+Profitez en!
