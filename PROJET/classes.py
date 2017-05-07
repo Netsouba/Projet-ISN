@@ -337,9 +337,19 @@ class Personnage():
             if distance(i.rect.center,self.rect.center)>35:
                 i.hold=None
 
+#----------------------Elements du niveau---------------------
+
+#La création des éléments se fait dans Niveau.creation()
+#Toutes les autres classes se basent sur la même structure.
+
 
 class Bloc():
+    """ L'objet bloc est le bloc sur lequel le personnage de déplace. 
+        La structure de cette classe est la structure par défaut de toutes les autres classes
+    """
     def __init__(self,img,pos):
+        """La création du b
+        """
         self.img=img
         self.rect=self.img.get_rect()
         self.rect.topleft=pos
