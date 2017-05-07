@@ -338,178 +338,6 @@ class Personnage():
                 i.hold=None
 
 
-class Goomba():
-    def __init__(self,liste_img,pos):
-        self.liste_img=liste_img
-        self.img=self.liste_img[0]
-        self.rect=self.img.get_rect()
-        self.rect.topleft=pos
-        self.ancien=self.rect
-        self.vitesse_x=-50
-        self.vitesse_y=0
-        self.acceleration_x=0
-        self.acceleration_y=g
-        self.animation=0
-
-    def update(self,perso,d_frame,niveau_actuel):
-
-    #Liste des elements de collision
-        liste_rect=[]
-
-        for i in niveau_actuel.dict_element["bloc"]:
-            liste_rect.append(i.rect)
-        for i in niveau_actuel.dict_element["porte"]:
-            if i.ouvert==False:
-                liste_rect.append(i.rect)
-
-        for i in niveau_actuel.dict_element["porte interrupteur"]:
-            if i.ouvert==False:
-                liste_rect.append(i.rect)
-
-        for i in niveau_actuel.dict_element["porte bouton"]:
-            if i.ouvert==False:
-                liste_rect.append(i.rect)
-
-        for i in niveau_actuel.dict_element["bouton"]:
-            liste_rect.append(i.rect)
-
-        for i in niveau_actuel.dict_element["caisse"]:
-            liste_rect.append(i.rect)
-
-        #Mouvement
-        self.ancien=self.rect
-        self.vitesse_x+=self.acceleration_x
-        self.vitesse_y+=self.acceleration_y
-        self.rect=self.rect.move(self.vitesse_x*d_frame*niveau_actuel.ralenti,self.vitesse_y)
-
-
-
-        #Restraindre position dans la fenetre
-        if self.rect.top>fenetre_y:
-            niveau_actuel.dict_element["goomba"].remove(self)
-            del self
-            return 0
-        if self.rect.top<0:
-            self.rect.top=0
-            self.vitesse_y=0
-        if self.rect.right>=fenetre_x:
-            self.rect.right=fenetre_x
-            self.vitesse_x=-50
-        elif self.rect.left<=0:
-            self.rect.left=0
-            self.vitesse_x=50
-
-
-        #Collision
-        i_collision=self.rect.collidelistall(liste_rect)
-        for rect in [liste_rect[i] for i in i_collision]:
-
-            if self.ancien.bottom<=rect.top<=self.rect.bottom:
-                self.rect.bottom=rect.top
-                self.vitesse_y=0
-            elif self.rect.top<=rect.bottom<=self.ancien.top:
-                self.rect.top=rect.bottom
-                self.vitesse_y=0
-
-            elif self.ancien.right<=rect.left<=self.rect.right:
-                self.rect.right=rect.left
-                self.vitesse_x=-50
-
-            elif self.rect.left<=rect.right<=self.ancien.left:
-                self.rect.left=rect.right
-                self.vitesse_x=50
-
-
-        #Animation
-        self.img=self.liste_img[self.animation]
-
-class Koopa():
-
-    def __init__(self, liste_img, pos):
-        self.liste_img=liste_img
-        self.img=liste_img[0]
-        self.rect=self.img.get_rect()
-        self.rect.topleft=pos
-        self.ancien=self.rect
-        self.vitesse_x=-500
-        self.vitesse_y=0
-        self.acceleration_x=0
-        self.acceleration_y=g
-        self.animation=0
-
-    def update(self,perso,d_frame,niveau_actuel):
-
-    #Liste des elements de collision
-        liste_rect=[]
-
-        for i in niveau_actuel.dict_element["bloc"]:
-            liste_rect.append(i.rect)
-        for i in niveau_actuel.dict_element["porte"]:
-            if i.ouvert==False:
-                liste_rect.append(i.rect)
-
-        for i in niveau_actuel.dict_element["porte interrupteur"]:
-            if i.ouvert==False:
-                liste_rect.append(i.rect)
-
-        for i in niveau_actuel.dict_element["porte bouton"]:
-            if i.ouvert==False:
-                liste_rect.append(i.rect)
-
-        for i in niveau_actuel.dict_element["bouton"]:
-            liste_rect.append(i.rect)
-
-        for i in niveau_actuel.dict_element["caisse"]:
-            liste_rect.append(i.rect)
-
-        #Mouvement
-        self.ancien=self.rect
-        self.vitesse_x+=self.acceleration_x
-        self.vitesse_y+=self.acceleration_y
-
-        self.rect=self.rect.move(self.vitesse_x*d_frame*niveau_actuel.ralenti,self.vitesse_y)
-
-
-
-        #Restraindre position dans la fenetre
-        if self.rect.top>fenetre_y:
-            niveau_actuel.dict_element["koopa"].remove(self)
-            del self
-            return 0
-        if self.rect.top<0:
-            self.rect.top=0
-            self.vitesse_y=0
-        if self.rect.right>=fenetre_x:
-            self.rect.right=fenetre_x
-            self.vitesse_x=-500
-        elif self.rect.left<=0:
-            self.rect.left=0
-            self.vitesse_x=500
-
-
-        #Collision
-        i_collision=self.rect.collidelistall(liste_rect)
-        for rect in [liste_rect[i] for i in i_collision]:
-
-            if self.ancien.bottom<=rect.top<=self.rect.bottom:
-                self.rect.bottom=rect.top
-                self.vitesse_y=0
-            elif self.rect.top<=rect.bottom<=self.ancien.top:
-                self.rect.top=rect.bottom
-                self.vitesse_y=0
-
-            elif self.ancien.right<=rect.left<=self.rect.right:
-                self.rect.right=rect.left
-                self.vitesse_x=-500
-
-            elif self.rect.left<=rect.right<=self.ancien.left:
-                self.rect.left=rect.right
-                self.vitesse_x=500
-
-
-        #Animation
-        self.img=self.liste_img[self.animation]
-
 class Bloc():
     def __init__(self,img,pos):
         self.img=img
@@ -916,6 +744,178 @@ class Tuto():
         pass
 
 
+
+class Goomba():
+    def __init__(self,liste_img,pos):
+        self.liste_img=liste_img
+        self.img=self.liste_img[0]
+        self.rect=self.img.get_rect()
+        self.rect.topleft=pos
+        self.ancien=self.rect
+        self.vitesse_x=-50
+        self.vitesse_y=0
+        self.acceleration_x=0
+        self.acceleration_y=g
+        self.animation=0
+
+    def update(self,perso,d_frame,niveau_actuel):
+
+    #Liste des elements de collision
+        liste_rect=[]
+
+        for i in niveau_actuel.dict_element["bloc"]:
+            liste_rect.append(i.rect)
+        for i in niveau_actuel.dict_element["porte"]:
+            if i.ouvert==False:
+                liste_rect.append(i.rect)
+
+        for i in niveau_actuel.dict_element["porte interrupteur"]:
+            if i.ouvert==False:
+                liste_rect.append(i.rect)
+
+        for i in niveau_actuel.dict_element["porte bouton"]:
+            if i.ouvert==False:
+                liste_rect.append(i.rect)
+
+        for i in niveau_actuel.dict_element["bouton"]:
+            liste_rect.append(i.rect)
+
+        for i in niveau_actuel.dict_element["caisse"]:
+            liste_rect.append(i.rect)
+
+        #Mouvement
+        self.ancien=self.rect
+        self.vitesse_x+=self.acceleration_x
+        self.vitesse_y+=self.acceleration_y
+        self.rect=self.rect.move(self.vitesse_x*d_frame*niveau_actuel.ralenti,self.vitesse_y)
+
+
+
+        #Restraindre position dans la fenetre
+        if self.rect.top>fenetre_y:
+            niveau_actuel.dict_element["goomba"].remove(self)
+            del self
+            return 0
+        if self.rect.top<0:
+            self.rect.top=0
+            self.vitesse_y=0
+        if self.rect.right>=fenetre_x:
+            self.rect.right=fenetre_x
+            self.vitesse_x=-50
+        elif self.rect.left<=0:
+            self.rect.left=0
+            self.vitesse_x=50
+
+
+        #Collision
+        i_collision=self.rect.collidelistall(liste_rect)
+        for rect in [liste_rect[i] for i in i_collision]:
+
+            if self.ancien.bottom<=rect.top<=self.rect.bottom:
+                self.rect.bottom=rect.top
+                self.vitesse_y=0
+            elif self.rect.top<=rect.bottom<=self.ancien.top:
+                self.rect.top=rect.bottom
+                self.vitesse_y=0
+
+            elif self.ancien.right<=rect.left<=self.rect.right:
+                self.rect.right=rect.left
+                self.vitesse_x=-50
+
+            elif self.rect.left<=rect.right<=self.ancien.left:
+                self.rect.left=rect.right
+                self.vitesse_x=50
+
+
+        #Animation
+        self.img=self.liste_img[self.animation]
+
+class Koopa():
+
+    def __init__(self, liste_img, pos):
+        self.liste_img=liste_img
+        self.img=liste_img[0]
+        self.rect=self.img.get_rect()
+        self.rect.topleft=pos
+        self.ancien=self.rect
+        self.vitesse_x=-500
+        self.vitesse_y=0
+        self.acceleration_x=0
+        self.acceleration_y=g
+        self.animation=0
+
+    def update(self,perso,d_frame,niveau_actuel):
+
+    #Liste des elements de collision
+        liste_rect=[]
+
+        for i in niveau_actuel.dict_element["bloc"]:
+            liste_rect.append(i.rect)
+        for i in niveau_actuel.dict_element["porte"]:
+            if i.ouvert==False:
+                liste_rect.append(i.rect)
+
+        for i in niveau_actuel.dict_element["porte interrupteur"]:
+            if i.ouvert==False:
+                liste_rect.append(i.rect)
+
+        for i in niveau_actuel.dict_element["porte bouton"]:
+            if i.ouvert==False:
+                liste_rect.append(i.rect)
+
+        for i in niveau_actuel.dict_element["bouton"]:
+            liste_rect.append(i.rect)
+
+        for i in niveau_actuel.dict_element["caisse"]:
+            liste_rect.append(i.rect)
+
+        #Mouvement
+        self.ancien=self.rect
+        self.vitesse_x+=self.acceleration_x
+        self.vitesse_y+=self.acceleration_y
+
+        self.rect=self.rect.move(self.vitesse_x*d_frame*niveau_actuel.ralenti,self.vitesse_y)
+
+
+
+        #Restraindre position dans la fenetre
+        if self.rect.top>fenetre_y:
+            niveau_actuel.dict_element["koopa"].remove(self)
+            del self
+            return 0
+        if self.rect.top<0:
+            self.rect.top=0
+            self.vitesse_y=0
+        if self.rect.right>=fenetre_x:
+            self.rect.right=fenetre_x
+            self.vitesse_x=-500
+        elif self.rect.left<=0:
+            self.rect.left=0
+            self.vitesse_x=500
+
+
+        #Collision
+        i_collision=self.rect.collidelistall(liste_rect)
+        for rect in [liste_rect[i] for i in i_collision]:
+
+            if self.ancien.bottom<=rect.top<=self.rect.bottom:
+                self.rect.bottom=rect.top
+                self.vitesse_y=0
+            elif self.rect.top<=rect.bottom<=self.ancien.top:
+                self.rect.top=rect.bottom
+                self.vitesse_y=0
+
+            elif self.ancien.right<=rect.left<=self.rect.right:
+                self.rect.right=rect.left
+                self.vitesse_x=-500
+
+            elif self.rect.left<=rect.right<=self.ancien.left:
+                self.rect.left=rect.right
+                self.vitesse_x=500
+
+
+        #Animation
+        self.img=self.liste_img[self.animation]
 
 
 
