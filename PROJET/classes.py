@@ -234,7 +234,7 @@ class Personnage():
 
         self.ancien=deepcopy(self.rect)                                     #Ancien devient le Rect précédent
 
-        self.vitesse_x+=self.acceleration_x                                 #On accelère la vitesse. (Voir annexe pour le fonctionnement)
+        self.vitesse_x+=self.acceleration_x                                 #On accelère la vitesse. (Voir 2) et 3)  dans l'annexe pour le fonctionnement)
         self.vitesse_y+=self.acceleration_y
 
         self.rect=self.rect.move(self.vitesse_x*d_frame,self.vitesse_y)     #On bouge le rectangle en fonction de la vitesse. (Voir annexe pour le fonctionnement de d_frame)
@@ -242,7 +242,7 @@ class Personnage():
         self.saut=True                                                      #Le perso est en saut dans tous les cas sauf cas il touche le sol
 
 
-        #--------Restraindre position dans la fenetre-----------    (voir annexe pour schémas)
+        #--------Restraindre position dans la fenetre-----------    
         if self.rect.top>=fenetre_y:            #Si le haut du personnage est en dessous du bas de la fenetre
             return "mort"                       #Le personnage est mort, on retourne "mort" vers la fonction jeu()
         elif self.rect.top<0:                   #Si le haut du personnage percute le haut de la fenetre
@@ -255,7 +255,7 @@ class Personnage():
             self.rect.left=0
             self.vitesse_x=0
 
-        #-----------------------------Collision----------------------- 
+        #-----------------------------Collision----------------------- (voir 4) de l'annexe pour schéma)
         
         liste_rect=[]                                                       #La liste possède tous les Rect des objets avec lesquel le personnage peut collisioner (sans problème contrairement aux ennemis)                                  
                                                                             #Il y donc :
