@@ -166,7 +166,7 @@ class Niveau():
         if self.noir==True:                                                              #Si le niveau est sombre, on peut rajouter les ombres 
             for y in range(0,fenetre_y,self.dict_images["ombre"].get_height()):          #On fait une boucle for allant de 0 à la hauteur de la fenêtre avec un pas de la hauteur d'un rectangle d'ombre
                 for x in range(0,fenetre_x,self.dict_images["ombre"].get_width()):       #On fait une boucle for allant de 0 à la largeur de la fenêtre avec un pas de la hauteur d'un rectangle d'ombre
-                    self.liste_ombre.append((x,y))                                       #On peut rajouter les coordonnées dans la liste ombre
+                    self.liste_ombre.append((x,y))                                       #On peut rajouter les coordonnées dans la liste ombre (Il y a donc par défaut des rectangles d'ombres sur tout l'écran. Certains rectangles pourront être supprimés notamment par la torche et la boule de feu (voir leur update() )
 
         if self.eclair==True:                                                            #si l'attribut éclair est True (après avoir fait un éclair)
             self.dict_images["ombre"].set_alpha(self.dict_images["ombre"].get_alpha()+10)#nous allons rajouter une opacité de 10 aux ombres
@@ -232,7 +232,7 @@ class Personnage():
 
         #----------------Mouvement----------------------
 
-        self.ancien=self.rect                                               #Ancien devient l'ancien Rect
+        self.ancien=deepcopy(self.rect)                                     #Ancien devient le Rect précédent
 
         self.vitesse_x+=self.acceleration_x                                 #On accelère la vitesse. (Voir annexe pour le fonctionnement)
         self.vitesse_y+=self.acceleration_y
@@ -544,60 +544,55 @@ class BouleFeu():
         i_collision_goomba=self.rect.collidelist(niveau_actuel.dict_element["goomba"])      #On calcule l'indice du "goomba" collisionné dans le dict_element (-1 s'il n'y a pas collision)
     
         if i_collision_torche!=-1 and niveau_actuel.dict_element["torche"][i_collision_torche].enflamme==False: #Si il y a bien eu collision, et que la torche en question est bien éteinte.
-            niveau_actuel.dict_element["torche"][i_collision_torche].enflamme=True
-            niveau_actuel.dict_element["boule feu"].remove(self)
-            del self
-            return 0
+            niveau_actuel.dict_element["torche"][i_collision_torche].enflamme=True          #On asigne True à l'attribut "enflammé" de cette torche
+            niveau_actuel.dict_element["boule feu"].remove(self)                            #On enlève la boule de feu de la liste
+            del self                                                                        #On la supprime 
+            return 0                                                                        #On quitte la méthode
 
-        elif self.rect.collidelist(liste_collision)!=-1:
-            niveau_actuel.dict_element["boule feu"].remove(self)
-            del self
-            return 0
+        elif self.rect.collidelist(liste_collision)!=-1:                                    #S'il y a collision avec : un bloc, une porte fermée, ou une caisse
+            niveau_actuel.dict_element["boule feu"].remove(self)                            #On enlève la boule de la liste
+            del self                                                                        #On la supprime
+            return 0                                                                        #On quitte la méthode
 
-        elif i_collision_goomba!=-1:
-            niveau_actuel.dict_element["goomba"].pop(i_collision_goomba)
-            niveau_actuel.dict_element["boule feu"].remove(self)
-            del self
-            return 0
+        elif i_collision_goomba!=-1:                                                        #S'il y a collision avec un goomba
+            niveau_actuel.dict_element["goomba"].pop(i_collision_goomba)                    #On retire le goomba de la liste
+            niveau_actuel.dict_element["boule feu"].remove(self)                            #On retire la boule de feu de la liste
+            del self                                                                        #On supprime la boule de feu
+            return 0                                                                        #On quitte la méthode
 
 
-        #Eclairage
-        l=[]
-        for o in niveau_actuel.liste_ombre:
-            if distance(self.rect.topleft,o)<=100:
-                l.append(o)
-        for o in l:
+        #---------------Eclairage---------------
+        l=[o for o in niveau_actuel.liste_ombre if distance(self.rect.topleft,o)<=100]      #Il s'agit de la liste des ombres à supprimer : si la distance entre l'ombre et la boule est inférieure à 100 pixels
+        for o in l:                                                                         #On va retire ces ombres avec un parcours de la liste des ombres à supprimer
             niveau_actuel.liste_ombre.remove(o)
 
 class Torche():
-
+    """L'objet Torche est la torche qui éclaire le niveau si elle est enflammée
+    """
     def __init__(self,dict_img,pos):
 
         self.dict_img=dict_img
-        self.img=dict_img["Arret"]
+        self.img=dict_img["Arret"]          #voir init.py pour la structure du dictionnaire
         self.rect=self.img.get_rect()
         self.rect.topleft=pos
-        self.enflamme=False
+        self.enflamme=False                 #on crée l'attribut enflammé pour savoir quand il faut éclairer.
         self.animation=0
 
     def update(self,perso,d_frame,niveau_actuel):
-        if self.enflamme==True:
-            #Animation
-            self.img=self.dict_img["Flamme"][self.animation]
+        if self.enflamme==True:                                 #Si la torche est enflammée
+            self.img=self.dict_img["Flamme"][self.animation]    #On met à jour l'image à afficher
 
-            #Eclairage
-            l=[]
-            for o in niveau_actuel.liste_ombre:
-                if distance(self.rect.topleft,o)<=100:
-                    l.append(o)
-            for i in l:
-                niveau_actuel.liste_ombre.remove(i)
-        else:
-            self.img=self.dict_img["Arret"]
+            l=[o for o in niveau_actuel.liste_ombre if distance(self.rect.topleft,o)<=100]  #Création de la liste des ombres à supprimer (Voir BouleFeu.update() )
+            for i in l: 
+                niveau_actuel.liste_ombre.remove(i)             #Suppression des ombres (voir BouFeu.update())
+        else:                                                   #Si la torche est éteinte
+            self.img=self.dict_img["Arret"]                     #On met à jour l'image
 
 
 class Porte():
-
+    """L'objet porte est le bloc qui peut être cassé par le trait. Elle est similaire à la classe PorteBouton 
+    """
+    
     def __init__(self,liste_img,pos):
         self.liste_img=liste_img
         self.img=liste_img[0]
@@ -607,81 +602,85 @@ class Porte():
         self.animation=0
 
     def update(self,perso,d_frame,niveau_actuel):
-        self.img=self.liste_img[self.animation]
+        self.img=self.liste_img[self.animation]         #La gestion du coupage se trouve dans jeu() de fonctions_jeu()
 
 
 class Bulle():
-    liste=[]
+    """L'objet Bulle est la bulle qui fait voler l'objet. Elle est crée dans jeu()
+    """
     def __init__(self,img,obj):
         self.img=img
-        self.obj=obj
+        self.obj=obj                    #Il s'agit de l'objet dans la bulle (voir jeu())
         self.rect=self.img.get_rect()
         self.rect.center=self.obj.rect.center
 
     def update(self,perso,d_frame,niveau_actuel):
 
-        self.rect.center=self.obj.rect.center
-        self.obj.acceleration_y=-g/2
-        t=type(self.obj)
-        if t!=Personnage:
-            if t==Goomba:
-
-                if self.obj not in niveau_actuel.dict_element["goomba"]:
-                    niveau_actuel.dict_element["bulle"].remove(self)
-                    del self
-                    return 0
+        self.rect.center=self.obj.rect.center   #On bouge la bulle au même endroit que l'objet 
+        self.obj.acceleration_y=-g/2            #On donne une acceleration y de -0.5g à l'objet pour le faire voler.
+        if type(self.obj)==Goomba:                                      #Si la classe de l'objet est Goomba
+            if self.obj not in niveau_actuel.dict_element["goomba"]:    #S'il n'y a plus cet objet dans la liste ( si le goomba est mort )
+                niveau_actuel.dict_element["bulle"].remove(self)        #On supprime la bulle de la liste    
+                del self                                                #On supprime la bulle
+                return 0                                                #On quitte la méthode (inutile dans ce cas là)
 
 class Interrupteur():
+    """L'objet Interrupteur est l'interrupteur qui contrôle certains blocs et allumables par l'éclair
+    """
     def __init__(self, dict_image, pos,car):
-        self.car=car
+        self.car=car                        #On met le caractère utilisé dans le fichier pour relier les interrupteurs "a" aux portes "A", "b" à "B", etc...
         self.dict_image= dict_image
-        self.img= dict_image["Ouvert"]
+        self.img= dict_image["Ouvert"]      #Voir init.py
         self.rect=self.img.get_rect()
         self.rect.topleft=pos
-        self.ouvert=True
-        self.liste_porte=[]
+        self.ouvert=True                    #On met l'attribut qui indique si 'l'interrupteur est ouvert ou non (dans le sens électronique du terme)
+        self.liste_porte=[]                 #Il s'agit de la liste des portes qu'elle contrôle. Elle se remmplit dans niveau.creation()
 
-    def update(self,perso,d_frame,niveau_actuel):
-        if self.ouvert==False:
-            self.img=self.dict_image["Ferme"]
-            for i,porte in enumerate(niveau_actuel.dict_element["porte interrupteur"]):
-                if i in self.liste_porte:
-                    porte.ouvert=True
+    def update(self,perso,d_frame,niveau_actuel):           #L'activation est gérée dan jeu()
+        if self.ouvert==False:                              #Si l'interrupeur est activé
+            self.img=self.dict_image["Ferme"]               #On met à jour l'image à afficher
+            for i,porte in enumerate(niveau_actuel.dict_element["porte interrupteur"]):     #On travaille sur toutes les portes interrupteur
+                if i in self.liste_porte:                                                   #Qui appartiennent à la liste des portes que l'interrupteur contrôle
+                    porte.ouvert=True                                                       #On ouvre cette porte
 
-        else:
+        else:                                                                               #Inversement dans le cas contraire
             self.img=self.dict_image["Ouvert"]
             for i,porte in enumerate(niveau_actuel.dict_element["porte interrupteur"]):
                 if i in self.liste_porte:
                     porte.ouvert=False
 
 class Porte_interrupteur():
-
+    """L'objet Porte_interrupteur est le bloc qui s'ouvre si l'interrupteur qui le controle est activé
+    """ 
     def __init__(self,liste_img,pos,car):
-        self.car=car.lower()
-        self.liste_img=liste_img
+        self.car=car.lower()                           #On met le caratère utilisé dans le fichier (voir  Interrupteur.__init__()) Si le caractère était "A", il devient "a"
+        self.liste_img=liste_img                       #L'animation se fait de la même manière que les autres portes (voir PorteBouton)
         self.img=liste_img[0]
         self.rect=self.img.get_rect()
         self.rect.topleft=pos
-        self.ouvert=False
-        self.animation=0
+        self.ouvert=False                               #On met l'attribut qui indique si la porte esr ouverte
+        self.animation=0    
 
     def update(self,perso,d_frame,niveau_actuel):
         self.img=self.liste_img[self.animation]
 
-class Caisse():
-    def __init__(self,img,pos,):
+class Caisse(): 
+    """L'objet Caisse est le bloc déplacable par le personnage. (voir Personnage.update() et jeu())
+        Elle fonctionne grandement de la même manière que le personnage.
+    """
+    def __init__(self,img,pos):
         self.img=img
         self.rect=self.img.get_rect()
         self.rect.topleft=pos
-        self.ancien=self.rect
-        self.vitesse_x=0
+        self.ancien=self.rect                   #Pour la collision (voir Personnage() )
+        self.vitesse_x=0                        #Pour le mouvement
         self.vitesse_y=0
         self.acceleration_x=0
         self.acceleration_y=g
-        self.hold=None
-
+        self.hold=None                          #None si elle n'est n'est pas tenue, "droite" si le personnage est à droite de la caisse, "gauche" s'il est à gauche
+    
     def update(self, perso, d_frame, niveau_actuel):
-        #Liste des elements de collision
+        #Liste des elements de collision    (voir Personnage)
         liste_rect=[]
 
         for i in niveau_actuel.dict_element["bloc"]:
@@ -703,42 +702,43 @@ class Caisse():
             liste_rect.append(i.rect)
 
 
-        #Mouvement
+        #-----------------Mouvement(voir Personnage)---------------
         self.ancien=deepcopy(self.rect)
         self.vitesse_x+=self.acceleration_x
         self.vitesse_y+=self.acceleration_y
 
-        self.rect=self.rect.move(self.vitesse_x*d_frame,self.vitesse_y)
+        self.rect=self.rect.move(self.vitesse_x*d_frame,self.vitesse_y) #note : les vitesses_x seront toujours nulles
+    
+        #Mouvement par la poussée du personnage
+        if self.hold=="gauche":                 #Si le personnage tient la caisse par la gauche
+            self.rect.left=perso.rect.right     #Le bord gauche de la caisse se met sur la droite du personnage
+        elif self.hold=="droite":               #Si le personnage tient la caisse par la droite
+            self.rect.right=perso.rect.left     #Le bord droit de la caisse se met sur la gauche du personnage
 
 
-        if self.hold=="gauche":
-            self.rect.left=perso.rect.right
-        elif self.hold=="droite":
-            self.rect.right=perso.rect.left
 
 
 
-
-
-        #Restraindre position dans la fenetre
-        if self.rect.top>fenetre_y:
-            niveau_actuel.dict_element["caisse"].remove(self)
-            del self
-            return 0
+        #---------------Restraindre position dans la fenetre(voir Personnage)---------------
+        if self.rect.top>fenetre_y:                             #Si la caisse tombe hors de la fenetre
+            niveau_actuel.dict_element["caisse"].remove(self)   #On retire la caisse de la liste des éléments du niveau
+            del self                                            #On la supprime
+            return 0                                            #On quitte la méthode
         if self.rect.top<0:
             self.rect.top=0
             self.vitesse_y=0
         if self.rect.right>=fenetre_x:
             self.rect.right=fenetre_x
             self.vitesse_x=-0
-            if self.hold=="gauche":
-                perso.rect.right=self.rect.left
+            if self.hold=="gauche":                             #Si on tient la caisse par la gauche et que la caisse sort vers la droite de l'écran
+                perso.rect.right=self.rect.left                 #Le personnage ne peut plus avancer, on le remet à l'emplacement de la caisse
         elif self.rect.left<=0:
             self.rect.left=0
             self.vitesse_x=0
-            if self.hold=="droite":
+            if self.hold=="droite":                             #Même raisonnement
                 perso.rect.left=self.rect.right
-        #Collision
+                
+        #--------------------Collision------------------- (voir Personnage)
         i_collision=self.rect.collidelistall(liste_rect)
 
         for rect in [liste_rect[i] for i in i_collision]:
@@ -753,23 +753,25 @@ class Caisse():
 
             elif self.ancien.right<=rect.left<=self.rect.right:
                 self.rect.right=rect.left
-                self.vitesse_x=-0
-                if self.hold=="gauche":
-                    perso.rect.right=self.rect.left
+                self.vitesse_x=0
+                if self.hold=="gauche":                         #Si la caisse a une collision vers la droite, et que le personnage la tient par la gauche
+                    perso.rect.right=self.rect.left             #Le personnage n'avance plus
 
 
             elif self.rect.left<=rect.right<=self.ancien.left:
                 self.rect.left=rect.right
                 self.vitesse_x=0
-                if self.hold=="droite":
+                if self.hold=="droite":                         #Même raisonnement
                     perso.rect.left=self.rect.right
 
 class Tuto():
+    """L'objet Tuto est le bloc qui lance le tutoriel quand on le touche. La collision est gérée dans Personnage.update et jeu()
+    """
     def __init__(self,img,pos):
         self.img=img
         self.rect=self.img.get_rect()
         self.rect.topleft=pos
-        self.toucher=False
+        self.toucher=False              #L'attribut montre si bloc a été touché. Il devient True quand le personnage le touche, et redevient False quand il quitte le bloc. Cela permet d'éviter de relancer le tutoriel quand on le quitte car le personnage serait encore sur le bloc
 
     def update(self,perso,d_frame,niveau_actuel):
         pass
@@ -777,12 +779,14 @@ class Tuto():
 
 
 class Goomba():
+    """L'objet Goomba est l'ennemi basique lent. Il fonctionne presque de la même manière que Personnage
+    """
     def __init__(self,liste_img,pos):
         self.liste_img=liste_img
-        self.img=self.liste_img[0]
+        self.img=self.liste_img[0]      
         self.rect=self.img.get_rect()
         self.rect.topleft=pos
-        self.ancien=self.rect
+        self.ancien=self.rect   
         self.vitesse_x=-50
         self.vitesse_y=0
         self.acceleration_x=0
@@ -791,7 +795,7 @@ class Goomba():
 
     def update(self,perso,d_frame,niveau_actuel):
 
-    #Liste des elements de collision
+    #----------------------Liste des elements de collision----------------------
         liste_rect=[]
 
         for i in niveau_actuel.dict_element["bloc"]:
@@ -814,7 +818,7 @@ class Goomba():
         for i in niveau_actuel.dict_element["caisse"]:
             liste_rect.append(i.rect)
 
-        #Mouvement
+        #---------------Mouvement---------------
         self.ancien=self.rect
         self.vitesse_x+=self.acceleration_x
         self.vitesse_y+=self.acceleration_y
@@ -822,7 +826,7 @@ class Goomba():
 
 
 
-        #Restraindre position dans la fenetre
+        #-------------------Restraindre position dans la fenetre-----------------
         if self.rect.top>fenetre_y:
             niveau_actuel.dict_element["goomba"].remove(self)
             del self
@@ -838,7 +842,7 @@ class Goomba():
             self.vitesse_x=50
 
 
-        #Collision
+        #--------------------Collision------------------
         i_collision=self.rect.collidelistall(liste_rect)
         for rect in [liste_rect[i] for i in i_collision]:
 
@@ -851,18 +855,19 @@ class Goomba():
 
             elif self.ancien.right<=rect.left<=self.rect.right:
                 self.rect.right=rect.left
-                self.vitesse_x=-50
+                self.vitesse_x=-50  #S'il y a collision par la droite, le goomba change de direction et se déplace de 50 pixels vers la gauche par seconde
 
             elif self.rect.left<=rect.right<=self.ancien.left:
                 self.rect.left=rect.right
-                self.vitesse_x=50
+                self.vitesse_x=50   #S'il y a collision par la gauche, le goomba change de direction et se déplace de 50 pixels vers la droite par seconde
 
 
         #Animation
         self.img=self.liste_img[self.animation]
 
 class Koopa():
-
+    """L'objet Koopa est l'ennemi rapide. Il fonctionne exactement de la même manière que Goomba mais sa vitesse est 10 fois plus élevé (et il ne peut pas être détruit par le joueur)
+    """
     def __init__(self, liste_img, pos):
         self.liste_img=liste_img
         self.img=liste_img[0]
