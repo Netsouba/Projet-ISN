@@ -220,7 +220,7 @@ def jeu(niveau_actuel):
                             tp=niveau_actuel.dict_element["tp"][i_tp]       #tp prend la valeur de l'objet Teleportation en question
                             if tp.etat!=4 and perso.energie>tp.etat and liste_cooldown[3]==liste_base_cooldown[3]:  #Si le bloc n'est pas marron
                                 liste_t_forme[3]=pygame.time.get_ticks()
-                                perso.energie-=3*tp.etat
+                                perso.energie-=3*tp.etat                    #Ici, on enlève l'énergie en fonction de l'état du bloc (qui change selon la distance du bloc, et qui se manifeste par la couleur plus ou moins foncée du bloc)
                                 perso.vitesse_y=0                           #On remet la vitesse y du personnage à 0
                                 perso.rect.center=tp.rect.center            #On met le rectangle du personnage au niveau du rectangle téléportation (les centres au même endroit)
 
