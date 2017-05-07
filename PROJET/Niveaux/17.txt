@@ -16,4 +16,4 @@ n
     4         4        p       1
 p    p  p    p     1 6 1        
 111111 111  11111   11111     111
-Indice : L'accès est juste au dessus de vous, eclairez les bonnes torches.
+Indice : L'acces est juste au dessus de vous, eclairez les bonnes torches.
