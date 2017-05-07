@@ -1,4 +1,4 @@
-﻿import os
+import os
 import pygame
 from pygame.locals import *
 import math
@@ -222,7 +222,7 @@ def r_cercle(liste_pos):
             if point[0]==max(liste_x):                                      #Si l'abscisse du point est la maximale, il s'agit du point le plus à droite.
                 a=point                                                     #On capture ce point dans la variable a
             if point[1]==min(liste_y):                                      #On fait cela pour les points les plus en haut, a gauche et en bas du dessin
-                b=point                                                     #Voir le dossier pour un schéma de la construction
+                b=point                                                     #Voir 1) dans l'annexe pour un schéma de la construction
             if point[0]==min(liste_x):
                 c=point
             if point[1]==max(liste_y):
