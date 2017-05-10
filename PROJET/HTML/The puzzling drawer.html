@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="style.css" />
+        <link rel="icon" type="image/png" href="Images/pieces/roi_fig.png" />
+        <title>The Puzzling Drawer</title>
+    </head>
+
+    <body>
+    	<header>
+
+        	<h1>Epreuve d'ISN</h1>
+        	
+
+        </header>
+        <nav>
+        	<ol>
+        		<li class="titre1"> <a href="#1">Présentation du Projet</a> </li>
+	        		<ol>
+        				<li class="titre3"> <a href="#1.3.1">Le pion</a> </li>
+        				<li class="titre3"> <a href="#1.3.2">La tour</a> </li>
+        				<li class="titre3"> <a href="#1.3.3">Le cavalier</a> </li>
+        				<li class="titre3"> <a href="#1.3.4">Le fou</a> </li>
+        				<li class="titre3"> <a href="#1.3.5">La reine</a> </li>
+        				<li class="titre3"> <a href="#1.3.6">Le roi</a> </li>
+        			</ol>
+
+        			<li class="titre2"> <a href="#1.4">Position de départ</a> </li>
+        			<li class="titre2"> <a href="#1.5">Les coups particuliers</a> </li>
+
+        			<ol>
+        				<li class="titre3"><a href="#1.5.1">Le roque</a></li>
+        				<li class="titre3"><a href="#1.5.2">La promotion</a></li>
+        				<li class="titre3"><a href="#1.5.3">La prise en passant</a></li>
+        			</ol>
+
+        			<li class="titre2"> <a href="#1.6">La notation</a> </li>
+
+        		</ol>
+
+        		<li class="titre1"> <a href="#2">Stratégies</a> </li>
+
+        		<ol>
+        			<li class="titre2"><a href="#2.1">La valeur des pièces</a></li>
+        			<li class="titre2"><a href="#2.2">Mats fondamentaux</a></li>
+
+        			<ol>
+        				<li class="titre3"><a href="#2.2.1">Mater avec deux tours</a></li>
+        				<li class="titre3"><a href="#2.2.2">Mater avec une tour</a></li>
+        				<li class="titre3"><a href="#2.2.3">Mater avec une reine</a></li>
+        				<li class="titre3"><a href="#2.2.4">Mater avec deux fous</a></li>
+        			</ol>
+
+        			<li class="titre2"><a href="#2.3">Conseils</a></li>
+
+        			<ol>
+        				<li class="titre3"><a href="#2.3.1">Le début de partie</a></li>
+        				<li class="titre3"><a href="#2.3.2">La fourchette</a></li>
+        				<li class="titre3"><a href="#2.3.3">La fin de partie</a></li>
+    				</ol>
+        		</ol>
+
+        		<li class="titre1"> <a href="#3">Exercices résolus</a> </li>
+
+
+        	</ol>
+        </nav>
+
+        <div class="background">	
+        <section>
+
+        <p>
+        	Théo Delerce
+        	Sébastien Li
+        	Théo Tarteix
+        </p>
+        <figure>
+				<img src="3.png">
+				<figcaption> Voici la page d'accueil du jeu </figcaption>
+			</figure>
+
+		<h2 id="1">Présentation du Projet</h2>
+
+		<figure>
+			<img src="8.png">
+			<figcaption>Okami est le jeu qui nous a inspiré pour ce projet </figcaption>
+		</figure>
+		
+
+			
+		<h2 id="2"> Langage utilisé </h2>
+					
+			
+			<img src="10.png">
+			<img src="9.png">
+			
+			
+			
+			<h2 id="3">Algorithme Principal</h2>
+
+			<figure>
+				<img src="11.png">
+				<figcaption>Schématisation de notre algotrithme "Main"</figcaption>
+			</figure>
+
+			<p>
+				Les échecs se jouent sur un échiquier composé alternativement de cases blanches et noires. Il y a en tout 64 cases (32 blanches et 32 noires). Ces cases sont ordonnées sur l’échiquier en 8 colonnes, de “A” à “H” de gauche à droite, et en 8 lignes de 1 à 8 de haut en bas. Donc, pour évoquer une case, on utilise ces repères.
+			</p>
+
+			<h3 id="1.3">Les pièces et leurs mouvements</h3>
+
+			<p>
+				Notez que pour ce cours, nous utiliserons les symboles suivants pour les 6 types de pièces dans le jeu:
+			</p>
+
+			<figure>
+				<img src="Images/Pieces/Pieces.png">
+				<figcaption>De gauche à droite: Roi, Reine, Tour, Fou, Cavalier, Pion</figcaption>
+			</figure>
+				
+			<p>
+				Il y a des pièces blanches et des pièces noires. Les pièces se déplacent sur les cases de l'échiquier. Deux pièces ne peuvent pas occuper la même case. De plus, une pièce ne peut pas sauter au dessus d’une autre, à l’exception du Cavalier. Il est interdit de jouer deux fois de suite ou de passer son tour. 
+			</p>
+
+
+			<h4 id="1.3.1">Le Pion : </h4>
+			
+			<p>
+				<img src="Images/pieces/pion_fig.png" class="flottant">Ils déplacent toujours en avançant à la verticale.  Ils ne se déplacent que d’une seule case à la fois sauf à leur premier mouvement où ils ont le choix d’avancer d’une ou deux cases. La particularité de cette pièce est qu’elle ne capture les autres pièces uniquement d’une case en diagonal devant elle. Il est impossible pour le pion de capturer une pièce qui est face à lui ou en diagonal derrière lui. 
+			</p>
+
+			<figure>
+				<img src="Images//pieces/pion_1.png">
+				<img src="Images//pieces/pion_2.png">
+				<figcaption>Les déplacements du pion</figcaption>
+			</figure>
+
+
+			<h4 id="1.3.2">La Tour :</h4>
+
+			
+
+			<p>
+				<img src="Images/pieces/tour_fig.png" class="flottant">Elle peut se déplacer en avant et en arrière à sa guise, elle se dirige horizontalement et verticalement.
+			</p>
+
+			<figure>
+				<img src="Images//pieces/tour.png">
+				<figcaption>Les déplacements de la tour</figcaption>
+			</figure>
+
+			
+			<h4 id="1.3.3">Le Cavalier :</h4>
+
+			
+
+			<p>
+				<img src="Images/pieces/cavalier_fig.png" class="flottant">Cette pièce a un déplacement très particulier, tout d’abord c’est la seul et unique pièce qui peut sauter par dessus les autres pièces, qu’ils soient partenaires ou adversaires. De plus il se déplace en faisant un “L” composé de 3 cases, ex: 2 cases vers l’avant et une case vers la droite. Cela donne donc 8 possibilité de déplacement. Il peut se déplacer et prendre en arrière. NB: Un cavalier dans une case blanche ne peut bouger que sur de cases noirs (et vice versa) 
+			</p>
+
+			<figure>
+				<img src="Images//pieces/cavalier.png">
+				<figcaption>Les déplacements du cavalier</figcaption>
+			</figure>
+
+			<h4 id="1.3.4">Le Fou : </h4>
+
+			
+
+			<p>
+				<img src="Images/pieces/fou_fig.png" class="flottant"> Il se déplace en diagonal en avant ou en arrière. NB: Un fou dans une case blanche restera dans des cases blanches durant toute la partie (et vice versa).
+
+			</p>
+
+			<figure>
+				<img src="Images//pieces/fou.png">
+				<figcaption>Les déplacements du fou</figcaption>
+			</figure>
+
+			<h4 id="1.3.5">La Reine :</h4>
+
+			
+
+			<p>
+				<img src="Images/pieces/reine_fig.png" class="flottant">C’est la pièce qui possède le plus de mobilité. Elle se déplace horizontalement, verticalement, en diagonal, en avant et en arrière.
+
+
+			</p>
+
+			<figure>
+				<img src="Images//pieces/reine.png">
+				<figcaption>Les déplacements de la reine</figcaption>
+			</figure>
+			
+
+			<h4 id="1.3.6">Le Roi : </h4>
+
+			
+
+			<p>
+				<img src="Images/pieces/roi_fig.png" class="flottant">Il ne peut se déplacer que d’une seule case dans toutes les directions.
+			</p>
+
+			<figure>
+				<img src="Images//pieces/roi.png">
+				<figcaption>Les déplacements de la reine</figcaption>
+			</figure>
+
+			<h3 id="1.4">Position de départ</h3>
+
+			<p>
+				Au début de chaque partie, les pièces ont un positionnement bien particulier. Tout d’abord il faut placer l’échiquier comme mentionné plus haut. On trouve donc les blancs d’un côté et les noirs de l’autr. Notez que la Reine commence toujours sur une case de sa propre couleur.
+				<br/>
+				Voici donc les positions de départ d’un jeu d’échec :
+				<figure>
+					<img src="Images/Position_de_depart.png">
+					<figcaption>Chaque partie se commence dans cette position</figcaption>
+				</figure>
+			</p>
+
+			<h3 id="1.5">Coups particuliers</h3>
+
+			<p>
+				Il existe trois coups particuliers de base qu’il faut connaître quand vous commencez à jouer aux échecs: 
+			</p>
+			    <ol>
+			    	<h4 id="1.5.1"><li>Le Roque</li></h4>
+			    	<p>
+			    		C’est un mouvement du Roi avec la Tour, s’il n’y a aucune pièce qui les sépare, et qu’aucun des deux n’a subi de mouvement durant la partie, le Roi se déplace de deux cases en direction de sa Tour qui vient se placer derrière lui. On appelle grand Roque et petit Roque selon le côté duquel on bouge le Roi. Ces mouvements se font en un seul coup.
+			    	</p>
+			    	<figure>
+			    		<img src="Images/Coups_particuliers/Roque/petit1.png">
+			    		<img src="Images/Coups_particuliers/Roque/petit2.png">
+			    		<figcaption>Le petit roque</figcaption>
+			    	</figure>
+			    	<figure>
+			    		<img src="Images/Coups_particuliers/Roque/grand1.png">
+			    		<img src="Images/Coups_particuliers/Roque/grand2.png">
+			    		<figcaption>Le grand roque</figcaption>
+			    	</figure>
+			    	<p>
+			    		De plus, si la case par lequel le roi passe est attaqué par une pièce adverse, le roque est impossible. Notez que si la case d’arrivée est attaquée, il est évidemment impossible de roquer.
+			    	</p>
+			    	<figure>
+			    		<img src="Images/Coups_particuliers/Roque/echec.png">
+			    		<figcaption>Le roi ne peut pas roquer car la case f1 est attaquée.</figcaption>
+			    	</figure>
+
+			    	<h4 id="1.5.2"><li>La promotion</li></h4>
+			    	<p>
+			    		Lorsqu’un pion arrive sur la dernière ligne (si un pion blanc arrive sur la ligne 8 ou si un pion noir arrive sur la ligne 1), le pion en question se transforme en une autre pièce choisie. Le pion ne peut pas se transformer en roi. Par conséquent, on le transforme très souvent en reine, qui est la pièce la plus mobile du jeu. En effet, promouvoir un pion en fou ou en tour est presque inutile puisque les mouvements de la reine inclut également ceux de la tour et du fou. Dans de très rare cas, on peut le transformer en cavalier. Mais ne faîtes cela que si le contexte l’oblige: une reine est toujours plus puissant qu’un cavalier.
+			    	</p>
+			    	<h4 id="1.5.3"><li>La prise en passant</li></h4>
+			    	<p>
+			    		Le pion a une autre possibilité de capturer les pions: le prise en passant. Cette capture se fait dans un contexte très particulier. Cela se fait quand un pion adverse avance de deux cases. Il faut qu'un de vos pions aurait pu capturer le pion adverse si ce dernier avait avancé d’une case. Alors, dans ce cas, votre pion peut capturer le pion adverse comme si ce dernier avait avancé d’une case.
+			    	</p>
+			    	<figure>
+			    		<img src="Images/Coups_particuliers/Prise_en_passant/1.png">
+			    		<img src="Images/Coups_particuliers/Prise_en_passant/2.png">
+			    		<figcaption>La prise en passant permet au pion en e5 de “capturer” le pion en f5 en se déplaçant sur la cas f6</figcaption>
+			    	</figure>
+			    	<p>
+			    		Ce coup ne peut se faire que dans le tour qui suit l’avancée du pion adverse.
+			    	</p>
+			    </ol>
+
+
+			<h3 id="1.6"> Notations</h3>
+			<p>
+				 Durant une partie d’échec, on peut noter les coups pour décrire les mouvements sur l’échiquier. Cela permet de restituer la partie plus tard, par exemple. Pour cela, on utilise la notation algébrique. Voici un exemple: 
+			</p>
+			<figure>
+				<img src="Images/notation/DxCf7.png">
+				<figcaption>DxCf7</figcaption>
+			</figure>
+				
+			<p>
+				Dans cet exemple, la reine se déplace sur la case f7 en prenant le cavalier.
+				<br/>
+				En général, on met d’abord le nom de la pièce en premier. On utilise des abréviations: on utilise la première lettre de la pièce. Pour la reine, on utilise la lettre D (pour dame). En fait, on n’écrit pas de lettre pour le pion. Ainsi, au lieu d’écrire Pe4 pour dire que le pion va en e4, on écrit juste e4. 
+				<br/>
+				Après le nom de la pièce, on met les coordonnées de la case d’arrivée. Si la pièce prend une pièce ennemi, on note x après le nom de votre pièce, puis le nom de la pièce prise, puis les coordonnées. Par exemple, DxCf7 : la dame prend un cavalier en f7. Pour la capture par les pions, il faut noter la colonne de départ du pion. Par exemple : exd5 signifie: le pion sur la colonne e prend le pion en d5.
+			</p>
+			<figure>
+				<img src="Images/notation/exd5.png">
+				<figcaption>exd5</figcaption>
+			</figure>
+			<p>	 
+				Pour le petit roque, on note O-O, on pour le grand, on note O-O-O. Si il y a promotion, on écrit “=” puis le nom de la pièce en laquelle veut se transformer le pion. Par exemple, on peut écrire e8=D. Cela signifie que le pion va sur la case e8 en se promouvant en Reine.
+				<br/>
+				En cas d'ambiguïté sur la pièce qui est bougée, on écrit la colonne ou la ligne de la case de départ.
+			</p>
+			<figure>
+				<img src="Images/notation/The4.png">
+				<figcaption>Si on écrit juste Te4, on ne sait pas de quel tour on parle. Donc, on note The4 pour comprendre qu’il s’agit de la tour en h4 et non en b4.</figcaption>
+			</figure>
+
+			<p>
+				Pour noter une partie, on écrit d’abord le numéro du coup, la notation du mouvement des blancs, puis la notation du mouvement des noirs. Par exemple: 
+			</p>
+			<figcaption>
+				<img src="Images/notation/e4.png">
+				<img src="Images/notation/e5.png">
+				<br/>
+				<img src="Images/notation/Cf3.png">
+				<img src="Images/notation/Cd6.png">	
+				<br/>
+				<img src="Images/notation/Cxe5.png">
+				<figcaption>
+					<ol class="petit">
+						<li>e4 e5</li>
+						<li>Cf3 Cd6</li>
+						<li>Cxe5 etc...</li>
+					</ol>
+				</figcaption>
+
+			</figcaption>
+			 
+			<h2 id="2">Stratégies</h2>
+			<h3 id="2.1">La valeur des pièces</h3>
+			<p>
+				Aux échecs, les pièces ont des puissances différentes. Par exemple, un pion est plus faible qu’une reine car ses mouvements sont plus limités. Ainsi, on détermine la puissance d’une pièce avec des valeurs. En faisant la différence des sommes des valeurs des pièces de chaque joueur, on peut avoir une vague idée du joueur qui gagne. Cependant, ce n’est pas toujours représentatif.
+				On donne une valeur de 3 au cavalier et au fou qui sont appelées pièces mineures.
+				<br/>
+				La tour a une valeur de 5 et la reine a une valeur de 10. On dit que les pions ont une valeur de 1 mais ce n’est pas toujours le cas. Sa valeur varie en fonction de la puissance de son positionnement. Par exemple, un pion qui s’apprête à promouvoir en reine peut parfois être plus important qu’une tour. Ou encore, un pion qui bloque l’avancé de l’ennemi qu
+				Evidemment, le roi n’a pas de valeur car sa perte signifie la défaite.
+				<br/>
+				Avec ces valeurs en tête, on peut faire des échanges. Un échange est la prise d’une pièce, suivie de la prise d’une pièce de même valeur. 
+			</p>
+
+			<figure>
+				<img src="Images/Echanges/1.png">
+				<img src="Images/Echanges/2.png">
+				<img src="Images/Echanges/3.png">
+				<figcaption>L'échange est équivalent</figcaption>
+			</figure>
+
+			<p>
+				Dans ce cas, le joueur blanc perd un cavalier et le joueur noir perd un fou. Les deux perdent donc 3 points et redeviennent équivalents en points. C’est un échange. En général, évitez à tout prix de perdre plus de points que l’adversaire. Il faut donc faire des échanges voire faire perdre des points à l’adversaire. Si vous réussissez à avoir plus de points que l'adversaire, faire des échanges sur la suite de la partie va consolider votre avantage.
+				<br/>
+				Attention, ce conseil n’est pas absolu. En effet, bien que la puissance d’un joueur vient du nombre de points qu’il possède, n’oubliez pas que le but du jeu est de faire un échec et mat.
+
+			</p>
+
+			<h3 id="2.2">Mats fondamentaux</h3>
+
+			<p>
+				Bien, vous avez fait des échanges, et vous avez réussi à prendre un avantage. C’est la fin de partie, comment faire pour être sûr de gagner et ne pas faire un pat? Il faut apprendre à amener l’échec et mat dans des cas fréquents.
+			</p>
+
+			<ol>
+				<h4><li id="2.2.1">Mater avec deux tours</li></h4>
+				<p>
+					Mater avec 2 tours est le plus facile. Le position à laquelle il faut arriver est celle là.
+					Le roi est sur le bord de l'échiquier et les deux tours sont sur les lignes (ou colonnes) qui empêchent la fuite du roi.
+				</p>
+
+				<figure>
+					<img src="Images/mat/tours/ligne.png">
+					<img src="Images/mat/tours/colonne.png">
+					<figcaption>Echec et mat!</figcaption>
+				</figure>
+
+				<p>
+
+					Pour arriver à cette situation, il faut utiliser “la technique de l’escalier”.
+					Le but est de faire reculer le roi adverse sur une bande l’échiquier. Pour cela, une tour doit se trouver sur la colonne adjacente à la colonne du roi adverse et opposée à la bande où vous voulez acculer le roi pour l'empêcher de fuir dans la direction opposée.
+				</p>
+
+				<figure>
+					<img src="Images/mat/tours/1.png">
+					<figcaption>On veut acculer le roi sur la colonne H. Le roi est sur la colonne F. On met donc la première tour sur la colonne E</figcaption>
+				</figure>
+
+				<p>
+					Ensuite, on met la deuxième tour sur la colonne où se trouve le roi pour le mettre en échec. Il ne pourra fuir seulement dans la colonne vers la bande.
+				</p>
+
+					<figure>
+						<img src="Images/mat/tours/2.png">
+						<figcaption>On met la deuxième tour sur la colonne F. Le roi doit reculer sur la colonne G.</figcaption>
+					</figure>
+
+				<p>
+					Ensuite, on met la première tour sur la colonne où se trouve le roi. Elle aura le rôle de mettre le roi en échec comme tout à l’heure. L’autre tour va empêcher le roi de fuir.
+				</p>
+
+				<figure>
+					<img src="Images/mat/tours/3.png">
+					<figcaption>On retrouve la position de tout à l’heure</figcaption>
+				</figure>
+					
+				<p>
+					Il faut ensuite répéter le processus jusqu’à que le roi se trouve sur la bande de l’échiquier. Il pourra plus reculer et ce sera un échec et mat.
+					Attention, si le roi menace de prendre une tour pendant le processus, retardez la victoire pour faire fuir la tour attaquée. La tour doit rester sur la même colonne pour pouvoir continuer la suite après la fuite de la tour.
+				</p>
+
+				<figure>
+					<img src="Images/mat/tours/4.png">
+					<figcaption>Le roi attaque la tour d6. Il faut fuir mais sur la même colonne.</figcaption>
+				</figure>
+
+				<p>
+					De même, ne mettez pas une tour sur une case adjacente au roi! Il vaut mieux retarder le mat pour replacer les tours que d’en perdre une. 
+					Notez que vous pouvez remplacer les mots “colonnes” par “lignes” dans ce paragraphe.
+					Si vous perdez une tour, il cependant toujours possible de gagner. 
+				</p>
+
+				<h4><li id="2.2.2">Mater avec un roi et une tour</li></h4>
+
+				<p>
+					Ce mat nécessite l’implication de votre roi. Voici la position:
+				</p>
+
+				<figure>
+					<img src="Images/mat/tour/position.png">
+					<figcaption>Echec et mat!</figcaption>
+				</figure>
+					
+				<p>
+					Le principe est le même que la technique de l’escalier: il faut faire reculer le roi adverse en l'empêchant de revenir et en faisant un échec sur la colonne (ou ligne) correspondante. Mais cela nécessite plus de coordination. Pour les anglophones, nous conseillons de regarder cette<a href=" https://www.youtube.com/watch?v=hpq5_jr5IQg ">vidéo</a>qui explique bien mieux le déroulement.
+					<br/>
+					Voilà un résumé pour les non-anglophones.
+					Il faut d’abord empêcher la fuite du roi avec la tour. Comme dans le mat précédent on met la tour sur la colonne adjacente au roi adverse et opposée à la bande où vous voulez l’acculer.
+				</p>
+
+				<figure>
+					<img src="Images/mat/tour/1.png">
+					<figcaption>La tour empêche le roi de fuir vers la colonne E</figcaption>
+				</figure>
+					
+				<p>
+					Il faut ensuite avoir votre roi à une case du roi adverse. Ainsi, votre roi empêche également la fuite du roi adverse. Quand vous arrivez à cette position, il faut que ce soit votre tour.
+				</p>
+
+				<figure>
+					<img src="Images/mat/tour/2.png">
+					<figcaption>Les rois sont en face et c’est le tour des blancs</figcaption>
+				</figure>
+				
+				<p>
+					Pour arriver à cela, il se peut que vous avez besoin d’un coup d’attente si il est impossible d’arriver à cette position. Il faut donc bouger la tour sur la même colonne sur une case sûre. 
+				</p>
+
+				<figure>
+					<img src="Images/mat/tour/3.png">
+					<figcaption>C’est au tour des blancs, le positionnement voulu est impossible. On bouge la tour.</figcaption>
+				</figure>
+				
+				<p>
+					Si le roi adverse fuit votre roi, il faut le poursuivre jusqu’à qu’il arrive au bord où il est obligé de revenir en face de votre roi.
+				</p>
+
+				<figure>
+					<img src="Images/mat/tour/4.png">
+					<img src="Images/mat/tour/5.png">
+					<figcaption>Poursuivez après le roi adverse!</figcaption>
+				</figure>
+
+				<p>
+					N’oubliez pas de faire des coups d’attente si nécessaire et d’avoir votre tour toujours en sécurité.
+					<br/>
+					Lorsque vos rois sont face à face, il faut bouger la tour pour faire un échec sur la colonne du roi et donc le faire fuir.
+				</p>
+
+				<figure>
+					<img src="Images/mat/tour/6.png">
+					<figcaption>Le roi doit fuir</figcaption>
+				</figure>
+					
+				<p>	
+					On répète le processus jusqu’à que le roi adverse arrive sur la position voulue. Les mots “colonne” peuvent toujours être remplacée par “ligne”.
+				</p>
+
+				<h4><li id="2.2.3">Mater avec un roi et un reine</li></h4>
+
+				<p>
+					Il existe de nombreuses façons de gagner avec la reine et le roi. Comme la reine peut bouger comme la tour, vous pouvez toujours gagner avec la même méthode que celle ci-dessus. Mais nous allons vous montrer une position efficace et facile pour gagner.
+				</p>
+
+				<figure>
+					<img src="Images/mat/reine/Position.png">
+					<figcaption>Le baiser de la mort !</figcaption>
+				</figure>
+				
+				<p>	
+					Le roi doit toujours être sur le bord (vous savez maintenant comment l’y amener).
+					Ensuite, il faut mettre la reine sur la case juste en face du roi ennemi. La reine doit avoir sur une de ses cases adjacentes votre roi pour la protéger. NB: Le pièce qui protège la reine n’est pas forcément un roi.
+				</p>
+
+				<figure>
+					<img src="Images/mat/reine/pion.png">
+					<figcaption>Le roi est rempplacé par un pion</figcaption>
+				</figure>
+
+				<p>
+					Pour arriver à cette position, il n’y a pas forcément de suite de mouvements précis. C’est assez facile si vous réfléchissez à vos mouvements.
+					Attention : Le pat est assez facile à avoir dans certains cas, réfléchissez avant de faire un mouvement qui pourrait vous coûter une victoire facile.
+				</p>
+
+				<figure>
+					<img src="Images/mat/reine/pat.png">
+					<figcaption>Pat!</figcaption>
+				</figure>
+
+
+				<h4><li id="2.2.4">Mater avec un roi et deux fous</li></h4>
+				<p>
+					Mater un roi et deux fous est difficile, et pas forcément nécessaire. En général, vous n’avez plus vos deux fous en fin de partie. Donc, nous n’allons pas rentrer dans les détails. Pour les curieux voilà le déroulement en<a href="https://www.youtube.com/watch?v=uimbIq9h_7A">vidéo</a>(toujours pour les anglophones).
+					<br/>
+					Voilà la position:
+
+				</p>
+
+				<figure>
+					<img src="Images/mat/fou/position.png">
+					<figcaption>Echec et mat!</figcaption>
+				</figure>	
+
+			</ol>
+
+
+
+
+			<p>
+				Il existe bien évidemment d’autres moyens de mater mais ceux-là sont les principaux. La plupart des parties se finissent avec les mats présentés, un abandons, ou une partie nulle.
+			</p>
+
+
+			<h3 id="2.3"> Conseils </h3>
+
+			<p>
+				Aux échecs, savoir déplacer ses pièces et connaître tous les mats possibles n’est pas suffisants pour gager. Il y a de nombreuses choses à connaître pour s’améliorer. Nous allons expliquer quelques éléments.
+			</p>
+
+			<ol>
+				<h4><li id="2.3.1">Le début de partie</li></h4>
+				<p>
+					Au début de la partie, les pièces sont “enfermées”  par les pions. Ils font donc les sortir pour aller attaquer le camp ennemi. Pour cela, il faut <em>développer</em> les pièces. Le centre de l’échiquier est la position la plus puissante car une pièce au centre a une grande mobilité et peut bloquer facilement l’avancé de l’ennemi.
+				</p>
+
+				<figure>
+					<img src="Images/conseil/debut_de_partie/centre.png">
+					<figcaption>Préférez les pièces qui ont une action sur le centre</figcaption>
+				</figure>					 
+				
+				<p>
+					Les pièces à développer au départ sont les pièces mineures (fou et cavalier) et les pions. Il ne faut pas développer tout de suite la tour. Cela prend trop de temps pour le faire sortir car ils se situent sur les bords de l’échiquier. Il ne faut pas sortir la reine non plus car elle est trop importante. La sortir alors que toutes les pièces sont encore de possibles menaces est trop risqué. De plus vos pièces seront des obstacles de sa grande mobilité. Enfin, il est évident qu’il ne faut pas sortir le roi. Le risque de se faire mater est trop grand et la puissance du roi n’est pas suffisante. Le roi doit être la pièce la plus protégée. C’est pour cela que roquer est essentiel: cela met le roi en sécurité et développe une tour, jusqu’alors inutile dans le coin.
+					<br/>
+					Le développement des pièces au début de partie se fait durant l’ouverture. Il existe de nombreuses ouvertures très efficaces. Elles se focalisent sur trois principes: le développement des pièces, la puissance au centre de l’échiquier et la protection du roi par le roque. C’est à vous d’expérimenter pour trouver une ouverture qui vous correspond.
+					<br/>
+					Nous allons voir un exemple: 
+					<br/>
+					Notez que cette série de coups n’est pas forcément optimale. Il suffit de regarder des ouvertures de grands maîtres pour voir que personne ne joue cette ouverture à haut niveau. Cependant, cet exemple permet de bien comprendre l’esprit à avoir lors des ouvertures.
+				</p>
+
+				<figure>
+					<img src="Images/conseil/debut_de_partie/ouverture/1.png">
+					<figcaption>Le premier coup est e4. Il permet d’avoir le centre et d’empêcher l’adversaire d’y accéder par d5. De plus, il laisse la possibilité au fou blanc de sortir. C’est le coup le plus populaire avec d4.</figcaption>
+					<br/>
+					<img src="Images/conseil/debut_de_partie/ouverture/2.png">
+					<figcaption>e5 est un coup puissant : Noir réplique par e5. Cela permet à avoir accès au centre et empêche la prise totale du centre par les blancs qui auraient voulu avoir un pion en d4.</figcaption>
+					<br/>
+					<img src="Images/conseil/debut_de_partie/ouverture/3.png">
+					<figcaption>Cf3 : Ce coup permet le développement du cavalier. Il contrôle de cases du centre (d4 et e5). De plus, il attaque le pion noir, ce qui force noir à le défendre sous peine de perdre 1 point.</figcaption>
+					<br/>
+					<img src="Images/conseil/debut_de_partie/ouverture/4.png">
+					<figcaption>Cc6 : Le développement du cavalier permet la défense du pion et le contrôle de deux cases du centre.</figcaption>
+					<br/>
+					<img src="Images/conseil/debut_de_partie/ouverture/5.png">
+					<figcaption>Fc4 : Le fou est développé. De plus, il attaque le pion noir f7 qui n’est protégé que par le roi.</figcaption>
+					<br/>
+					<img src="Images/conseil/debut_de_partie/ouverture/6.png">
+					<figcaption>Fc5 : Développement du fou</figcaption>
+					<br/>
+					<img src="Images/conseil/debut_de_partie/ouverture/7.png">
+					<figcaption>O-O : On roque pour mettre le roi à l’abri.</figcaption>
+					<br/>
+					<img src="Images/conseil/debut_de_partie/ouverture/8.png">
+					<figcaption>d6 : Le pion protège le fou et le pion en e5. De plus, il permet le développement du fou par la suite.</figcaption>
+					<br/>
+					<img src="Images/conseil/debut_de_partie/ouverture/9.png">
+					<figcaption>Cc3 : Développement du cavalier</figcaption>
+					<br/>
+					<img src="Images/conseil/debut_de_partie/ouverture/10.png">
+					<figcaption>Fg4</figcaption>
+				</figure>	
+
+				<p>
+					En plus de développer le fou, celui la <em>cloue</em> le cavalier f3. En effet, si le cavalier se déplace, le fou noir peut prendre la reine. La défaite est quasiment assuré pour les Blancs si le joueur perd sa reine. Le cavalier ne doit pas bouger tant qu’il est <em>cloué</em>.
+					Nous pensons que vous avez compris, il est inutile de continuer.
+					<br/><br/>
+
+					<strong>ATTENTION: NE FAITES PAS LE COUP DU BERGER ET SACHEZ LE CONTRER!</strong>
+					<br/>
+					Le coup du berger une erreur de débutant à ne pas produire. Ce coup est très agressif car il menace un échec et mat en 4 coups grâce à la reine. 
+				</p>
+
+				<figure>
+					<img src="Images/conseil/debut_de_partie/coup_du_berger/1.png">
+					<img src="Images/conseil/debut_de_partie/coup_du_berger/2.png">
+					<img src="Images/conseil/debut_de_partie/coup_du_berger/3.png">
+					<figcaption>Ne faîtes pas ça!</figcaption>
+				</figure>
+
+				<p>
+					N’importe quel joueur sachant ce qu’il fait ne tombera pas dans le piège. Non seulement faire ce coup est irrespectueux car vous espérez que votre adversaire soit un débutant, mais les conséquences peuvent être problématiques en cas de parade et peut vous coûter la victoire.
+				</p>
+
+				<figure class="successionimage">
+					<img src="Images/conseil/debut_de_partie/coup_du_berger/4.png">
+					<img src="Images/conseil/debut_de_partie/coup_du_berger/5.png">
+					<img src="Images/conseil/debut_de_partie/coup_du_berger/6.png">
+					<img src="Images/conseil/debut_de_partie/coup_du_berger/7.png">
+					<img src="Images/conseil/debut_de_partie/coup_du_berger/8.png">
+					<img src="Images/conseil/debut_de_partie/coup_du_berger/9.png">
+					<img src="Images/conseil/debut_de_partie/coup_du_berger/10.png">
+
+					<figcaption>Cc6 empêche l’éventuelle prise par la reine du pion e5</figcaption>
+					<figcaption>g6 empêche le mat </figcaption>
+					<figcaption>Df3 : Blanc veut toujours aller en f7 pour gagner</figcaption>
+					<figcaption>Cf6 : Le cavalier empêche la prise en f7t </figcaption>
+					<figcaption>Db3 : Blanc veut toujours prendre le pion f7 </figcaption>
+					<figcaption>Cd4 : Le cavalier menace de prendre la reine ou de faire une<a href="#2.3.2">fourchette</a></figcaption>
+					<figcaption>Da4 Cxe4 </figcaption>
+				</figure>				
+				
+				<p>
+					Noir finit par dominer Blanc. Il a un pion supplémentaire, une meilleure position et un meilleur développement. Le développement des Blancs va être difficile.
+				</p>
+
+				<h4><li id="2.3.2">La fourchette</li></h4>
+
+				<p>
+					La fourchette est une attaque double menée par un pièce sur deux pièces adversaires. L’adversaire va protéger une pièce attaquée et va se faire prendre la deuxième.
+				</p>
+
+				<figure>
+					<img src="Images/conseil/fourchette/1.png">
+					<figcaption>Le cavalier menace de prendre une tour. Si Tgg7 Cxd7 Txd7 Blanc est gagnant car il perd 3 points contre 5 points. </figcaption>
+				</figure>
+				
+				<p>
+
+					La fourchette est efficace si:
+
+					<ul class="petit">
+						<li>Après protection d’une pièce, la deuxième n’est toujours pas protégée.</li>
+						<li>Les deux pièces ennemies ont des valeurs plus importantes que l’attaquant (cas précédent)</li>
+					</ul>
+
+				</p>
+
+				<figure>
+					<img src="Images/conseil/fourchette/2.png">
+					<figcaption>La fourchette permet d'obtenir une tour contre un cavalier </figcaption>
+				</figure>
+					
+				<p>
+					Les cases c7 et f7 sont des cases sensibles aux fourchettes des cavaliers. Elles ne sont protégées que par une pièce qui est importante (respectivement la reine et le roi). Il suffit d’attaquer la case avec également un fou par exemple pour protéger le cavalier. La fourchette vous garantit la prise d’une tour.
+					<br/>
+					Attention! Tout comme le coup du berger, ce coup est inefficace contre les joueurs expérimentés. Cependant, le coup n’est pas trop coûteux en cas d’échec, et la moindre erreur d'inattention de l’adversaire vous permet de faire ce coup. 
+
+				</p>
+
+				<h4><li id="2.3.3">La fin de partie </li></h4>
+
+				<p>
+					Lorsque le nombre de pièces encore présentes est suffisamment petit, il est temps de conclure la partie. Les pions et le roi deviennent alors des pièces bien plus puissantes. En effet, le pion a moins d’obstacle pour parvenir au bord de l’échiquier et peut plus facilement promouvoir. C’est pour cela que la perte lors des échanges de pions lors du milieu de partie n’est pas négligeable. Le but de la fin de partie  est de soit parvenir à un mat fondamental, soit à la promotion d’un pion pour gagner une reine. Pour cela, le roi doit commencer à s’impliquer dans le jeu. En effet, les menaces sont réduites au centre de l’échiquier, et sa capacité à défendre les pièces et contrôler les cases en fin de partie est très important. Sortez donc votre roi lorsque le centre est sûr, tout en restant attentif à ne pas se faire mater.
+					<br/>
+					En fin de partie, avec la valeur matérielle de chaque joueur, on peut déterminer à l’avance l’issue de la partie, ce qui permet au joueur perdant d’abandonner et de ne pas perdre de temps. Par exemple, avec les <a href="#2.2">mats fondamentaux</a>, on sait qui devrait gagner. Si les deux joueurs sont équivalents, la partie sera en général nulle.
+					<br/>
+					De manière générale, le joueur avantagé gagne si et seulement sa supériorité matérielle équivaut à au moins cinq points. Il existe bien entendu des exceptions. Nous allons en voir plusieurs cas. 
+				</p>
+
+				<figure>
+					<img src="Images/conseil/fin_de_partie/Nulle.png">
+					<figcaption>Bien que Blanc ait 6 points de plus, il est impossible pour lui de gagner. C’est un match nul. </figcaption>
+				</figure>
+
+				<figure>
+					<img src="Images/conseil/fin_de_partie/Victoire.png">
+					<figcaption>Bien que Noir soit en supériorité matérielle, il ne peut pas gagner. </figcaption>
+				</figure>
+
+				<figure>
+					<img src="Images/conseil/fin_de_partie/1.png">
+					<figcaption>Blanc joue et gagne</figcaption>
+				</figure>
+
+				<p>
+					En général, dans une finale avec Roi+Fou contre Roi+Tour, c’est une partie nulle. Mais dans certains cas comme celui là, le possesseur de la tour peut gagner.
+				</p>
+
+				<figure>
+					<img src="Images/conseil/fin_de_partie/1_sol.png">
+					<figcaption>Tb7</figcaption>
+				</figure>
+
+				<p>
+					Après ce déplacement, la tour menace l’échec et mat avec Tb8. Le seul moyen pour Noir de l’éviter est de bouger son roi. La tour peut ensuite prendre le fou avec Txb4. La finale devient la situation Roi contre Roi+Tour qui<a href="#2.2.2">se gagne facilement.</a> 
+				</p>
+
+				<figure>
+					<img src="Images/conseil/fin_de_partie/2.png">
+					<figcaption>Blanc joue et gagne</figcaption>
+				</figure>
+
+				<p>
+					Bien évidemment, la règle ne s’applique pas forcément avec les pions car les pions peuvent promouvoir en reine. Cependant, gagner n’est pas toujours évident: le risque de pat est très important. 
+					<br/>
+					Dans ce cas, le roi doit protéger son pion car il ne peut pas gagner Roi contre Roi. 
+					<br/>
+					Si le roi avance en e6 pour protéger son pion, le roi noir ne peut plus bouger. C’est un pat!
+				</p>
+
+				<figure>
+					<img src="Images/conseil/fin_de_partie/2_fail.png">
+					<figcaption>Re6 : Mauvais coup</figcaption>
+				</figure>
+
+				<p>
+					 Il faut donc bouger le roi en d6 ou f6. Le roi noir est alors obligé de partir et de laisser la promotion de la reine. Blanc<a href="#2.2.3"> gagne donc très facilement.</a>
+				</p>
+
+				<figure>
+					<img src="Images/conseil/fin_de_partie/3.1.png">
+					<img src="Images/conseil/fin_de_partie/3.2.png">
+					<img src="Images/conseil/fin_de_partie/3.3.png">
+					<figcaption>Rd6 ou Rf6 permet à Blanc de gagner</figcaption>
+				</figure>
+
+				<p>
+					En conclusion, prenez le temps de réfléchir lors des finales. La moindre erreur peut vous coûter la victoire très facilement.
+				</p>
+
+			</ol>
+
+			<h2 id="3"> Exercices résolus </h2>
+
+				<p class="exos">
+					Après la théorie, la pratique!
+					<br/>
+					Ces exercices consistent à faire gagner les blancs. C’est au tour des blancs pour chaque exercice. Quels sont les mouvements gagnants? 
+					<br/>
+					Cliquez sur l'image pour voir la solution.
+					<br/>
+					A vous de jouer!
+					<br/>
+					<a href="Solutions/1.html" id="Exo 1"><img src="Images/Exercices/1/Depart.png">					
+					<br/>
+					Exercice 1</a>
+
+					<br/><br/>
+
+					<a href="Solutions/2.html" id="Exo 2"><img src="Images/Exercices/2/Depart.png">					
+					<br/>
+					Exercice 2</a>
+
+					<br/><br/>
+
+					<a href="Solutions/3.html" id="Exo 3"><img src="Images/Exercices/3/Depart.png">
+					<br/>
+					Exercice 3</a>
+
+					<br/><br/>
+				
+					<a href="Solutions/4.html" id="Exo 4"><img src="Images/Exercices/4/Depart.png">
+					<br/>
+					Exercice 4</a>
+
+					<br/><br/>
+
+					<a href="Solutions/5.html" id="Exo 5"><img src="Images/Exercices/5/Depart.png">
+					<br/>
+					Exercice 5</a>
+					
+					<br/><br/>
+
+					<a href="Solutions/6.html" id="Exo 6"><img src="Images/Exercices/6/Depart.png">
+					<br/>
+					Exercice 6</a>
+
+					<br/><br/>
+
+					<a href="Solutions/7.html" id="Exo 7"><img src="Images/Exercices/7/Depart.png">
+					<br/>
+					Exercice 7</a>
+
+					<br/><br/>
+
+					<a href="Solutions/8.html" id="Exo 8"><img src="Images/Exercices/8/Depart.png">
+					<br/>
+					Exercice 8</a>
+
+					<br/><br/>
+
+
+				</p>
+
+			<p>Si il reste un dernier conseil, c'est : <strong>pratiquez!</strong> Essayez de jouer avec d'autres personnes. Vous pouvez également vous entrainer sur<a href="https://fr.lichess.org/">lichess.org</a>. Au départ, vous allez beaucoup perdre, mais c'est avec de l'entrainement que vous arriverez à de meilleurs résultats. Vous pouvez aussi encore plus vous documenter, ce cours ne fait qu'effleurer les bases de ce jeu.</p>
+		</section>
+		</div>
+		
+		<footer>
+			<div id="droite">
+				<h4>Site créé par :</h4>
+				<ul>
+					<li>Théo DELERCE</li>
+					<li>Sébastien LI</li>
+					<li>Théo TARTEIX</li>
+				</ul>
+			</div>
+
+			<div id="gauche">
+				<p>Images de<a href="https://fr.lichess.org/">lichess.org</a></p>
+				<a href="Copyrights.html"><div class="retour">Travail supllémentaire : Infromatique et liberté</div></a>
+			</div>
+		</footer>
+    </body>
+</html>

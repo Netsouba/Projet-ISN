@@ -1,0 +1,257 @@
+body
+{
+	color:black;
+	font-family:"Texte","Arial","Times New Roman";
+	font-size:105%;
+	font-size: 1.1em;
+}
+
+section
+{
+	border: 2px solid black;
+	border-radius: 10px;
+    box-shadow: 6px 6px 6px black;
+	background-color:rgb(200,125,50);
+	margin-right:10%;
+	margin-left:10%;
+	padding-left:1%;
+	width:80%;
+}
+
+nav
+{
+	font-size: 70%;
+	right:0;
+	top:10%;
+	background-image:linear-gradient(60deg,silver, white);
+	position:fixed;
+	border:2px groove blue;
+	border-radius: 10px 5px 5px 10px;
+	box-shadow: -6px 6px 6px black;
+	opacity:0.25;
+	padding:0.5%;
+	
+}
+nav:hover
+{
+	opacity:1;
+}
+
+
+header
+{
+	width: 100%;
+	height: 200px;
+	background-image: url("Images/Decorations/Chess.jpg");
+	margin-top:0;
+}
+
+footer
+{
+	overflow: auto;
+	background-image:linear-gradient(60deg,silver, white);
+	border:1px solid black;
+	
+}
+
+p
+{
+	width: 94%;
+	text-align: justify;
+	padding:1%;
+	margin:2%;
+}
+
+a
+{
+	text-decoration:none;
+	font-weight:bold;
+	padding-left:1%;
+	padding-right: 1%;
+	padding-bottom: 0.1%;
+	padding-top: 0.1%;
+}
+a:hover
+{
+	border:1px groove black;
+	border-radius:10px; 
+	box-shadow: 1px 1px 0px black;
+
+}
+a:active
+{
+	border:1px inset;
+}
+
+h1
+{
+	text-align: center;
+	margin-top:5%;
+	color:rgb(255,200,150);
+	font-family: 'Titre';
+	font-size: 10em;
+    text-shadow: 10px 10px 10px maroon;
+}
+
+h2
+{
+	font-size:3em;
+	padding-left: 10%;
+	color:white;
+	text-shadow: 2px 2px 2px black;
+}
+h2[id="3"]
+{
+
+	padding-left: 0;
+	text-align: center;
+}
+h3
+{
+	color:rgb(0,127,255);
+	text-shadow: 1px 1px 1px white;
+	font-size: 2em;
+	padding-left: 5%;
+
+}
+h4
+{
+	color:rgb(75,75,75);
+	font-size: 1.5em;
+	padding-left: 2%;
+	text-shadow: 1px 1px 1px white;
+}
+figure
+{
+	width: 60%;
+	margin-left:auto;
+	margin-right: auto;
+	text-align: center;
+}
+figure img
+{
+	margin-top: 2%;
+}
+
+figcaption
+{
+	font-style: italic;
+	width:40%;
+	text-align: center;
+	padding:1%;
+	margin-bottom:2%;
+	margin-right: auto;
+	margin-left: auto;
+
+}	
+ol li
+{
+	list-style-type: upper-roman;
+}
+nav a , nav li
+{
+	color:black;
+}
+
+.petit li
+{
+	list-style-type:decimal;
+}
+.successionimage 
+{
+	width: 100%;
+}
+
+.successionimage img
+{
+	margin-top: 0;
+}
+
+.successionimage figcaption
+{
+	width: 100%;
+	padding: 0;
+	margin: 0;
+}
+
+.flottant
+{
+	float:left;
+}
+
+.exos
+{
+	text-align: center;
+}
+.exos a:hover
+{
+	text-decoration:none;
+	border:none;
+}
+.retour
+{
+	margin-left:87%;
+	width:10%;
+	border:2px solid black;
+	background-color:silver;
+	text-align:center;
+	padding: 1%;
+	margin-bottom:1%;
+	color:black;
+}
+
+a:hover .retour 
+{
+	text-decoration-color:black;
+	text-decoration:underline ;
+}
+
+.background
+{
+	background-image:url("Images/Decorations/Background.jpg");
+	background-attachment: fixed;
+}
+
+#droite
+{
+	overflow: auto;
+	float: right;
+	padding-right:1%;
+	padding-left: 2%;
+	width: 15%;
+	text-align: right;
+}
+#gauche
+{
+	margin-top: 1%;
+	margin-left: 1%;
+	overflow: auto;
+	float: left;
+	padding-right: 2%;
+	padding-left:1%;
+	width: 45%;
+	text-align:left;
+}
+
+.titre1
+{
+	list-style-type: upper-roman;
+}
+.titre2
+{
+	list-style-type: upper-alpha;
+}
+.titre3
+{
+	list-style-type: decimal;
+}
+@font-face 
+{
+	font-family: "Titre";
+	src :url("Polices/Enchanted Land.otf");
+}
+@font-face 
+{
+	font-family: "Texte";
+	src :url("Polices/AppleGaramond.ttf");
+}
