@@ -131,6 +131,7 @@ figure
 figure img
 {
 	margin-top: 2%;
+	text-align: center;
 }
 
 figcaption
@@ -254,4 +255,41 @@ a:hover .retour
 {
 	font-family: "Texte";
 	src :url("Polices/AppleGaramond.ttf");
+}
+
+#un
+{
+	
+	margin-right: 73%;
+	
+}
+
+#deux
+{
+	
+}
+
+#trois
+{
+	margin-left:25%;
+}
+
+#quatre
+{
+	margin-right:65%
+}
+
+#cinq
+{
+	margin-left:23%
+}
+
+#six
+{
+	margin-left:35%
+}
+
+#sept
+{
+	margin-left:6%
 }
