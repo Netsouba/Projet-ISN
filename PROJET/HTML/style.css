@@ -10,8 +10,7 @@ section
 {
 	border: 2px solid black;
 	border-radius: 10px;
-    box-shadow: 6px 6px 6px black;
-	background-color:rgb(200,125,50);
+	background-color:rgb(15,180,160);
 	margin-right:10%;
 	margin-left:10%;
 	padding-left:1%;
@@ -23,11 +22,10 @@ nav
 	font-size: 70%;
 	right:0;
 	top:10%;
-	background-image:linear-gradient(60deg,silver, white);
+	background-image:linear-gradient(60deg,grey, white);
 	position:fixed;
-	border:2px groove blue;
+	border:2px groove black;
 	border-radius: 10px 5px 5px 10px;
-	box-shadow: -6px 6px 6px black;
 	opacity:0.25;
 	padding:0.5%;
 	
@@ -41,18 +39,12 @@ nav:hover
 header
 {
 	width: 100%;
-	height: 200px;
-	background-image: url("Images/Decorations/Chess.jpg");
+	height: 210px;
+	background-image: url("background.jpg");
 	margin-top:0;
 }
 
-footer
-{
-	overflow: auto;
-	background-image:linear-gradient(60deg,silver, white);
-	border:1px solid black;
-	
-}
+
 
 p
 {
@@ -100,12 +92,7 @@ h2
 	color:white;
 	text-shadow: 2px 2px 2px black;
 }
-h2[id="3"]
-{
 
-	padding-left: 0;
-	text-align: center;
-}
 h3
 {
 	color:rgb(0,127,255);
@@ -114,13 +101,7 @@ h3
 	padding-left: 5%;
 
 }
-h4
-{
-	color:rgb(75,75,75);
-	font-size: 1.5em;
-	padding-left: 2%;
-	text-shadow: 1px 1px 1px white;
-}
+
 figure
 {
 	width: 60%;
@@ -180,58 +161,10 @@ nav a , nav li
 	float:left;
 }
 
-.exos
-{
-	text-align: center;
-}
-.exos a:hover
-{
-	text-decoration:none;
-	border:none;
-}
-.retour
-{
-	margin-left:87%;
-	width:10%;
-	border:2px solid black;
-	background-color:silver;
-	text-align:center;
-	padding: 1%;
-	margin-bottom:1%;
-	color:black;
-}
-
-a:hover .retour 
-{
-	text-decoration-color:black;
-	text-decoration:underline ;
-}
-
 .background
 {
-	background-image:url("Images/Decorations/Background.jpg");
+	background-image:url("fond.jpg");
 	background-attachment: fixed;
-}
-
-#droite
-{
-	overflow: auto;
-	float: right;
-	padding-right:1%;
-	padding-left: 2%;
-	width: 15%;
-	text-align: right;
-}
-#gauche
-{
-	margin-top: 1%;
-	margin-left: 1%;
-	overflow: auto;
-	float: left;
-	padding-right: 2%;
-	padding-left:1%;
-	width: 45%;
-	text-align:left;
 }
 
 .titre1
@@ -242,10 +175,8 @@ a:hover .retour
 {
 	list-style-type: upper-alpha;
 }
-.titre3
-{
-	list-style-type: decimal;
-}
+
+
 @font-face 
 {
 	font-family: "Titre";
